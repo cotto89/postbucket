@@ -12,20 +12,13 @@ import { resolve, Routes } from 'universal-router';
 import * as qs from 'query-string';
 import { History, Location } from 'history';
 
-export interface IRoutingResult {
-    component: StatelessComponent<any>;
-    query: { [key: string]: string };
-    params: { [key: string]: string };
-    path: string;
-}
-
-interface State extends IRoutingResult { }
+interface State extends Model.Route { }
 
 interface Props {
     history: History;
     routes: Routes<any, any>;
     fallbackView?: StatelessComponent<any>;
-    onLocationChange?: (location: IRoutingResult) => void;
+    onLocationChange?: (location: Model.Route) => void;
 }
 
 export default class Router extends Component<Props, State> {
@@ -46,7 +39,7 @@ export default class Router extends Component<Props, State> {
 
     defaultFallbackView = () => createElement('div', {});
 
-    handleLocationChange = (result: IRoutingResult) => {
+    handleLocationChange = (result: Model.Route) => {
         const {onLocationChange} = this.props;
         onLocationChange && onLocationChange(result);
         this.setState(result);

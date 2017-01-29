@@ -1,9 +1,4 @@
-interface Store {
-    subscribe: Function;
-    getState: Function;
-}
-
-export default function devTool(store: Store) {
+export default function devTool(store: AppStore) {
     let reduxDevToolsExtension = (
         process.env.NODE_ENV === 'development' &&
         typeof window !== 'undefined' &&

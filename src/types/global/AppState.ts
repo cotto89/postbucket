@@ -1,11 +1,8 @@
-import { Project, Topic, Post } from '../model';
-
-export default State;
-export interface State {
+interface AppState {
     /* Data */
-    projects: { [projectId: string]: Project };
-    topics: { [topicId: string]: Topic };
-    posts: { [postid: string]: Post };
+    projects: { [projectId: string]: Model.Project };
+    topics: { [topicId: string]: Model.Topic };
+    posts: { [postid: string]: Model.Post };
 
     /* Session */
     session: {
