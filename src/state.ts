@@ -1,4 +1,3 @@
-import { createElement } from 'react';
 import State from './types/State';
 
 export default function initialState(): State {
@@ -19,14 +18,6 @@ export default function initialState(): State {
             editingProjectCardId: [],
             editingTopicCardId: [],
         },
-
-        /* Route */
-        route: {
-            component: () => createElement('div'),
-            path: '/',
-            params: {},
-            query: {}
-        }
     };
 }
 

@@ -1,4 +1,3 @@
-import { SFC } from 'react';
 import { Project, Topic, Post } from '../model';
 
 export default State;
@@ -19,13 +18,4 @@ export interface State {
         editingProjectCardId: string[];
         editingTopicCardId: string[];
     };
-
-    /* RouterState */
-    route: {
-        component: SFC<any>,
-        path: string,
-        params: { [key: string]: string },
-        query: { [key: string]: string }
-    };
-
 }
