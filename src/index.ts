@@ -2,8 +2,12 @@ import './lib/polyfill/object';
 
 /* Router
 --------------------------------- */
-import Router from './lib/router/Router';
+import Router, { IRoutingResult } from './lib/router/Router';
 import routes, { history } from './routes';
+
+function onLocationChange(result: IRoutingResult) {
+    store.dispatch('UPDATE_ROUTER_LOCATION', result);
+}
 
 /* Store
 --------------------------------- */
@@ -25,7 +29,9 @@ const store = createStore<State, ActionTypes>(initialState(), handler);
 
 window.addEventListener('DOMContentLoaded', () => {
     devtool(store);
-    render($(Provider, { store: store as any },
-        $(Router, { routes, history })
-    ), document.getElementById('root'));
+    render(
+        $(Provider, { store: store as any },
+            $(Router, { routes, history, onLocationChange })
+        ),
+        document.getElementById('root'));
 });

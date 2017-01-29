@@ -1,51 +1,55 @@
-import { Component, createElement, StatelessComponent } from 'react';
-import { connect } from 'react-redux';
-import { resolve, Routes } from 'universal-router';
-import * as qs from 'query-string';
-import { History, Location } from 'history';
-import State from './../../types/State';
-import { Dispatch } from './../../types/Store';
-
-
-export interface IRouterActionResult {
-    component: StatelessComponent<any>;
-    query: { [key: string]: string };
-    params: { [key: string]: string };
-}
-
-export interface IRoutingResult extends IRouterActionResult {
-    path: string;
-}
-
 /*
 #lib
 * universal-router: path matchingとmatchした場合のroute.actionを叩く。actionの結果はPromiseで返って来る。
 * history: browser historyを模したライブラリ。pathの更新をlistenできる。
 # routerのざっくりした仕組み
 - history.listenでpathの変更を監視
-- 変更があればuniversal-router#resolve()で該当RouterStoreに次のrouteをdispatch
-# 備考
-- renderにmobxを使ってcomponent(SFC)をmobxのobservable stateとして管理している
+- 変更があればstateを更新してcomponentをrender
 */
+
+import { Component, createElement, StatelessComponent } from 'react';
+import { resolve, Routes } from 'universal-router';
+import * as qs from 'query-string';
+import { History, Location } from 'history';
+
+export interface IRoutingResult {
+    component: StatelessComponent<any>;
+    query: { [key: string]: string };
+    params: { [key: string]: string };
+    path: string;
+}
+
+interface State extends IRoutingResult { }
+
 interface Props {
-    dispatch: Dispatch;
-    currentRoute: State['route'];
     history: History;
     routes: Routes<any, any>;
     fallbackView?: StatelessComponent<any>;
+    onLocationChange?: (location: IRoutingResult) => void;
 }
 
-const DefaultFallbackView = () => createElement('div', {});
-
-export class Router extends Component<Props, {}> {
+export default class Router extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        // inital action
-        this.handleRouting(props.history.location);
+        this.state = {
+            path: '/',
+            component: this.props.fallbackView || this.defaultFallbackView,
+            query: {},
+            params: {},
+        };
 
+        this.handleRouting(props.history.location);
         // listen history
         props.history.listen(this.handleRouting);
+    }
+
+    defaultFallbackView = () => createElement('div', {});
+
+    handleLocationChange = (result: IRoutingResult) => {
+        const {onLocationChange} = this.props;
+        onLocationChange && onLocationChange(result);
+        this.setState(result);
     }
 
     handleRouting = (location: Location) => {
@@ -55,40 +59,12 @@ export class Router extends Component<Props, {}> {
         };
 
         resolve(this.props.routes, ctx)
-            .then((result: IRouterActionResult) => {
-
-                if (process.env.NODE_ENV === 'development') {
-                    console.group('routing result');
-                    /* tslint:disable:no-console */
-                    console.log(result);
-                    /* tslint:enable:no-console */
-                    console.groupEnd();
-                }
-
-                this.props.dispatch('UPDATE_ROUTER_LOCATION', {
-                    ...result,
-                    path: location.pathname,
-                });
-            })
-            .catch(() => {
-                this.props.dispatch('UPDATE_ROUTER_LOCATION', {
-                    query: {},
-                    params: {},
-                    component: this.props.fallbackView || DefaultFallbackView,
-                    path: location.pathname,
-                });
-            });
+            .then(this.handleLocationChange)
+            .catch(this.handleLocationChange);
     }
 
     render() {
-        const { currentRoute, fallbackView } = this.props;
-        let component = currentRoute.component || fallbackView || DefaultFallbackView;
+        let component = this.state.component || this.props.fallbackView || this.defaultFallbackView;
         return createElement(component);
     }
 }
-
-const mapStateToProps = (state: State) => ({
-    currentRoute: state.route,
-});
-
-export default connect(mapStateToProps)(Router);
