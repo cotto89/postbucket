@@ -1,4 +1,5 @@
 import './lib/polyfill/object';
+import devtool from './lib/devtool';
 import { createElement as $ } from 'react';
 import { render } from 'react-dom';
 import { Provider, connect } from 'react-redux';
@@ -29,5 +30,6 @@ const mapDispatchtoProps = (dispath: typeof store.dispatch) => ({
 const App = connect(mapStatetoProps, mapDispatchtoProps)(Counter);
 
 window.addEventListener('DOMContentLoaded', () => {
+    devtool(store);
     render($(Provider, { store: store as any }, $(App)), document.getElementById('root'));
 });
