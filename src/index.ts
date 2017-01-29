@@ -1,35 +1,31 @@
 import './lib/polyfill/object';
+
+/* Router
+--------------------------------- */
+import Router from './lib/router/Router';
+import routes, { history } from './routes';
+
+/* Store
+--------------------------------- */
+import createStore from './lib/flux/createStore';
+import initialState from './state';
+import State from './types/State';
+import ActionTypes from './types/ActionTypes';
+import handler from './actionHandler';
+
+/* View
+---------------------------------- */
 import devtool from './lib/devtool';
 import { createElement as $ } from 'react';
 import { render } from 'react-dom';
-import { Provider, connect } from 'react-redux';
-import createStore from './lib/flux/createStore';
+import { Provider } from 'react-redux';
 
-const state = {
-    count: 0
-};
 
-const store = createStore<{ count: number }, { up: number }>(state, {
-    'up': [(state: any, count: number) => ({ count: state.count + count })]
-});
-
-const Counter = (props: { count: number, countUp: Function }) => {
-    return $('div', {},
-        $('div', {}, props.count),
-        $('button', { onClick: () => props.countUp(1) }, 'up')
-    );
-};
-
-const mapStatetoProps = (s: { count: number }) => s;
-const mapDispatchtoProps = (dispath: typeof store.dispatch) => ({
-    countUp: (count: number) => {
-        dispath('up', count);
-    }
-});
-
-const App = connect(mapStatetoProps, mapDispatchtoProps)(Counter);
+const store = createStore<State, ActionTypes>(initialState(), handler);
 
 window.addEventListener('DOMContentLoaded', () => {
     devtool(store);
-    render($(Provider, { store: store as any }, $(App)), document.getElementById('root'));
+    render($(Provider, { store: store as any },
+        $(Router, { routes, history })
+    ), document.getElementById('root'));
 });
