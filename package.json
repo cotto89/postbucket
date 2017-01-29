@@ -29,6 +29,7 @@
     "@types/react-redux": "^4.4.36",
     "@types/shortid": "^0.0.28",
     "@types/sinon": "^1.16.34",
+    "@types/universal-router": "^0.0.2",
     "@types/webpack": "^2.2.4",
     "autoprefixer": "^6.7.0",
     "awesome-typescript-loader": "^3.0.0-beta.18",

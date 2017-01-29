@@ -76,6 +76,10 @@
   dependencies:
     "@types/source-map" "*"
 
+"@types/universal-router@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@types/universal-router/-/universal-router-0.0.2.tgz#59306eec8ba363b94aa83492bec5c65695c21c4e"
+
 "@types/webpack@^2.2.4":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-2.2.4.tgz#05afb4af5b7ece8a4d491030e94c769c7a9bc110"
