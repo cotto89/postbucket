@@ -82,7 +82,7 @@ export default function createStore<S, E>(init: S, handler: Handler<S, E>) {
     /**
      * 状態の変更を購読
      */
-    function subscribe<K extends keyof E>(listener: (state: S, event: E[K], err?: Error) => void) {
+    function subscribe<K extends keyof E>(listener: (state: S, event: K, err?: Error) => void) {
         store.listener.push(listener);
         return () => {
             store.listener = store.listener.filter(fn => fn !== listener);
