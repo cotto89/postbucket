@@ -13,7 +13,7 @@ function onLocationChange(result: Model.Route) {
 --------------------------------- */
 import createStore from './lib/flux/createStore';
 import initialState from './state';
-import handler from './action-handler';
+import usecase from './usecase';
 
 /* View
 ---------------------------------- */
@@ -23,7 +23,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 
-const store = createStore<AppState, ActionTypes>(initialState(), handler);
+const store = createStore<AppState, ActionTypes>(initialState(), usecase);
 
 window.addEventListener('DOMContentLoaded', () => {
     devtool(store);
