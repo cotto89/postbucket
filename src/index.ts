@@ -13,7 +13,7 @@ function onLocationChange(result: Model.Route) {
 --------------------------------- */
 import createStore from './lib/flux/createStore';
 import initialState from './state';
-import handler from './actionHandler';
+import handler from './action-handler';
 
 /* View
 ---------------------------------- */
