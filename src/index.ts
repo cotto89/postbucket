@@ -17,7 +17,6 @@ import usecase from './usecase';
 
 /* View
 ---------------------------------- */
-import devtool from './lib/devtool';
 import { createElement as $ } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -26,7 +25,10 @@ import { Provider } from 'react-redux';
 const store = createStore<AppState, ActionTypes>(initialState(), usecase);
 
 window.addEventListener('DOMContentLoaded', () => {
-    devtool(store);
+    if (process.env.NODE_ENV === 'development') {
+        require('./lib/devtool').default(store);
+    }
+
     render(
         $(Provider, { store: store as any },
             $(Router, { routes, history, onLocationChange })
