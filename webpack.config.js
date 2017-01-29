@@ -65,11 +65,7 @@ let config = {
         })
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
-        alias: {
-            'react': 'inferno-compat',
-            'react-dom': 'inferno-compat',
-        }
+        extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
 };
 
