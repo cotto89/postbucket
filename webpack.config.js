@@ -73,7 +73,6 @@ if (isDev) {
     config = merge(config, {
         devtool: 'inline-source-map',
         devServer: {
-            open: true,
             contentBase: 'public',
             inline: true,
             noInfo: true
