@@ -2,10 +2,10 @@ import './lib/polyfill/object';
 
 /* Router
 --------------------------------- */
-import Router, { IRoutingResult } from './lib/router/Router';
+import Router from './lib/router/Router';
 import routes, { history } from './routes';
 
-function onLocationChange(result: IRoutingResult) {
+function onLocationChange(result: Model.Route) {
     store.dispatch('UPDATE_ROUTER_LOCATION', result);
 }
 
@@ -13,8 +13,6 @@ function onLocationChange(result: IRoutingResult) {
 --------------------------------- */
 import createStore from './lib/flux/createStore';
 import initialState from './state';
-import State from './types/State';
-import ActionTypes from './types/ActionTypes';
 import handler from './actionHandler';
 
 /* View
@@ -25,7 +23,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 
-const store = createStore<State, ActionTypes>(initialState(), handler);
+const store = createStore<AppState, ActionTypes>(initialState(), handler);
 
 window.addEventListener('DOMContentLoaded', () => {
     devtool(store);

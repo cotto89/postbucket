@@ -1,6 +1,4 @@
-import State from './types/State';
-
-export default function initialState(): State {
+export default function initialState(): AppState {
     return {
         /* Data */
         projects: {},

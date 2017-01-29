@@ -1,6 +1,5 @@
 import { createElement as $, StatelessComponent } from 'react';
 import { createHashHistory } from 'history';
-import { IRoutingResult } from './lib/router/Router';
 
 /* Routes
 -----------------------------------------*/
@@ -39,7 +38,7 @@ export const history = createHashHistory({
 class RoutingError extends Error { }
 
 export function createActionResult(component: StatelessComponent<any>) {
-    return (context: any): IRoutingResult => {
+    return (context: any): Model.Route => {
         const { query, params } = context;
         return {
             query,
