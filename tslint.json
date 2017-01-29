@@ -74,7 +74,7 @@
         "no-eval": true,
         "no-invalid-this": true,
         "no-shadowed-variable": true,
-        "no-string-literal": true,
+        "no-string-literal": false,
         "no-switch-case-fall-through": true,
         "no-unsafe-finally": true,
         "no-unused-expression": "allow-fast-null-checks",
