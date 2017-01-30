@@ -1,12 +1,12 @@
+/* Polyfill
+---------------------------------*/
 import './lib/polyfill/object';
 
-/* Store
---------------------------------- */
-// import createStore from './lib/flux/createStore';
-import buildQuex from './lib/flux/quex';
+/* Flux
+---------------------------------*/
+import build from './lib/flux/quex';
 import initialState from './state';
-const quex = buildQuex(initialState());
-
+const quex = build(initialState());
 
 /* Router
 --------------------------------- */
