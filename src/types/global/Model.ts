@@ -12,7 +12,7 @@ declare global {
         interface Topic {
             readonly id: string;
             readonly projectId: string;
-            postIds: string;
+            postIds: string[];
             title: string;
             createdAt: Date;
             updateAt: Date;
