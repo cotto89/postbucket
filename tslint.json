@@ -16,7 +16,7 @@
                     "public-static-method",
                     "protected-static-method",
                     "private-static-method",
-                    "public-instance-field",
+                    // "public-instance-field",
                     "protected-instance-field",
                     "private-instance-field",
                     "constructor",
@@ -31,7 +31,7 @@
         "no-reference": true,
         "no-var-requires": true,
         "typedef": [
-            true,
+            false,
             "member-variable-declaration"
         ],
         "typedef-whitespace": [
