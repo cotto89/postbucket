@@ -1,5 +1,6 @@
 import { createElement as $, StatelessComponent } from 'react';
 import { createHashHistory } from 'history';
+import DashboardPane from './components/DashboardPane/index';
 
 /* Routes
 -----------------------------------------*/
@@ -14,7 +15,7 @@ export function routes() {
             children: [
                 {
                     path: '/',
-                    action: result(() => $('div', {}, 'currentPath: /')),
+                    action: result(() => $(DashboardPane)),
                 },
                 {
                     path: '/projects/:projectId',
