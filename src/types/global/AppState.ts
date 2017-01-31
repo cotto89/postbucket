@@ -1,18 +1,6 @@
-interface AppState {
-    /* Data */
-    projects: { [projectId: string]: Model.Project };
-    topics: { [topicId: string]: Model.Topic };
-    posts: { [postid: string]: Model.Post };
-
-    /* Session */
-    session: {
-        currentProjectId?: string;
-        currentTopicId?: string;
-    };
-
-    /* UI */
-    ui: {
-        editingProjectCardId: string[];
-        editingTopicCardId: string[];
-    };
+import { UIState } from './../../reducers/ui';
+import { DataState } from './../../reducers/data';
+import { SessionState } from './../../reducers/session';
+declare global {
+    interface AppState extends UIState, DataState, SessionState { }
 }

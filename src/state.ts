@@ -1,21 +1,11 @@
+import { initialUIState } from './reducers/ui';
+import { initialDataState } from './reducers/data';
+import { initialSessoinState } from './reducers/session';
 export default function initialState(): AppState {
     return {
-        /* Data */
-        projects: {},
-        topics: {},
-        posts: {},
-
-        /* Sessino */
-        session: {
-            currentProjectId: undefined,
-            currentTopicId: undefined
-        },
-
-        /* UI */
-        ui: {
-            editingProjectCardId: [],
-            editingTopicCardId: [],
-        },
+        ...initialDataState(),
+        ...initialSessoinState(),
+        ...initialUIState()
     };
 }
 

@@ -43,8 +43,11 @@ quex.setState({
 --------------------------------- */
 import Router from './lib/router/Router';
 import routes, { history } from './routes';
-import { updateCurrentIds } from './mutations/session';
-const onLocationChange = quex.usecase('ROUTER_LOCATION_UPDATE').use([updateCurrentIds]);
+import * as Session from './reducers/session';
+
+const onLocationChange = quex.usecase('ROUTER_LOCATION_UPDATE').use([
+    Session.updateCurrentIds
+]);
 
 /* View
 ---------------------------------- */
