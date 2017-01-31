@@ -4,6 +4,15 @@ export type T3<S, P> = (state: S, params: P) => Partial<S> | void;
 export type T4<S, P> = (state: S, params: P) => Promise<T3<S, P>> | void;
 export type Q1<S> = (T1<S> | T2<S>)[];
 export type Q2<S, P> = (T3<S, P> | T4<S, P>)[];
+export type R1<S> = {
+    (): void;
+    readonly _queue: Q1<S>
+};
+
+export type R2<S, P> = {
+    (p: P): void;
+    readonly _queue: Q2<S, P>
+};
 
 export default function build<S>(initState: S) {
     let $$state = initState;
@@ -55,13 +64,16 @@ export default function build<S>(initState: S) {
     /*
      * usecase('name').use([f1, f2, f3])(params)
      */
+
     function usecase(name?: string) {
         return { use };
 
-        function use(queue: Q1<S>): () => void;
-        function use<P>(queue: Q2<S, P>): (params: P) => void;
-        function use(queue: Function[]): () => void {
-            return run;
+        function use(queue: Q1<S>): R1<S>;
+        function use<P>(queue: Q2<S, P>): R2<S, P>;
+        function use(queue: Function[]): R1<S> | R2<S, any> {
+            let $run: any = run;
+            $run._queue = queue;
+            return $run;
 
             function run() {
                 const p = arguments[0];
