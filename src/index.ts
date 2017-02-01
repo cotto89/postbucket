@@ -5,38 +5,28 @@ import './lib/polyfill/object';
 /* Flux
 ---------------------------------*/
 import build from './lib/flux/quex';
-import initialState, { createStoreData } from './domain/app/state';
+import initialState from './domain/app/state';
+import * as Data from './domain/data/state';
 const quex = build(initialState());
 
-const d1 = createStoreData({
+const d1 = Data.createDataState({
     projectTitle: 'SampleProject A',
     iden: 'A',
     topicCount: 3,
     postCountPerTopic: 10
 });
 
-const d2 = createStoreData({
+const d2 = Data.createDataState({
     projectTitle: 'SampleProject B',
     iden: 'B',
     topicCount: 2,
     postCountPerTopic: 5
 });
 
-const topics = [...d1.topics, ...d2.topics].reduce((ct, t) => {
-    return Object.assign(ct, { [t.id]: t });
-}, {});
-
-const posts = [...d1.posts, ...d2.posts].reduce((container, p) => {
-    return Object.assign(container, { [p.id]: p });
-}, {});
-
 quex.setState({
-    projects: {
-        [d1.project.id]: d1.project,
-        [d2.project.id]: d2.project
-    },
-    topics,
-    posts
+    projects: { ...d1.projects, ...d2.projects },
+    topics: { ...d1.topics, ...d2.topics },
+    posts: { ...d1.posts, ...d2.posts },
 });
 
 /* Router

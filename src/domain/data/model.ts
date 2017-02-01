@@ -35,8 +35,8 @@ export function post(
         id: props.id || shortId.generate(),
         replyIds: [],
         isReply: false,
-        createdAt: Date,
-        updateAt: Date,
+        createdAt: new Date(),
+        updateAt: new Date(),
         ...props
     });
 };
