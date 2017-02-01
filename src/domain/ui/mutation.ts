@@ -10,7 +10,9 @@ export const editingTopicCardIds = createCardIdsUpdator<T>('editingTopicCardIds'
 -------------------------- */
 function createCardIdsUpdator<U extends { id: string }>(key: 'editingProjectCardIds' | 'editingTopicCardIds') {
     function add(s: S, p: U) {
-        if (s[key].includes(p.id)) return;
+        if (s[key].includes(p.id)) {
+            return { [key]: [...s[key]] }
+        };
         return {
             [key]: [...s[key], p.id]
         };
