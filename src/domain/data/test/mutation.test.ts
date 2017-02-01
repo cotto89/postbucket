@@ -3,6 +3,7 @@ import AppState from './../../app/state';
 import * as Data from '../index';
 
 let state: IAppState;
+const assign = Object.assign;
 
 beforeEach(() => {
     state = AppState();
@@ -55,3 +56,60 @@ describe('deleteProject', () => {
     });
 });
 
+describe('addTopic()', () => {
+    it('topicsにtopicを追加, projectに関係追加', () => {
+        const pj = Data.project({ name: 'sample' });
+        const t = Data.topic({ projectId: pj.id, title: 'sample' });
+        state = assign({}, state, { projects: { [pj.id]: pj } });
+        state = assign({}, state, Data.addTopic(state, t));
+
+        assert.deepEqual(state.projects[pj.id].topicIds, [
+            t.id
+        ]);
+
+        assert.deepEqual(state.topics, {
+            [t.id]: t
+        });
+    });
+});
+
+describe('updateTopic()', () => {
+    it('topicを更新する', () => {
+        const pj = Data.project({ name: 'sample' });
+        const t = Data.topic({ projectId: pj.id, title: 'sample' });
+        state = assign({}, state, { projects: { [pj.id]: pj } });
+        state = assign({}, state, Data.addTopic(state, t));
+
+        assert.equal(state.topics[t.id].title, 'sample');
+
+        const r = Data.updateTopic(state, { ...t, title: 'sample2' });
+
+        assert.deepEqual(r, {
+            topics: { [t.id]: { ...t, title: 'sample2' } }
+        });
+    });
+});
+
+describe('deleteTopic()', () => {
+    it('topicと依存のあるpostを削除。projectからtopicIdを削除', () => {
+        const pj = Data.project({ name: 'sample' });
+        const t = Data.topic({ projectId: pj.id, title: 'sample' });
+        const p = Data.post({ projectId: pj.id, topicId: t.id, content: 'string' });
+        t.postIds.push(p.id);
+
+        state = assign({}, state, { projects: { [pj.id]: pj } });
+        state = assign({}, state, Data.addTopic(state, t), { posts: { [p.id]: p } });
+
+        assert.deepEqual(state.projects, { [pj.id]: { ...pj, topicIds: [t.id] } });
+        assert.deepEqual(state.topics, { [t.id]: t });
+        assert.deepEqual(state.posts, { [p.id]: p });
+
+        const r = Data.deleteTopic(state, t);
+
+        assert.deepEqual(r, {
+            projects: { [pj.id]: { ...pj, topicIds: [] } },
+            topics: {},
+            posts: {}
+        });
+    });
+});
