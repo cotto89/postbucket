@@ -1,3 +1,0 @@
---compilers ts:espower-typescript/guess src/**/*.test.ts
---growl
---reporter nyan

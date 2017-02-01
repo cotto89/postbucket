@@ -1,7 +1,6 @@
 import * as assert from 'assert';
 import AppState from './../../app/state';
 import * as Data from '../index';
-import './../../../lib/polyfill/object';
 
 let state: IAppState;
 
