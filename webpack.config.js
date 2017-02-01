@@ -28,7 +28,7 @@ let config = {
         rules: [
             {
                 test: /\.tsx?$/,
-                exclude: [/node_modules/, /\.test\.tsx?$/],
+                exclude: /(\/node_modules\/|\.test\.tsx?$)/,
                 loader: 'awesome-typescript-loader'
             },
             {
