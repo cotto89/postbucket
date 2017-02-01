@@ -1,9 +1,11 @@
 import omit = require('lodash/omit');
+import uniq = require('lodash/uniq');
 
 type S = IAppState;
 type DS = IDataState;
 type PJ = Model.IProject;
 type T = Model.ITopic;
+type P = Model.IPost;
 
 
 /**
@@ -32,14 +34,8 @@ export const deleteProject = (s: S, p: PJ): Partial<S> => ({
 export const addTopic = (s: S, t: T) => {
     const pj = s.projects[t.projectId];
     return {
-        projects: {
-            ...s.projects,
-            [pj.id]: { ...pj, topicIds: [...pj.topicIds, t.id] }
-        },
-        topics: {
-            ...s.topics,
-            [t.id]: t
-        }
+        projects: { ...s.projects, [pj.id]: { ...pj, topicIds: uniq([...pj.topicIds, t.id]) } },
+        topics: { ...s.topics, [t.id]: t }
     };
 };
 
@@ -67,6 +63,47 @@ export const deleteTopic = (s: S, t: T) => {
         },
         topics: omit<DS['topics'], DS['topics']>(s.topics, t.id),
         posts: omit<DS['posts'], DS['posts']>(s.posts, [...t.postIds])
+    };
+};
+
+/**
+ * postを追加
+ *
+ * project.postIdsにpost.idを追加
+ * topic.postIdsにpost.idを追加
+ */
+export const addPost = (s: S, p: P) => {
+    const pj = s.projects[p.projectId];
+    const t = s.topics[p.topicId];
+    return {
+        projects: { ...s.projects, [pj.id]: { ...pj, postIds: uniq([...pj.postIds, p.id]) } },
+        topics: { ...s.topics, [t.id]: { ...t, postIds: uniq([...t.postIds, p.id]) } },
+        posts: { ...s.posts, [p.id]: p }
+    };
+};
+
+/**
+ * postを更新する
+ */
+export const updatePost = (s: S, p: P) => ({
+    posts: { ...s.posts, [p.id]: p }
+});
+
+
+/**
+ * postを削除する
+ *
+ * project.postIdsからpost.idを削除
+ * topic.postIdsからpost.idを削除
+ */
+export const deletePost = (s: S, p: P) => {
+    const pj = s.projects[p.projectId];
+    const t = s.topics[p.topicId];
+
+    return {
+        projects: { ...s.projects, [pj.id]: { ...pj, postIds: pj.postIds.filter(i => i !== p.id) } },
+        topics: { ...s.topics, [t.id]: { ...t, postIds: t.postIds.filter(i => i !== p.id) } },
+        posts: omit<DS['posts'], DS['posts']>(s.posts, [p.id])
     };
 };
 

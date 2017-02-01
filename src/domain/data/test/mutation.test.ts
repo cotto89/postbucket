@@ -61,14 +61,11 @@ describe('addTopic()', () => {
         const pj = Data.project({ name: 'sample' });
         const t = Data.topic({ projectId: pj.id, title: 'sample' });
         state = assign({}, state, { projects: { [pj.id]: pj } });
-        state = assign({}, state, Data.addTopic(state, t));
+        const r = Data.addTopic(state, t);
 
-        assert.deepEqual(state.projects[pj.id].topicIds, [
-            t.id
-        ]);
-
-        assert.deepEqual(state.topics, {
-            [t.id]: t
+        assert.deepEqual(r, {
+            projects: { [pj.id]: { ...pj, topicIds: [t.id] } },
+            topics: { [t.id]: t }
         });
     });
 });
@@ -113,3 +110,68 @@ describe('deleteTopic()', () => {
         });
     });
 });
+
+
+describe('addPost()', () => {
+    it('postとその依存を追加', () => {
+        const pj = Data.project({ name: 'sample' });
+        const t = Data.topic({ projectId: pj.id, title: 'sample' });
+        const p = Data.post({ projectId: pj.id, topicId: t.id, content: 'string' });
+
+        state = assign(state, {
+            projects: { [pj.id]: pj },
+            topics: { [t.id]: t }
+        });
+
+        const r = Data.addPost(state, p);
+
+        assert.deepEqual(r, {
+            projects: { [pj.id]: { ...pj, postIds: [p.id] } },
+            topics: { [t.id]: { ...t, postIds: [p.id] } },
+            posts: { [p.id]: p }
+        });
+    });
+});
+
+
+describe('updatePost()', () => {
+    it('postを更新', () => {
+        const p = Data.post({ projectId: '1', topicId: '1', content: 'foo' });
+        const r = Data.updatePost(state, p);
+
+        assert.deepEqual(r, {
+            posts: { [p.id]: p }
+        });
+    });
+});
+
+
+describe('deletePost()', () => {
+    it('postを削除。projectとtopicからpostIdを削除', () => {
+        const pj = Data.project({ name: 'sample' });
+        const t = Data.topic({ projectId: pj.id, title: 'sample' });
+        const p = Data.post({ projectId: pj.id, topicId: t.id, content: 'string' });
+
+        state = assign(state, {
+            projects: { [pj.id]: pj },
+            topics: { [t.id]: t }
+        });
+
+        state = assign({}, state, Data.addPost(state, p));
+        assert.equal(state.projects[pj.id].postIds.length, 1);
+        assert.equal(state.topics[t.id].postIds.length, 1);
+
+        const r = Data.deletePost(state, p);
+
+        assert.deepEqual(r, {
+            projects: { [pj.id]: { ...pj, postIds: [] } },
+            topics: { [t.id]: { ...t, postIds: [] } },
+            posts: {}
+        });
+    });
+});
+
+
+
+
+
