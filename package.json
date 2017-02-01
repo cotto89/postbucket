@@ -6,6 +6,8 @@
   "dependencies": {
     "history": "^4.5.1",
     "lodash": "^4.17.4",
+    "mobx": "^3.0.2",
+    "mobx-react": "^4.1.0",
     "object.entries": "^1.0.4",
     "object.values": "^1.0.4",
     "proptypes": "^0.14.3",
@@ -51,6 +53,8 @@
     "karma-nyan-reporter": "^0.2.5",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.2",
+    "mobx-react-devtools": "^4.2.11",
+    "mobx-remotedev": "^0.2.5",
     "mocha": "^3.2.0",
     "node-sass": "^4.4.0",
     "npm-run-all": "^4.0.1",
