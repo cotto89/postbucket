@@ -20,12 +20,12 @@ interface Props {
 export class DashBoradPane extends React.Component<Props, {}> {
     addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
         UI.editingProjectCardIds.remove,
-        Data.addProject,
+        Data.setProject
     ]);
 
     updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
         UI.editingProjectCardIds.remove,
-        Data.updateProject,
+        Data.setProject,
     ]);
 
     deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
