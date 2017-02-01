@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Link from './../../lib/router/Link';
 
 interface Props {
     project: Model.IProject;
@@ -16,7 +17,9 @@ export default class ProjectView extends React.Component<Props, {}> {
         return (
             <div className='ProjectView'>
                 <h1>
-                    <a onClick={this.select}>{this.props.project.name}</a>
+                    <Link to={`/projects/${this.props.project.id}`} onClick={this.select}>
+                        {this.props.project.name}
+                    </Link>
                 </h1>
                 <div>
                     <button onClick={this.delete}>DELETE</button>
