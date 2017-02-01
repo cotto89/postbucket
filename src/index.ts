@@ -5,7 +5,7 @@ import './lib/polyfill/object';
 /* Flux
 ---------------------------------*/
 import build from './lib/flux/quex';
-import initialState, { createStoreData } from './state';
+import initialState, { createStoreData } from './domain/app/state';
 const quex = build(initialState());
 
 const d1 = createStoreData({
@@ -43,7 +43,7 @@ quex.setState({
 --------------------------------- */
 import Router from './lib/router/Router';
 import routes, { history } from './routes';
-import * as Session from './reducers/session';
+import * as Session from './domain/session/index';
 
 const onLocationChange = quex.usecase('ROUTER_LOCATION_UPDATE').use([
     Session.updateCurrentIds

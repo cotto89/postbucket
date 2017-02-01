@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as model from './../../model';
+import * as model from './../../domain/data/index';
 
 interface State {
     newProjectName: string;

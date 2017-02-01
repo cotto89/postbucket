@@ -1,5 +1,7 @@
 import omit = require('lodash/omit');
 
+export { project, topic, post } from './model';
+
 export interface IDataState {
     projects: { [projectId: string]: Model.IProject };
     topics: { [topicId: string]: Model.ITopic };

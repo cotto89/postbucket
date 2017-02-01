@@ -1,6 +1,6 @@
-import { initialUIState } from './reducers/ui';
-import { initialDataState } from './reducers/data';
-import { initialSessoinState } from './reducers/session';
+import { initialUIState } from './../ui/index';
+import { initialDataState } from './../data/index';
+import { initialSessoinState } from './../session/index';
 export default function initialState(): IAppState {
     return {
         ...initialDataState(),
@@ -9,7 +9,7 @@ export default function initialState(): IAppState {
     };
 }
 
-import * as model from './model';
+import * as model from './../data/index';
 import range = require('lodash/range');
 
 export function createStoreData(props: {

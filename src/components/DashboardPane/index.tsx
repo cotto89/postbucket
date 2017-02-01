@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as UI from './../../reducers/ui';
-import * as Data from './../../reducers/data';
-import * as Session from './../../reducers/session';
+import * as UI from './../../domain/ui/index';
+import * as Data from './../../domain/data/index';
+import * as Session from './../../domain/session/index';
 
 import ProjectForm from './ProjectFrom';
 import ProjectView from './ProjectView';
