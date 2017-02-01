@@ -1,5 +1,4 @@
-import * as $ from 'r-dom';
-import { Component, SyntheticEvent, HTMLProps } from 'react';
+import { Component, createElement as $, SyntheticEvent, HTMLProps } from 'react';
 import { createPath } from 'history';
 import omit = require('lodash/omit');
 import { history } from './../../routes';
@@ -34,7 +33,7 @@ export default class Link extends Component<Props & HTMLProps<HTMLAnchorElement>
     }
 
     render() {
-        return $.a({
+        return $('a', {
             ...omit(this.props, ['to', 'children', 'replace']),
             href: 'javascript:void(0)',
             onClick: combine(this.props.onClick, this.transition)
