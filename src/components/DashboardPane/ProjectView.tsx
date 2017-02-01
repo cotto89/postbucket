@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 interface Props {
-    project: Model.Project;
-    deleteProject: (project: Model.Project) => void;
-    toggleCardView: (project: Model.Project) => void;
-    onSelect: (propject: Model.Project) => void;
+    project: Model.IProject;
+    deleteProject: (project: Model.IProject) => void;
+    toggleCardView: (project: Model.IProject) => void;
+    onSelect: (propject: Model.IProject) => void;
 }
 
 export default class ProjectView extends React.Component<Props, {}> {

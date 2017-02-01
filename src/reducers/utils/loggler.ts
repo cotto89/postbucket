@@ -1,4 +1,4 @@
-export function logger(s: AppState, payload: any) {
+export function logger(s: IAppState, payload: any) {
     /* tslint:disable:no-console */
     console.groupCollapsed('LOGGER');
     console.log(payload);

@@ -1,9 +1,9 @@
-export interface UIState {
+export interface IUIState {
     editingProjectCardIds: string[];
     editingTopicCardIds: string[];
 }
 
-export function initialUIState(): UIState {
+export function initialUIState(): IUIState {
     return {
         editingProjectCardIds: [],
         editingTopicCardIds: []
@@ -12,9 +12,9 @@ export function initialUIState(): UIState {
 
 /* Reducer
 --------------------------- */
-type S = AppState;
-type PJ = Model.Project;
-type T = Model.Topic;
+type S = IAppState;
+type PJ = Model.IProject;
+type T = Model.ITopic;
 
 function createCardIdsUpdator<U extends { id: string }>(key: 'editingProjectCardIds' | 'editingTopicCardIds') {
 

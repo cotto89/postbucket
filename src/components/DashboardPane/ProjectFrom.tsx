@@ -7,9 +7,9 @@ interface State {
 }
 export interface Props {
     isNew?: boolean;
-    project: Model.Project;
-    onSubmit?: (project: Model.Project) => void;
-    onCancel?: (project: Model.Project) => void;
+    project: Model.IProject;
+    onSubmit?: (project: Model.IProject) => void;
+    onCancel?: (project: Model.IProject) => void;
     onChange?: React.FormEventHandler<HTMLInputElement>;
 }
 

@@ -1,4 +1,4 @@
-export default function devTool(store: AppStore) {
+export default function devTool(store: IAppStore) {
     let reduxDevToolsExtension = (
         process.env.NODE_ENV === 'development' &&
         typeof window !== 'undefined' &&

@@ -4,7 +4,7 @@ const assign = Object.assign;
 
 /* Project
 ------------------------------- */
-export function project(props: Partial<Model.Project> & { name: string }): Model.Project {
+export function project(props: Partial<Model.IProject> & { name: string }): Model.IProject {
     return assign({
         id: props.id || shortId.generate(),
         topicIds: [],
@@ -16,7 +16,7 @@ export function project(props: Partial<Model.Project> & { name: string }): Model
 
 /* Topic
 ------------------------------- */
-export function topic(props: Partial<Model.Topic> & { projectId: string, title: string }): Model.Topic {
+export function topic(props: Partial<Model.ITopic> & { projectId: string, title: string }): Model.ITopic {
     return assign({
         id: props.id || shortId.generate(),
         createdAt: new Date(),
@@ -30,7 +30,7 @@ export function topic(props: Partial<Model.Topic> & { projectId: string, title: 
 /* Post
 ------------------------------- */
 export function post(
-    props: Partial<Model.Post> & { projectId: string, topicId: string, content: string }): Model.Post {
+    props: Partial<Model.IPost> & { projectId: string, topicId: string, content: string }): Model.IPost {
     return assign({
         id: props.id || shortId.generate(),
         replyIds: [],

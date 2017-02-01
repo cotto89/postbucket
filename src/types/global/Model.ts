@@ -2,14 +2,14 @@ import { StatelessComponent } from 'react';
 
 declare global {
     namespace Model {
-        interface Project {
+        interface IProject {
             readonly id: string;
             name: string;
             topicIds: string[];
             postIds: string[];
         }
 
-        interface Topic {
+        interface ITopic {
             readonly id: string;
             readonly projectId: string;
             postIds: string[];
@@ -18,7 +18,7 @@ declare global {
             updateAt: Date;
         }
 
-        interface Post {
+        interface IPost {
             id: string;
             projectId: string;
             topicId: string;
@@ -29,7 +29,7 @@ declare global {
             isReply: boolean;
         }
 
-        interface Route {
+        interface IRoute {
             component: StatelessComponent<any>;
             query: { [key: string]: string };
             params: { [key: string]: string };

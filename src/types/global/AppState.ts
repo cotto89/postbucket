@@ -1,6 +1,10 @@
-import { UIState } from './../../reducers/ui';
-import { DataState } from './../../reducers/data';
-import { SessionState } from './../../reducers/session';
+import * as UI from './../../reducers/ui';
+import * as Data from './../../reducers/data';
+import * as Session from './../../reducers/session';
+
 declare global {
-    interface AppState extends UIState, DataState, SessionState { }
+    interface IUIState extends UI.IUIState { }
+    interface IDataState extends Data.IDataState { }
+    interface ISessionState extends Session.ISessionState { }
+    interface IAppState extends IUIState, IDataState, ISessionState { }
 }

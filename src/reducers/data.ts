@@ -1,12 +1,12 @@
 import omit = require('lodash/omit');
 
-export interface DataState {
-    projects: { [projectId: string]: Model.Project };
-    topics: { [topicId: string]: Model.Topic };
-    posts: { [postid: string]: Model.Post };
+export interface IDataState {
+    projects: { [projectId: string]: Model.IProject };
+    topics: { [topicId: string]: Model.ITopic };
+    posts: { [postid: string]: Model.IPost };
 }
 
-export function initialDataState(): DataState {
+export function initialDataState(): IDataState {
     return {
         projects: {},
         topics: {},
@@ -16,9 +16,9 @@ export function initialDataState(): DataState {
 
 /* Reducer
 ----------------------- */
-type S = AppState;
-type DS = DataState;
-type PJ = Model.Project;
+type S = IAppState;
+type DS = IDataState;
+type PJ = Model.IProject;
 
 /**
  * Projectを追加

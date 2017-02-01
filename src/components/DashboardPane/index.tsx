@@ -12,33 +12,33 @@ const $ = React.createElement;
 /* DashBoradPane
 ----------------------------------- */
 interface Props {
-    projects: AppState['projects'];
+    projects: IAppState['projects'];
     editingCardIds: string[];
-    usecase: UseCase;
+    usecase: IAppStore.UseCase;
 }
 
 export class DashBoradPane extends React.Component<Props, {}> {
-    addProject = this.props.usecase('PROJECT_ADD').use<Model.Project>([
+    addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
         UI.editingProjectCardIds.remove,
         Data.addProject,
     ]);
 
-    updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.Project>([
+    updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
         UI.editingProjectCardIds.remove,
         Data.updateProject,
     ]);
 
-    deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.Project>([
+    deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
         UI.editingProjectCardIds.remove,
         Data.deleteProject,
     ]);
 
-    onCardSelect = this.props.usecase('PROJECT_SELECT').use<Model.Project>([
+    onCardSelect = this.props.usecase('PROJECT_SELECT').use<Model.IProject>([
         UI.editingProjectCardIds.clear,
         Session.setCurrentProjectId,
     ]);
 
-    toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.Project>([
+    toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.IProject>([
         UI.editingProjectCardIds.toggle
     ]);
 
@@ -86,12 +86,12 @@ export class DashBoradPane extends React.Component<Props, {}> {
 
 /* Container
 ------------------------ */
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: IAppState) => ({
     projects: state.projects,
     editingCardIds: state.editingProjectCardIds
 });
 
-const mapDispatchToProps = (dispatch: UseCase) => ({
+const mapDispatchToProps = (dispatch: IAppStore.UseCase) => ({
     usecase: dispatch
 });
 

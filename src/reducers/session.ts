@@ -1,4 +1,4 @@
-export interface SessionState {
+export interface ISessionState {
     session: {
         currentProjectId?: string;
         currentTopicId?: string;
@@ -14,11 +14,11 @@ export function initialSessoinState() {
     };
 }
 
-type S = AppState;
-type PJ = Model.Project;
-type T = Model.Topic;
+type S = IAppState;
+type PJ = Model.IProject;
+type T = Model.ITopic;
 
-export const updateCurrentIds = (state: S, route: Model.Route) => ({
+export const updateCurrentIds = (state: S, route: Model.IRoute) => ({
     session: {
         ...state.session,
         currentProjectId: route.params['projectId'],
