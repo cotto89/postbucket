@@ -14,7 +14,7 @@ export type R2<S, P> = {
     readonly _queue: Q2<S, P>
 };
 
-export default function build<S>(initState: S) {
+export default function build<S>(initState: S, updator?: (state: S, taskResult: Partial<S>) => S) {
     let $$state = initState;
     let $$listener: Function[] = [];
 
@@ -41,7 +41,13 @@ export default function build<S>(initState: S) {
      * stateをassign
      */
     function setState(state: Partial<S>) {
-        $$state = Object.assign({}, $$state, state);
+        // default
+        if (!updator) {
+            $$state = Object.assign({}, $$state, state);
+            return;
+        }
+
+        $$state = updator($$state, state);
     }
 
     /**
