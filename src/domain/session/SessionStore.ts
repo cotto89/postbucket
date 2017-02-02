@@ -21,6 +21,7 @@ export default class SessionStore {
         return s;
     }
 
+    @action
     static setCurrentTopicId(s: S, t: T) {
         s.session.currentTopicId = t.id;
         return s;
