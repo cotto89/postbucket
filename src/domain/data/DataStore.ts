@@ -1,6 +1,4 @@
 import { observable, action } from 'mobx';
-import { Project, Post, Topic } from './model';
-import range = require('lodash/range');
 
 type S = IAppState;
 type PJ = Model.IProject;
@@ -72,46 +70,6 @@ export default class DataStore {
         s.topics.delete(p.topicId);
         s.posts.delete(p.id);
         return s;
-    }
-
-
-    /* fixture
-    ----------------- */
-    @action
-    setFixtureData(props: {
-        projectCount: number,
-        topicCountPerProject: number,
-        postCountPerTopic: number;
-        iden?: string;
-    }) {
-        const pj = new Project({ name: `SampleProject ${props.iden}` });
-
-        this.projects.set(pj.id, pj);
-
-        const tArray = range(props.topicCountPerProject).map(n => {
-            return new Topic({ projectId: pj.id, title: `topic ${props.iden + n}` });
-        });
-
-
-        tArray.forEach(t => {
-            const pArray = range(props.postCountPerTopic).map(n => {
-                return new Post({
-                    projectId: pj.id,
-                    topicId: t.id,
-                    content: `Sample Post ${props.iden}-${t.id}-${n}`
-                });
-            });
-
-            const pIds = pArray.map(p => p.id);
-
-
-            t.postIds.push(...pIds);
-            pj.postIds.push(...pIds);
-            pj.topicIds.push(t.id);
-
-            this.topics.set(t.id, t);
-            pArray.forEach(p => this.posts.set(p.id, p));
-        });
     }
 }
 
