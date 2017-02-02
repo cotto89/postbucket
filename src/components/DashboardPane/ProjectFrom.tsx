@@ -1,11 +1,7 @@
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Project } from './../../domain/data/model';
-
-interface State {
-    newProjectName: string;
-    isProcessing: boolean;
-}
 
 interface Props {
     isNew?: boolean;
@@ -16,40 +12,45 @@ interface Props {
 }
 
 @observer
-export class ProjectForm extends React.Component<Props, State> {
+export class ProjectForm extends React.Component<Props, {}> {
+    @observable newProjectName: string = '';
+    @observable isProcessing: boolean = false;
+    @observable isNew: boolean = false;
+
     constructor(props: Props) {
         super(props);
-        this.state = {
-            newProjectName: props.project.name,
-            isProcessing: false
-        };
+        this.newProjectName = props.project.name || '';
+        this.isNew = props.isNew || false;
     }
 
     submit = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
-        this.setState({ isProcessing: true }, () => {
-            const name = this.state.newProjectName.trim();
-            const project = new Project({ ...this.props.project, name });
+        this.isProcessing = true;
 
-            this.props.onSubmit && this.props.onSubmit(project);
-            this.setState({ newProjectName: '', isProcessing: false });
-        });
+        const name = this.newProjectName.trim();
+        const pj = new Project({ ...this.props.project, name });
+
+        this.props.onSubmit && this.props.onSubmit(pj);
+
+        this.newProjectName = '';
+        this.isProcessing = false;
     }
 
     cancal = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
         this.props.onCancel && this.props.onCancel(this.props.project);
-        this.setState({ newProjectName: '', isProcessing: false });
+        this.newProjectName = '';
+        this.isProcessing = false;
     }
 
     onChange = (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         this.props.onChange && this.props.onChange(e);
-        this.setState({ newProjectName: e.currentTarget.value });
+        this.newProjectName = e.currentTarget.value;
     }
 
     render() {
-        const {newProjectName, isProcessing} = this.state;
+        const {newProjectName, isProcessing} = this;
 
         return (
             <div className='ProjectForm'>
