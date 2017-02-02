@@ -31,7 +31,7 @@ describe('.updateCurrentIds()', () => {
 
     context('route.paramsにprojectIdあった場合', () => {
         it('currentProjecIdに追加される', () => {
-            assert.equal(s.session.currentProjectid, '1');
+            assert.equal(s.session.currentProjectId, '1');
         });
     });
 
@@ -44,9 +44,9 @@ describe('.updateCurrentIds()', () => {
 });
 
 describe('.setCurrentProjectIds', () => {
-    it('currentProjectidに追加されること', () => {
+    it('currentProjectIdに追加されること', () => {
         Session.setCurrentProjectId(s, { id: '1' } as Model.IProject);
-        assert.equal(s.session.currentProjectid, '1');
+        assert.equal(s.session.currentProjectId, '1');
     });
 });
 

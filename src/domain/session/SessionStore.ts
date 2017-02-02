@@ -5,19 +5,19 @@ type PJ = Model.IProject;
 type T = Model.ITopic;
 
 export default class SessionStore {
-    @observable currentProjectid?: string;
+    @observable currentProjectId?: string;
     @observable currentTopicId?: string;
 
     @action
     static updateCurrentIds(s: S, r: Model.IRoute) {
-        s.session.currentProjectid = r.params['projectId'];
+        s.session.currentProjectId = r.params['projectId'];
         s.session.currentTopicId = r.params['topicId'];
         return s;
     }
 
     @action
     static setCurrentProjectId(s: S, pj: PJ) {
-        s.session.currentProjectid = pj.id;
+        s.session.currentProjectId = pj.id;
         return s;
     }
 
