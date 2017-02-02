@@ -1,5 +1,6 @@
+import { observer } from 'mobx-react';
 import * as React from 'react';
-import * as model from './../../domain/data/index';
+import { Project } from './../../domain/data/model';
 
 interface State {
     newProjectName: string;
@@ -13,7 +14,8 @@ export interface Props {
     onChange?: React.FormEventHandler<HTMLInputElement>;
 }
 
-export default class ProjectForm extends React.Component<Props, State> {
+@observer
+export class ProjectForm extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -26,7 +28,7 @@ export default class ProjectForm extends React.Component<Props, State> {
         e.preventDefault();
         this.setState({ isProcessing: true }, () => {
             const name = this.state.newProjectName.trim();
-            const project = model.project({ ...this.props.project, name });
+            const project = new Project({ ...this.props.project, name });
 
             this.props.onSubmit && this.props.onSubmit(project);
             this.setState({ newProjectName: '', isProcessing: false });
@@ -63,3 +65,5 @@ export default class ProjectForm extends React.Component<Props, State> {
         );
     }
 }
+
+export default ProjectForm;
