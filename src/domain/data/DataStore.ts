@@ -40,7 +40,9 @@ export default class DataStore {
 
     @action
     static deleteTopic(s: S, t: T) {
-        s.projects.delete(t.projectId);
+        const pj = s.projects.get(t.projectId);
+
+        pj && pj.topicIds.remove(t.id);
         s.topics.delete(t.id);
         t.postIds.forEach(pid => s.posts.delete(pid));
         return s;
@@ -66,8 +68,12 @@ export default class DataStore {
 
     @action
     static deletePost(s: S, p: P) {
-        s.projects.delete(p.projectId);
-        s.topics.delete(p.topicId);
+        const pj = s.projects.get(p.projectId);
+        pj && pj.postIds.remove(p.id);
+
+        const t = s.topics.get(p.topicId);
+        t && t.postIds.remove(p.id);
+
         s.posts.delete(p.id);
         return s;
     }
