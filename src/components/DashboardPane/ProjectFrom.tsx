@@ -6,7 +6,8 @@ interface State {
     newProjectName: string;
     isProcessing: boolean;
 }
-export interface Props {
+
+interface Props {
     isNew?: boolean;
     project: Model.IProject;
     onSubmit?: (project: Model.IProject) => void;

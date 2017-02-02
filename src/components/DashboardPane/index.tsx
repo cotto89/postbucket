@@ -4,8 +4,7 @@ import UI from './../../domain/ui/UIStore';
 import Data from './../../domain/data/DataStore';
 import Session from './../../domain/session/SessionStore';
 
-import ProjectForm from './ProjectFrom';
-import ProjectView from './ProjectView';
+import ProjectCardList from './ProjectCardList';
 
 const $ = React.createElement;
 
@@ -51,33 +50,14 @@ export class DashBoradPane extends React.Component<Props, {}> {
                 {
                     /* ProjectList
                     ----------------------- */
-                    projects.entries().map(([id, project]) =>
-                        /* ProjectCard
-                        --------------------------*/
-                        <div className='ProjectCard' key={id}>
-                            {
-                                /* ProjectView
-                                ---------------------------*/
-                                !editingCardIds.includes(id) &&
-                                $(ProjectView, {
-                                    project,
-                                    deleteProject: this.deleteProject,
-                                    onSelect: this.onCardSelect,
-                                    toggleCardView: this.toggleCardView
-                                })
-                            }
-                            {
-                                /* ProjectForm
-                                ---------------------------*/
-                                editingCardIds.includes(id) &&
-                                $(ProjectForm, {
-                                    project,
-                                    onSubmit: this.updateProject,
-                                    onCancel: this.toggleCardView
-                                })
-                            }
-                        </div>
-                    )
+                    $(ProjectCardList, {
+                        projects,
+                        editingCardIds,
+                        updateProject: this.updateProject,
+                        deleteProject: this.deleteProject,
+                        onCardSelect: this.onCardSelect,
+                        toggleCardView: this.toggleCardView
+                    })
                 }
             </div>
         );
