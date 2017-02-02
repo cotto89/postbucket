@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Project } from './../../domain/data/model';
@@ -23,7 +23,8 @@ export class ProjectForm extends React.Component<Props, {}> {
         this.isNew = props.isNew || false;
     }
 
-    submit = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+    @action.bound
+    submit(e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
         e.preventDefault();
         this.isProcessing = true;
 
@@ -36,14 +37,16 @@ export class ProjectForm extends React.Component<Props, {}> {
         this.isProcessing = false;
     }
 
-    cancal = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+    @action.bound
+    cancal(e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
         e.preventDefault();
         this.props.onCancel && this.props.onCancel(this.props.project);
         this.newProjectName = '';
         this.isProcessing = false;
     }
 
-    onChange = (e: React.FormEvent<HTMLInputElement>) => {
+    @action.bound
+    onChange(e: React.FormEvent<HTMLInputElement>) {
         e.preventDefault();
         this.props.onChange && this.props.onChange(e);
         this.newProjectName = e.currentTarget.value;
