@@ -1,42 +1,63 @@
 import shortId = require('shortid');
-
-const assign = Object.assign;
+import { observable, extendObservable } from 'mobx';
 
 /* Project
 ------------------------------- */
-export function project(props: Partial<Model.IProject> & { name: string }): Model.IProject {
-    return assign({
-        id: props.id || shortId.generate(),
-        topicIds: [],
-        postIds: [],
-        ...props,
-    });
+export class Project {
+    @observable readonly id: string;
+    @observable name: string = '';
+    topicIds = observable.array<string>([]);
+    postIds = observable.array<string>([]);
+
+    constructor(props: Partial<Project> & { name: string }) {
+        extendObservable(this, {
+            ...props,
+            id: props.id || shortId.generate(),
+        });
+    }
 }
 
 
 /* Topic
 ------------------------------- */
-export function topic(props: Partial<Model.ITopic> & { projectId: string, title: string }): Model.ITopic {
-    return assign({
-        id: props.id || shortId.generate(),
-        createdAt: new Date(),
-        updateAt: new Date(),
-        postIds: [],
-        ...props
-    });
-};
+export class Topic {
+    @observable readonly id: string;
+    @observable readonly projectId: string;
+    @observable title: string = '';
+    postIds = observable.array<string>([]);
+    @observable createdAt: Date = new Date();
+    @observable updateAt: Date = new Date();
+
+    constructor(props: Partial<Topic> & { projectId: string, title: string }) {
+        extendObservable(this, {
+            ...props,
+            id: props.id || shortId.generate(),
+        });
+    }
+}
 
 
 /* Post
 ------------------------------- */
-export function post(
-    props: Partial<Model.IPost> & { projectId: string, topicId: string, content: string }): Model.IPost {
-    return assign({
-        id: props.id || shortId.generate(),
-        replyIds: [],
-        isReply: false,
-        createdAt: new Date(),
-        updateAt: new Date(),
-        ...props
-    });
-};
+export class Post {
+    @observable readonly id: string;
+    @observable readonly projectId: string;
+    @observable readonly topicId: string;
+    replyIds = observable.array<string>([]); // postIds;
+    @observable createdAt: Date = new Date();
+    @observable updatedAt: Date = new Date();
+    @observable content: string = '';
+
+    isReply: boolean = false;
+
+    constructor(props: Partial<Post> & {
+        projectId: string;
+        topicId: string;
+        content: string;
+    }) {
+        extendObservable(this, {
+            ...props,
+            id: props.id || shortId.generate(),
+        });
+    }
+}

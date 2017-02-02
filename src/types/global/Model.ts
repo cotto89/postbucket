@@ -1,33 +1,13 @@
 import { StatelessComponent } from 'react';
+import { Project, Topic, Post } from './../../domain/data/model';
 
 declare global {
     namespace Model {
-        interface IProject {
-            readonly id: string;
-            name: string;
-            topicIds: string[];
-            postIds: string[];
-        }
+        interface IProject extends Project { }
 
-        interface ITopic {
-            readonly id: string;
-            readonly projectId: string;
-            postIds: string[];
-            title: string;
-            createdAt: Date;
-            updateAt: Date;
-        }
+        interface ITopic extends Topic { }
 
-        interface IPost {
-            id: string;
-            projectId: string;
-            topicId: string;
-            replyIds: string[];
-            createdAt: Date;
-            updateAt: Date;
-            content: string; // HASTになるかもしれない
-            isReply: boolean;
-        }
+        interface IPost extends Post { }
 
         interface IRoute {
             component: StatelessComponent<any>;
