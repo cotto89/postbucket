@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import * as UI from './../../domain/ui/index';
-import * as Data from './../../domain/data/index';
-import * as Session from './../../domain/session/index';
+import { observer, inject } from 'mobx-react';
+import UI from './../../domain/ui/UIStore';
+import Data from './../../domain/data/DataStore';
+import Session from './../../domain/session/SessionStore';
 
-import ProjectForm from './ProjectFrom';
-import ProjectView from './ProjectView';
+import ProjectCardList from './ProjectCardList';
 
 const $ = React.createElement;
 
@@ -17,29 +16,30 @@ interface Props {
     usecase: IAppStore.UseCase;
 }
 
+@observer
 export class DashBoradPane extends React.Component<Props, {}> {
     addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
-        UI.editingProjectCardIds.remove,
+        UI.removeEditingCardId,
         Data.setProject
     ]);
 
     updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
-        UI.editingProjectCardIds.remove,
+        UI.removeEditingCardId,
         Data.setProject,
     ]);
 
     deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
-        UI.editingProjectCardIds.remove,
+        UI.removeEditingCardId,
         Data.deleteProject,
     ]);
 
     onCardSelect = this.props.usecase('PROJECT_SELECT').use<Model.IProject>([
-        UI.editingProjectCardIds.clear,
+        UI.clearEditingCardIds,
         Session.setCurrentProjectId,
     ]);
 
     toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.IProject>([
-        UI.editingProjectCardIds.toggle
+        UI.toggleEditingCardIds
     ]);
 
     render() {
@@ -50,33 +50,14 @@ export class DashBoradPane extends React.Component<Props, {}> {
                 {
                     /* ProjectList
                     ----------------------- */
-                    Object.entries(projects).map(([id, project]) =>
-                        /* ProjectCard
-                        --------------------------*/
-                        <div className='ProjectCard' key={id}>
-                            {
-                                /* ProjectView
-                                ---------------------------*/
-                                !editingCardIds.includes(id) &&
-                                $(ProjectView, {
-                                    project,
-                                    deleteProject: this.deleteProject,
-                                    onSelect: this.onCardSelect,
-                                    toggleCardView: this.toggleCardView
-                                })
-                            }
-                            {
-                                /* ProjectForm
-                                ---------------------------*/
-                                editingCardIds.includes(id) &&
-                                $(ProjectForm, {
-                                    project,
-                                    onSubmit: this.updateProject,
-                                    onCancel: this.toggleCardView
-                                })
-                            }
-                        </div>
-                    )
+                    $(ProjectCardList, {
+                        projects,
+                        editingCardIds,
+                        updateProject: this.updateProject,
+                        deleteProject: this.deleteProject,
+                        onCardSelect: this.onCardSelect,
+                        toggleCardView: this.toggleCardView
+                    })
                 }
             </div>
         );
@@ -86,13 +67,10 @@ export class DashBoradPane extends React.Component<Props, {}> {
 
 /* Container
 ------------------------ */
-const mapStateToProps = (state: IAppState) => ({
-    projects: state.projects,
-    editingCardIds: state.editingProjectCardIds
+const mapStateToProps = (store: IAppStore) => ({
+    projects: store.projects,
+    editingCardIds: store.ui.editingProjectCardIds,
+    usecase: store.usecase
 });
 
-const mapDispatchToProps = (dispatch: IAppStore.UseCase) => ({
-    usecase: dispatch
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashBoradPane);
+export default inject(mapStateToProps)(DashBoradPane);
