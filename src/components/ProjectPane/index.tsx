@@ -9,8 +9,8 @@ import TopicList from './TopicList';
 import TopicForm from './TopicForm';
 
 interface Props {
-    projects: IAppState['projects'];
-    currentProject: Model.IProject | undefined;
+    topics: IAppState['topics'];
+    currentProject?: Model.IProject | undefined;
     editingIds: string[];
     usecase: IAppStore.UseCase;
 }
@@ -18,8 +18,9 @@ interface Props {
 export class ProjectPane extends React.Component<Props, {}> {
     @computed get topics() {
         if (!this.props.currentProject) return [];
-        return this.props.currentProject.topics.values()
-            .sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+        return this.props.currentProject.topicIds
+            .map(tid => this.props.topics.get(tid))
+            .filter(t => !!t) as Model.ITopic[];
     }
 
     @action
@@ -80,7 +81,7 @@ export class ProjectPane extends React.Component<Props, {}> {
 }
 
 const mapStateToProps = (store: IAppStore) => ({
-    projects: store.projects,
+    topics: store.topics,
     currentProject: store.projects.get(store.session.currentProjectId || ''),
     editingIds: store.ui.editingTopicCardIds,
     usecase: store.usecase
