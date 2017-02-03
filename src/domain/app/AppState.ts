@@ -35,7 +35,7 @@ export class AppState extends DataStore {
                     return new Post({
                         projectId: pj.id,
                         topicId: t.id,
-                        content: `Sample Post ${iden}-${t.id}-${n}`
+                        content: `Sample Post ${iden}-${n}`
                     });
                 });
 
