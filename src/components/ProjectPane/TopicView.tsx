@@ -20,7 +20,7 @@ export class ProjectView extends React.Component<Props, {}> {
         return (
             <div className='ProjectView'>
                 <h1>
-                    <Link to={`/projects/${topic.projectId}/topics/${topic.id}`} onClick={this.select}>
+                    <Link to={`/topics/${topic.id}`} onClick={this.select}>
                         {topic.title}
                     </Link>
                 </h1>

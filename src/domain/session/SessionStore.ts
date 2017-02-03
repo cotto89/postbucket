@@ -12,6 +12,14 @@ export default class SessionStore {
     static updateCurrentIds(s: S, r: Model.IRoute) {
         s.session.currentProjectId = r.params['projectId'];
         s.session.currentTopicId = r.params['topicId'];
+
+        const tid = r.params['topicId'];
+        const t = s.topics.get(tid);
+        if (t) {
+            s.session.currentProjectId = t.projectId;
+            s.session.currentTopicId = t.id;
+        }
+
         return s;
     }
 
