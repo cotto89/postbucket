@@ -10,17 +10,16 @@ import TopicForm from './TopicForm';
 
 interface Props {
     projects: IAppState['projects'];
-    currentProjectId: string;
+    currentProject: Model.IProject | undefined;
     editingIds: string[];
     usecase: IAppStore.UseCase;
 }
 
 export class ProjectPane extends React.Component<Props, {}> {
     @computed get topics() {
-        const pj = this.props.projects.get(this.props.currentProjectId);
-        if (!pj) return [];
-        // TODO: sortの仕方を再考する
-        return pj.topics.values().sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+        if (!this.props.currentProject) return [];
+        return this.props.currentProject.topics.values()
+            .sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
     }
 
     @action
@@ -52,10 +51,17 @@ export class ProjectPane extends React.Component<Props, {}> {
     ]);
 
     render() {
+        const {currentProject} = this.props;
+
+        if (!currentProject) return <div>...NotFound</div>;
+
         return (
             <div className='ProjectPane'>
+                <header>
+                    <h1>{currentProject.name}</h1>
+                </header>
                 <TopicForm
-                    topic={{ projectId: this.props.currentProjectId } as Model.ITopic}
+                    topic={{ projectId: currentProject.id } as Model.ITopic}
                     isNew
                     onSubmit={this.addTopic}
                 />
@@ -69,14 +75,13 @@ export class ProjectPane extends React.Component<Props, {}> {
                     updateTopic={this.updateTopic}
                 />
             </div>
-
         );
     }
 }
 
 const mapStateToProps = (store: IAppStore) => ({
     projects: store.projects,
-    currentProjectId: store.session.currentProjectId,
+    currentProject: store.projects.get(store.session.currentProjectId || ''),
     editingIds: store.ui.editingTopicCardIds,
     usecase: store.usecase
 });

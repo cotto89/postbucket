@@ -44,6 +44,9 @@ export class DashBoradPane extends React.Component<Props, {}> {
     render() {
         return (
             <div>
+                <header>
+                    <h1>Dashboard</h1>
+                </header>
                 <ProjectForm
                     project={{ name: '' } as Model.IProject}
                     isNew
