@@ -7,12 +7,12 @@
 - 変更があればstateを更新してcomponentをrender
 */
 
+import { observable, action } from 'mobx';
+import { observer } from 'mobx-react';
 import { Component, createElement, StatelessComponent } from 'react';
 import { resolve, Routes } from 'universal-router';
 import * as qs from 'query-string';
 import { History, Location } from 'history';
-
-interface State extends Model.IRoute { }
 
 interface Props {
     history: History;
@@ -21,28 +21,26 @@ interface Props {
     onLocationChange?: (location: Model.IRoute) => void;
 }
 
-export default class Router extends Component<Props, State> {
+@observer
+export default class Router extends Component<Props, {}> {
+    @observable component: StatelessComponent<any>;
+
     constructor(props: Props) {
         super(props);
-
-        this.state = {
-            path: '/',
-            component: this.props.fallbackView || this.defaultFallbackView,
-            query: {},
-            params: {},
-        };
+        this.component = this.props.fallbackView || this.defaultFallbackView;
 
         this.handleRouting(props.history.location);
         // listen history
         props.history.listen(this.handleRouting);
     }
 
-    defaultFallbackView = () => createElement('div', {});
+    defaultFallbackView = () => createElement('div', {}, '...NotFound');
 
+    @action
     handleLocationChange = (result: Model.IRoute) => {
         const {onLocationChange} = this.props;
         onLocationChange && onLocationChange(result);
-        this.setState(result);
+        this.component = result.component;
     }
 
     handleRouting = (location: Location) => {
@@ -57,7 +55,7 @@ export default class Router extends Component<Props, State> {
     }
 
     render() {
-        let component = this.state.component || this.props.fallbackView || this.defaultFallbackView;
+        let component = this.component || this.props.fallbackView || this.defaultFallbackView;
         return createElement(component);
     }
 }
