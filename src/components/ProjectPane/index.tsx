@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import Data from './../../domain/data/DataStore';
-import UI from './../../domain/ui/UIStore';
 import Session from './../../domain/session/SessionStore';
 
 import TopicList from './TopicList';
@@ -11,11 +10,12 @@ import TopicForm from './TopicForm';
 interface Props {
     topics: IAppState['topics'];
     currentProject?: Model.IProject | undefined;
-    editingIds: string[];
     usecase: IAppStore.UseCase;
 }
 
 export class ProjectPane extends React.Component<Props, {}> {
+    editingCardIds = observable<string>([]);
+
     @computed get topics() {
         if (!this.props.currentProject) return [];
         return this.props.currentProject.topicIds
@@ -30,24 +30,28 @@ export class ProjectPane extends React.Component<Props, {}> {
 
     @action
     updateTopic = this.props.usecase('TOPIC_UPDATE').use<Model.ITopic>([
-        UI.removeEditingCardId,
+        (_s, t) => { this.editingCardIds.remove(t.id); },
         Data.updateTopic,
     ]);
 
     @action
     deleteTopic = this.props.usecase('TOPIC_DELETE').use<Model.ITopic>([
-        UI.removeEditingCardId,
+        (_s, t) => { this.editingCardIds.remove(t.id); },
         Data.deleteTopic
     ]);
 
     @action
     toggleTopicView = this.props.usecase('TOPIC_VIEW_TOGGLE').use<Model.ITopic>([
-        UI.toggleEditingCardIds
+        (_s, pj) => {
+            this.editingCardIds.includes(pj.id)
+                ? this.editingCardIds.remove(pj.id)
+                : this.editingCardIds.push(pj.id);
+        },
     ]);
 
     @action
     onTopicSelect = this.props.usecase('TOPIC_SELECT').use<Model.ITopic>([
-        UI.clearEditingCardIds,
+        () => { this.editingCardIds.clear(); },
         Session.setCurrentTopicId
     ]);
 
@@ -69,7 +73,7 @@ export class ProjectPane extends React.Component<Props, {}> {
 
                 <TopicList
                     topics={this.topics}
-                    editingIds={this.props.editingIds}
+                    editingIds={this.editingCardIds}
                     deleteTopic={this.deleteTopic}
                     onTopicSelect={this.onTopicSelect}
                     toggleTopicView={this.toggleTopicView}
@@ -83,7 +87,6 @@ export class ProjectPane extends React.Component<Props, {}> {
 const mapStateToProps = (store: IAppStore) => ({
     topics: store.topics,
     currentProject: store.projects.get(store.session.currentProjectId || ''),
-    editingIds: store.ui.editingTopicCardIds,
     usecase: store.usecase
 });
 

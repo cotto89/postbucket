@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import UIStore from './../ui/UIStore';
 import DataStore from './../data/DataStore';
 import SessionStore from './../session/SessionStore';
 import { Project, Post, Topic } from './../data/model';
@@ -8,7 +7,6 @@ import range = require('lodash/range');
 
 export class AppState extends DataStore {
     @observable session = new SessionStore();
-    @observable ui = new UIStore();
 
     /* fixture
     ----------------- */

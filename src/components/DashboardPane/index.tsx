@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import UI from './../../domain/ui/UIStore';
+import { action, observable } from 'mobx';
 import Data from './../../domain/data/DataStore';
 import Session from './../../domain/session/SessionStore';
 
@@ -11,34 +11,44 @@ import ProjectCardList from './ProjectCardList';
 ----------------------------------- */
 interface Props {
     projects: IAppState['projects'];
-    editingCardIds: string[];
     usecase: IAppStore.UseCase;
 }
 
 @observer
 export class DashBoradPane extends React.Component<Props, {}> {
+    editingCardIds = observable.array<string>([]);
+
+    @action
     addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
-        UI.removeEditingCardId,
+        (_s, pj) => { this.editingCardIds.remove(pj.id); },
         Data.setProject
     ]);
 
+    @action
     updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
-        UI.removeEditingCardId,
+        (_s, pj) => { this.editingCardIds.remove(pj.id); },
         Data.setProject,
     ]);
 
+    @action
     deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
-        UI.removeEditingCardId,
+        (_s, pj) => { this.editingCardIds.remove(pj.id); },
         Data.deleteProject,
     ]);
 
+    @action
     onCardSelect = this.props.usecase('PROJECT_SELECT').use<Model.IProject>([
-        UI.clearEditingCardIds,
+        () => { this.editingCardIds.clear(); },
         Session.setCurrentProjectId,
     ]);
 
+    @action
     toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.IProject>([
-        UI.toggleEditingCardIds
+        (_s, pj) => {
+            this.editingCardIds.includes(pj.id)
+                ? this.editingCardIds.remove(pj.id)
+                : this.editingCardIds.push(pj.id);
+        },
     ]);
 
     render() {
@@ -58,7 +68,9 @@ export class DashBoradPane extends React.Component<Props, {}> {
                     deleteProject={this.deleteProject}
                     onCardSelect={this.onCardSelect}
                     toggleCardView={this.toggleCardView}
-                    {...this.props} />
+                    editingCardIds={this.editingCardIds}
+                    projects={this.props.projects}
+                />
             </div>
         );
     }
@@ -69,7 +81,6 @@ export class DashBoradPane extends React.Component<Props, {}> {
 ------------------------ */
 const mapStateToProps = (store: IAppStore) => ({
     projects: store.projects,
-    editingCardIds: store.ui.editingProjectCardIds,
     usecase: store.usecase
 });
 
