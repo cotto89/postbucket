@@ -6,8 +6,6 @@ import Session from './../../domain/session/SessionStore';
 
 import ProjectCardList from './ProjectCardList';
 
-const $ = React.createElement;
-
 /* DashBoradPane
 ----------------------------------- */
 interface Props {
@@ -43,22 +41,14 @@ export class DashBoradPane extends React.Component<Props, {}> {
     ]);
 
     render() {
-        const {projects, editingCardIds} = this.props;
-
         return (
             <div>
-                {
-                    /* ProjectList
-                    ----------------------- */
-                    $(ProjectCardList, {
-                        projects,
-                        editingCardIds,
-                        updateProject: this.updateProject,
-                        deleteProject: this.deleteProject,
-                        onCardSelect: this.onCardSelect,
-                        toggleCardView: this.toggleCardView
-                    })
-                }
+                <ProjectCardList
+                    updateProject={this.updateProject}
+                    deleteProject={this.deleteProject}
+                    onCardSelect={this.onCardSelect}
+                    toggleCardView={this.toggleCardView}
+                    {...this.props} />
             </div>
         );
     }
