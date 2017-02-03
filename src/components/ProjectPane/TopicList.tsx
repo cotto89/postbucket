@@ -7,9 +7,7 @@ import TopicView from './TopicView';
 type topicAction = (t: Model.ITopic) => void;
 
 interface Props {
-    projects: IAppState['projects'];
-    currentProjectId: string;
-    topics: IAppStore['topics'];
+    topics: Model.ITopic[];
     editingIds: string[];
     deleteTopic: topicAction;
     onTopicSelect: topicAction;
@@ -18,21 +16,13 @@ interface Props {
 }
 
 function TopicList(props: Props) {
-    const { projects, topics, currentProjectId, editingIds } = props;
-
-    const pj = projects.get(currentProjectId);
-    if (!pj) return <div>...topic is not found</div>;
-
-    const ts = pj.topicIds.map((tid) => topics.get(tid)).filter(t => !!t) as Model.ITopic[];
-    ts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
-
     return (
         <div className='TopicList'>
             {
-                ts.map(t =>
+                props.topics.map(t =>
                     <div key={t.id}>
                         {
-                            !editingIds.includes(t.id) &&
+                            !props.editingIds.includes(t.id) &&
                             <TopicView
                                 topic={t}
                                 deleteTopic={props.deleteTopic}
@@ -41,7 +31,7 @@ function TopicList(props: Props) {
                             />
                         }
                         {
-                            editingIds.includes(t.id) &&
+                            props.editingIds.includes(t.id) &&
                             <TopicForm
                                 topic={t}
                                 onCancel={props.toggleTopicView}

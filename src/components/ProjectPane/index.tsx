@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { action } from 'mobx';
+import { action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import Data from './../../domain/data/DataStore';
 import UI from './../../domain/ui/UIStore';
@@ -10,13 +10,19 @@ import TopicForm from './TopicForm';
 
 interface Props {
     projects: IAppState['projects'];
-    topics: IAppState['topics'];
     currentProjectId: string;
     editingIds: string[];
     usecase: IAppStore.UseCase;
 }
 
 export class ProjectPane extends React.Component<Props, {}> {
+    @computed get topics() {
+        const pj = this.props.projects.get(this.props.currentProjectId);
+        if (!pj) return [];
+        // TODO: sortの仕方を再考する
+        return pj.topics.values().sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+    }
+
     @action
     addTopic = this.props.usecase('TOPIC_ADD').use<Model.ITopic>([
         Data.addTopic,
@@ -55,11 +61,12 @@ export class ProjectPane extends React.Component<Props, {}> {
                 />
 
                 <TopicList
+                    topics={this.topics}
+                    editingIds={this.props.editingIds}
                     deleteTopic={this.deleteTopic}
                     onTopicSelect={this.onTopicSelect}
                     toggleTopicView={this.toggleTopicView}
                     updateTopic={this.updateTopic}
-                    {...this.props}
                 />
             </div>
 
@@ -69,7 +76,6 @@ export class ProjectPane extends React.Component<Props, {}> {
 
 const mapStateToProps = (store: IAppStore) => ({
     projects: store.projects,
-    topics: store.topics,
     currentProjectId: store.session.currentProjectId,
     editingIds: store.ui.editingTopicCardIds,
     usecase: store.usecase
