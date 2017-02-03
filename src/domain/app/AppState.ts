@@ -22,11 +22,8 @@ export class AppState extends DataStore {
 
         const fixture = () => {
             const pj = new Project({ name: `SampleProject ${iden}` });
-
-            this.projects.set(pj.id, pj);
-
             const tArray = range(props.topicCountPerProject).map(n => {
-                return new Topic({ projectId: pj.id, title: `topic ${iden + n}` });
+                return new Topic({ projectId: pj.id, title: `topic ${n}-${iden}` });
             });
 
 
@@ -41,13 +38,11 @@ export class AppState extends DataStore {
 
                 const pIds = pArray.map(p => p.id);
 
-
                 t.postIds.push(...pIds);
-                pj.postIds.push(...pIds);
-                pj.topicIds.push(t.id);
 
-                this.topics.set(t.id, t);
-                pArray.forEach(p => this.posts.set(p.id, p));
+                this.projects.set(pj.id, pj);
+                pj.topics.set(t.id, t);
+                pArray.forEach(p => pj.posts.set(p.id, p));
             });
         };
 

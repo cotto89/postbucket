@@ -16,38 +16,26 @@ describe('#setFixtureData()', () => {
         });
     });
 
-    describe('topics', () => {
-        it('topicが4つあること', () => {
-            assert.equal(s.topics.size, 4);
-        });
-
-        it('topicが所属するproject.topicIdsに自身のidがあること', () => {
-            s.topics.entries().forEach(([id, t]) => {
-                const pj = s.projects.get(t.projectId);
-                if (!pj) throw Error('projectがない');
-                assert(pj.topicIds.includes(id));
-            });
+    describe('project.topics', () => {
+        it('topicが2つあること', () => {
+            const [pj] = s.projects.values();
+            assert.equal(pj.topics.size, 2);
         });
     });
 
     describe('posts', () => {
-        it('postが8つあること', () => {
-            assert.equal(s.posts.size, 8);
-        });
-
-        it('postが所属するprojec.postidsに自身のidがあること', () => {
-            s.posts.entries().forEach(([id, p]) => {
-                const pj = s.projects.get((p.projectId));
-                if (!pj) throw Error('projectがない');
-                assert(pj.postIds.includes(id));
-            });
+        it('postが4つあること', () => {
+            const [pj] = s.projects.values();
+            assert.equal(pj.posts.size, 4);
         });
 
         it('postが所属するtopic.postidsに自身のidがあること', () => {
-            s.posts.entries().forEach(([id, p]) => {
-                const pj = s.topics.get((p.topicId));
-                if (!pj) throw Error('projectがない');
-                assert(pj.postIds.includes(id));
+            const [pj] = s.projects.values();
+
+            pj.posts.entries().forEach(([id, p]) => {
+                const t = pj.topics.get((p.topicId));
+                if (!t) throw Error('topicがない');
+                assert(t.postIds.includes(id));
             });
         });
     });
