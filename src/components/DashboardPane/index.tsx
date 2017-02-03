@@ -4,6 +4,7 @@ import UI from './../../domain/ui/UIStore';
 import Data from './../../domain/data/DataStore';
 import Session from './../../domain/session/SessionStore';
 
+import ProjectForm from './ProjectFrom';
 import ProjectCardList from './ProjectCardList';
 
 /* DashBoradPane
@@ -43,6 +44,12 @@ export class DashBoradPane extends React.Component<Props, {}> {
     render() {
         return (
             <div>
+                <ProjectForm
+                    project={{ name: '' } as Model.IProject}
+                    isNew
+                    onSubmit={this.addProject}
+                />
+
                 <ProjectCardList
                     updateProject={this.updateProject}
                     deleteProject={this.deleteProject}
