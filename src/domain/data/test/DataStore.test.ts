@@ -35,6 +35,18 @@ describe('.deleteProject', () => {
     it('projectを1つ削除する', () => {
         assert(!s.projects.keys().includes(pj.id));
     });
+
+    it('関連topicが削除されること', () => {
+        pj.topicIds.forEach((tid) => {
+            assert(!s.topics.keys().includes(tid));
+        });
+    });
+
+    it('関連postが削除されること', () => {
+        pj.postIds.forEach(pid => {
+            assert(!s.posts.keys().includes(pid));
+        });
+    });
 });
 
 describe('.addTopic()', () => {
@@ -48,40 +60,45 @@ describe('.addTopic()', () => {
     });
 
     it('topicが追加されること', () => {
-        assert(pj.topics.values().includes(t));
+        assert(s.topics.values().includes(t));
+    });
+
+    it('project.topicIdsに追加されること', () => {
+        assert(pj.topicIds.includes(t.id));
     });
 });
 
 describe('.updateTopic()', () => {
     it('topicの内容が更新されること', () => {
-        const [pj] = s.projects.values();
-        const [t] = pj.topics.values();
+        const [t] = s.topics.values();
         Data.updateTopic(s, new Model.Topic({ ...t, title: 'hello' }));
 
-        const targetT = pj.topics.get(t.id) as Model.Topic;
+        const targetT = s.topics.get(t.id) as Model.Topic;
         assert.equal(targetT.title, 'hello');
     });
 });
 
 describe('.deleteTopic()', () => {
-    let pj: Model.Project;
     let t: Model.Topic;
     beforeEach(() => {
-        const [_pj] = s.projects.values();
-        const [topic] = _pj.topics.values();
-        pj = _pj;
+        const [topic] = s.topics.values();
         t = topic;
         Data.deleteTopic(s, t);
     });
 
     it('topicが1つ削除されること', () => {
-        assert(!pj.topics.keys().includes(t.id));
+        assert(!s.topics.keys().includes(t.id));
+    });
+
+    it('project.topicIdsから削除対象topicIdがきえること', () => {
+        const pj = s.projects.get(t.projectId) as Model.Project;
+        assert(!pj.topicIds.includes(t.id));
     });
 
     it('関連postが削除されること', () => {
         const pIds = t.postIds;
         pIds.forEach((id) => {
-            assert(!pj.posts.keys().includes(id));
+            assert(!s.posts.keys().includes(id));
         });
     });
 });
@@ -92,11 +109,11 @@ describe('.addPost()', () => {
     let pj: Model.Project;
 
     beforeEach(() => {
-        const [_pj] = s.projects.values();
-        pj = _pj;
-        t = _pj.topics.values()[0];
+        const [_t] = s.topics.values();
+        t = _t;
+        pj = s.projects.get(t.projectId) as Model.Project;
         p = new Model.Post({
-            projectId: _pj.id,
+            projectId: pj.id,
             topicId: t.id,
             content: ''
         });
@@ -105,7 +122,11 @@ describe('.addPost()', () => {
     });
 
     it('postが1つ追加されること', () => {
-        assert(pj.posts.keys().includes(p.id));
+        assert(s.posts.keys().includes(p.id));
+    });
+
+    it('project.postIdsにpostIdが使いされること', () => {
+        assert(pj.postIds.includes(p.id));
     });
 
     it('topic.postIdsにpostIdが追加されること', () => {
@@ -116,34 +137,32 @@ describe('.addPost()', () => {
 
 describe('.updatePost()', () => {
     it('postが更新されること', () => {
-        const [pj] = s.projects.values();
-        const [p] = pj.posts.values();
+        const [p] = s.posts.values();
         Data.updatePost(s, new Model.Post({ ...p, content: 'hello' }));
-        const newP = pj.posts.get(p.id) as Model.Post;
+        const newP = s.posts.get(p.id) as Model.Post;
         assert(newP.content, 'hello');
     });
 });
 
 describe('.deletePost()', () => {
     let p: Model.Post;
-    let pj: Model.Project;
 
     beforeEach(() => {
-        pj = s.projects.values()[0];
-        p = pj.posts.values().slice(0, 1)[0];
+        p = s.posts.values().slice(0, 1)[0];
         Data.deletePost(s, p);
     });
 
     it('postが削除されること', () => {
-        assert(!pj.posts.keys().includes(p.id));
+        assert(!s.posts.keys().includes(p.id));
     });
 
-    it('project.postsからpostが削除されること', () => {
-        assert(!pj.posts.keys().includes(p.id));
+    it('project.postIdsからidが削除されること', () => {
+        const pj = s.projects.get(p.projectId) as Model.Project;
+        assert(!pj.postIds.includes(p.id));
     });
 
     it('topics.postIdsからidが削除されること', () => {
-        const t = pj.topics.get(p.topicId) as Model.Topic;
+        const t = s.topics.get(p.topicId) as Model.Topic;
         assert(!t.postIds.includes(p.id));
     });
 });
