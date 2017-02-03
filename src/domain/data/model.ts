@@ -6,8 +6,8 @@ import { observable, extendObservable } from 'mobx';
 export class Project {
     @observable readonly id: string;
     @observable name: string = '';
-    topicIds = observable.array<string>([]);
-    postIds = observable.array<string>([]);
+    topics = observable.map<Topic>({});
+    posts = observable.map<Post>({});
 
     constructor(props: Partial<Project> & { name: string }) {
         extendObservable(this, {
