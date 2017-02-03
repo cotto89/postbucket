@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Project } from './../../domain/data/model';
+import { Project } from './../../app/model';
 
 interface Props {
     isNew?: boolean;

@@ -1,11 +1,10 @@
 import { createElement } from 'react';
 import * as assert from 'assert';
-import Session from './../SessionStore';
-import AppState from './../../app/AppState';
+import AppStore, { Session } from './../../store';
 
-let s: AppState;
+let s: AppStore;
 beforeEach(() => {
-    s = new AppState();
+    s = new AppStore();
 });
 
 const createRoute = (props: Partial<Model.IRoute>): Model.IRoute => ({

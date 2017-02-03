@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { action, computed, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import Data from './../../domain/data/DataStore';
-import Session from './../../domain/session/SessionStore';
+import { Data, Session } from './../../app/store';
 
 import TopicList from './TopicList';
 import TopicForm from './TopicForm';
 
 interface Props {
-    topics: IAppState['topics'];
+    topics: IAppStore['topics'];
     currentProject?: Model.IProject | undefined;
-    usecase: IAppStore.UseCase;
+    usecase: UseCase;
 }
 
 export class ProjectPane extends React.Component<Props, {}> {
@@ -18,9 +17,11 @@ export class ProjectPane extends React.Component<Props, {}> {
 
     @computed get topics() {
         if (!this.props.currentProject) return [];
-        return this.props.currentProject.topicIds
+        const ts = this.props.currentProject.topicIds
             .map(tid => this.props.topics.get(tid))
             .filter(t => !!t) as Model.ITopic[];
+
+        return ts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
     }
 
     @action

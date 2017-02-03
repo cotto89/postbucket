@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action, observable } from 'mobx';
-import Data from './../../domain/data/DataStore';
-import Session from './../../domain/session/SessionStore';
+import { Data, Session } from './../../app/store';
 
 import ProjectForm from './ProjectFrom';
 import ProjectCardList from './ProjectCardList';
@@ -10,8 +9,8 @@ import ProjectCardList from './ProjectCardList';
 /* DashBoradPane
 ----------------------------------- */
 interface Props {
-    projects: IAppState['projects'];
-    usecase: IAppStore.UseCase;
+    projects: IAppStore['projects'];
+    usecase: UseCase;
 }
 
 @observer

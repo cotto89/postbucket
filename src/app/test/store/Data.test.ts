@@ -1,14 +1,13 @@
 import * as assert from 'assert';
 import { } from 'mobx';
-import AppState from './../../app/AppState';
-import Data from './../DataStore';
-import * as Model from './../model';
+import AppStore, { Data } from './../../store';
+import * as Model from './../../model';
 
-let s: AppState;
+let s: AppStore;
 
 beforeEach(() => {
-    s = new AppState();
-    s.setFixtureData({
+    s = new AppStore();
+    AppStore.setFixtureData(s, {
         projectCount: 2,
         topicCountPerProject: 2,
         postCountPerTopic: 2

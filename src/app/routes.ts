@@ -1,7 +1,7 @@
 import { createElement as $, StatelessComponent } from 'react';
 import { createHashHistory } from 'history';
-import DashboardPane from './components/DashboardPane/index';
-import ProjectPane from './components/ProjectPane/index';
+import DashboardPane from './../components/DashboardPane/index';
+import ProjectPane from './../components/ProjectPane/index';
 
 /* Routes
 -----------------------------------------*/

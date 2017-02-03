@@ -1,10 +1,10 @@
 import * as assert from 'assert';
-import AppState from './../AppState';
+import AppStore from './../../store';
 
 describe('#setFixtureData()', () => {
-    const s = new AppState();
+    const s = new AppStore();
 
-    s.setFixtureData({
+    AppStore.setFixtureData(s, {
         projectCount: 2,
         topicCountPerProject: 2,
         postCountPerTopic: 2,

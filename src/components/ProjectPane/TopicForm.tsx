@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Topic } from './../../domain/data/model';
+import { Topic } from './../../app/model';
 
 /* NOTE:
 ProjectFormと共通化できそう

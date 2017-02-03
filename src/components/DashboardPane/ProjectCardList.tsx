@@ -6,7 +6,7 @@ import ProjectView from './ProjectView';
 const $ = React.createElement;
 
 interface Props {
-    projects: IAppState['projects'];
+    projects: IAppStore['projects'];
     editingCardIds: string[];
     updateProject: (pj: Model.IProject) => void;
     deleteProject: (pj: Model.IProject) => void;

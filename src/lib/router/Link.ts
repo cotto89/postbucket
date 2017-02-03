@@ -1,7 +1,7 @@
 import { Component, createElement as $, SyntheticEvent, HTMLProps } from 'react';
 import { createPath } from 'history';
 import omit = require('lodash/omit');
-import { history } from './../../routes';
+import { history } from './../../app/routes';
 
 interface Props {
     to: string | { pathname: string, search?: string };

@@ -1,7 +1,16 @@
 import { StatelessComponent } from 'react';
-import { Project, Topic, Post } from './../../domain/data/model';
+import { Project, Topic, Post } from './../../app/model';
+import AppStore from './../../app/store';
+import * as Quex from './../../lib/flux/types';
 
 declare global {
+    interface UseCase extends Quex.UseCase<AppStore> { }
+
+    interface IAppStore extends AppStore {
+        usecase: Quex.UseCase<AppStore>;
+    }
+
+
     namespace Model {
         interface IProject extends Project { }
 

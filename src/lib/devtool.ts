@@ -1,4 +1,5 @@
-export default function devTool(store: IAppStore) {
+import { Store } from './flux/types';
+export default function devTool(store: Store<IAppStore>) {
     let reduxDevToolsExtension = (
         process.env.NODE_ENV === 'development' &&
         typeof window !== 'undefined' &&
