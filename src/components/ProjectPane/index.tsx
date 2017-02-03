@@ -6,6 +6,7 @@ import UI from './../../domain/ui/UIStore';
 import Session from './../../domain/session/SessionStore';
 
 import TopicList from './TopicList';
+import TopicForm from './TopicForm';
 
 interface Props {
     projects: IAppState['projects'];
@@ -18,7 +19,6 @@ interface Props {
 export class ProjectPane extends React.Component<Props, {}> {
     @action
     addTopic = this.props.usecase('TOPIC_ADD').use<Model.ITopic>([
-        UI.removeEditingCardId,
         Data.addTopic,
     ]);
 
@@ -45,10 +45,15 @@ export class ProjectPane extends React.Component<Props, {}> {
         Session.setCurrentTopicId
     ]);
 
-
     render() {
         return (
             <div className='ProjectPane'>
+                <TopicForm
+                    topic={{ projectId: this.props.currentProjectId } as Model.ITopic}
+                    isNew
+                    onSubmit={this.addTopic}
+                />
+
                 <TopicList
                     deleteTopic={this.deleteTopic}
                     onTopicSelect={this.onTopicSelect}

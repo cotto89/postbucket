@@ -24,6 +24,7 @@ function TopicList(props: Props) {
     if (!pj) return <div>...topic is not found</div>;
 
     const ts = pj.topicIds.map((tid) => topics.get(tid)).filter(t => !!t) as Model.ITopic[];
+    ts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
 
     return (
         <div className='TopicList'>
