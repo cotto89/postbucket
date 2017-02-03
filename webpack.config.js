@@ -18,6 +18,7 @@ console.info(`
 
 let config = {
     entry: {
+        vendor: ['react', 'react-dom'],
         index: ['./src/index.ts', './style/index.scss']
     },
     output: {
@@ -50,6 +51,10 @@ let config = {
             options: {
                 postcss: [autoprefixer({ browsers: ['last 2 versions'] })],
             }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: 'vendor.bundle.js'
         }),
         new HtmlWebpackPlugin({
             hash: true,
