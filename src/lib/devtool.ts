@@ -12,7 +12,8 @@ export default function devTool(store: Store<IAppStore>) {
 
     devtool.init(store.getState());
 
-    store.subscribe((state: any, event: string) => {
+    store.subscribe((state: any, event: string, error) => {
+        if (error) console.error(error);
         devtool.send(event, state);
     });
 };
