@@ -10,7 +10,7 @@ interface Props {
 }
 
 @observer
-export class ProjectView extends React.Component<Props, {}> {
+export class TopicView extends React.Component<Props, {}> {
     delete = () => this.props.deleteTopic(this.props.topic);
     toggle = () => this.props.toggleToicView(this.props.topic);
     select = () => this.props.onSelect(this.props.topic);
@@ -18,7 +18,7 @@ export class ProjectView extends React.Component<Props, {}> {
     render() {
         const {topic} = this.props;
         return (
-            <div className='ProjectView'>
+            <div className='TopicView'>
                 <h1>
                     <Link to={`/topics/${topic.id}`} onClick={this.select}>
                         {topic.title}
@@ -33,5 +33,5 @@ export class ProjectView extends React.Component<Props, {}> {
     }
 }
 
-export default ProjectView;
+export default TopicView;
 
