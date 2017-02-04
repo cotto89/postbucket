@@ -3,8 +3,6 @@ import * as React from 'react';
 import ProjectForm from './ProjectFrom';
 import ProjectView from './ProjectView';
 
-const $ = React.createElement;
-
 interface Props {
     projects: IAppStore['projects'];
     editingCardIds: string[];
@@ -28,22 +26,22 @@ export function ProjectCardList(props: Props) {
                             /* ProjectView
                             ---------------------------*/
                             !props.editingCardIds.includes(id) &&
-                            $(ProjectView, {
-                                project,
-                                deleteProject: props.deleteProject,
-                                onSelect: props.onCardSelect,
-                                toggleCardView: props.toggleCardView
-                            })
+                            <ProjectView
+                                project={project}
+                                deleteProject={props.deleteProject}
+                                onSelect={props.onCardSelect}
+                                toggleCardView={props.toggleCardView}
+                            />
                         }
                         {
                             /* ProjectForm
                             ---------------------------*/
                             props.editingCardIds.includes(id) &&
-                            $(ProjectForm, {
-                                project,
-                                onSubmit: props.updateProject,
-                                onCancel: props.toggleCardView
-                            })
+                            <ProjectForm
+                                project={project}
+                                onSubmit={props.updateProject}
+                                onCancel={props.toggleCardView}
+                            />
                         }
                     </div>
                 )
