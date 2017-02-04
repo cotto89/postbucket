@@ -16,7 +16,16 @@ export default function devTool(store: Store<IAppStore>) {
             isStarted = true;
             devtool.init(store.getState());
             store.subscribe((state: any, event: string, error) => {
-                if (error) console.error(error);
+                if (error) {
+                    if (error.name === 'AbortTransaction') {
+                        // tslint:disable:no-console
+                        console.groupCollapsed(`${error.name} on ${event}`);
+                        console.info(error);
+                        console.groupEnd();
+                    } else {
+                        console.error(error.name);
+                    }
+                }
                 devtool.send(event, state);
             });
         }
