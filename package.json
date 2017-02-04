@@ -1,6 +1,6 @@
 {
-  "name": "template_typescript",
-  "description": "template_typescript",
+  "name": "postbucket",
+  "description": "postbucket",
   "version": "0.0.1",
   "author": "cotto",
   "dependencies": {
