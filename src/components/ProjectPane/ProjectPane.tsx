@@ -2,6 +2,7 @@ import * as React from 'react';
 import { action, computed, observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Data, Session } from './../../app/store';
+import abortIf from './../utils/abortTransaction';
 
 import TopicList from './TopicList';
 import TopicForm from './TopicForm';
@@ -26,24 +27,26 @@ export class ProjectPane extends React.Component<Props, {}> {
 
     @action
     addTopic = this.props.usecase('TOPIC_ADD').use<Model.ITopic>([
+        (_, t) => abortIf(() => !!t.title),
         Data.addTopic,
     ]);
 
     @action
     updateTopic = this.props.usecase('TOPIC_UPDATE').use<Model.ITopic>([
-        (_s, t) => { this.editingCardIds.remove(t.id); },
+        (_, t) => abortIf(() => !!t.title),
+        (_, t) => { this.editingCardIds.remove(t.id); },
         Data.updateTopic,
     ]);
 
     @action
     deleteTopic = this.props.usecase('TOPIC_DELETE').use<Model.ITopic>([
-        (_s, t) => { this.editingCardIds.remove(t.id); },
+        (_, t) => { this.editingCardIds.remove(t.id); },
         Data.deleteTopic
     ]);
 
     @action
     toggleTopicView = this.props.usecase('TOPIC_VIEW_TOGGLE').use<Model.ITopic>([
-        (_s, pj) => {
+        (_, pj) => {
             this.editingCardIds.includes(pj.id)
                 ? this.editingCardIds.remove(pj.id)
                 : this.editingCardIds.push(pj.id);

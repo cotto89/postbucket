@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action, observable } from 'mobx';
 import { Data, Session } from './../../app/store';
+import abortIf from './../utils/abortTransaction';
 
 import ProjectForm from './ProjectFrom';
 import ProjectCardList from './ProjectCardList';
@@ -19,19 +20,21 @@ export class DashBoradPane extends React.Component<Props, {}> {
 
     @action
     addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
-        (_s, pj) => { this.editingCardIds.remove(pj.id); },
+        (_, pj) => abortIf(() => !!pj.name),
+        (_, pj) => { this.editingCardIds.remove(pj.id); },
         Data.setProject
     ]);
 
     @action
     updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
-        (_s, pj) => { this.editingCardIds.remove(pj.id); },
+        (_, pj) => abortIf(() => !!pj.name),
+        (_, pj) => { this.editingCardIds.remove(pj.id); },
         Data.setProject,
     ]);
 
     @action
     deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
-        (_s, pj) => { this.editingCardIds.remove(pj.id); },
+        (_, pj) => { this.editingCardIds.remove(pj.id); },
         Data.deleteProject,
     ]);
 
@@ -43,7 +46,7 @@ export class DashBoradPane extends React.Component<Props, {}> {
 
     @action
     toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.IProject>([
-        (_s, pj) => {
+        (_, pj) => {
             this.editingCardIds.includes(pj.id)
                 ? this.editingCardIds.remove(pj.id)
                 : this.editingCardIds.push(pj.id);
