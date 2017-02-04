@@ -18,7 +18,6 @@ console.info(`
 
 let config = {
     entry: {
-        vendor: ['react', 'react-dom'],
         index: ['./src/lib/polyfill/object.ts', './src/index.ts', './style/index.scss']
     },
     output: {
@@ -52,10 +51,6 @@ let config = {
                 postcss: [autoprefixer({ browsers: ['last 2 versions'] })],
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            filename: 'vendor.bundle.js'
-        }),
         new HtmlWebpackPlugin({
             hash: true,
             filename: '../index.html',
@@ -70,7 +65,12 @@ let config = {
         })
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        alias: {
+            'react': 'inferno-compat',
+            'react-dom': 'inferno-compat',
+            'mobx-react': 'inferno-mobx'
+        }
     },
 };
 

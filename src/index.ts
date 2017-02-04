@@ -31,7 +31,9 @@ import { Provider } from 'mobx-react';
 
 window.addEventListener('DOMContentLoaded', () => {
     if (process.env.NODE_ENV === 'development') {
+        /* tslint:disable:no-var-requires */
         require('./lib/devtool').default(store);
+        require('inferno-devtools');
 
         const DevTools = require('mobx-react-devtools').default;
         render($(DevTools, { position: { bottom: 0, right: 20 } }), document.getElementById('devtool'));
@@ -41,5 +43,6 @@ window.addEventListener('DOMContentLoaded', () => {
         $(Provider, { ...state, usecase: store.usecase },
             $(Router, { routes, history, onLocationChange })
         ),
-        document.getElementById('root'));
+        document.getElementById('root')
+    );
 });
