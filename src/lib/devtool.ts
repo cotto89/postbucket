@@ -8,12 +8,17 @@ export default function devTool(store: Store<IAppStore>) {
 
     if (!reduxDevToolsExtension) return;
 
+    let isStarted = false;
     const devtool = reduxDevToolsExtension.connect();
 
-    devtool.init(store.getState());
-
-    store.subscribe((state: any, event: string, error) => {
-        if (error) console.error(error);
-        devtool.send(event, state);
+    devtool.subscribe((message: any) => {
+        if (message.type === 'START') {
+            isStarted = true;
+            devtool.init(store.getState());
+            store.subscribe((state: any, event: string, error) => {
+                if (error) console.error(error);
+                devtool.send(event, state);
+            });
+        }
     });
 };
