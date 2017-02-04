@@ -1,7 +1,8 @@
 import { createElement as $, StatelessComponent } from 'react';
 import { createHashHistory } from 'history';
-import DashboardPane from './../components/DashboardPane/index';
-import ProjectPane from './../components/ProjectPane/index';
+import DashboardPane from './../components/DashboardPane/DashboardPane';
+import ProjectPane from './../components/ProjectPane/ProjectPane';
+import TopicPane from './../components/TopicPane/TopicPane';
 
 /* Routes
 -----------------------------------------*/
@@ -21,7 +22,11 @@ export function routes() {
                 {
                     path: '/projects/:projectId',
                     action: result(() => $(ProjectPane))
-                }
+                },
+                {
+                    path: '/topics/:topicId',
+                    action: result(() => $(TopicPane))
+                },
             ]
         }
     ];
