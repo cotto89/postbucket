@@ -1,5 +1,5 @@
 import quex from './../lib/flux/quex';
-import { observable, action } from 'mobx';
+import { observable, action, IObservableArray } from 'mobx';
 import * as M from './model';
 import range = require('lodash/range');
 import * as _ from './../utils/utils';
@@ -7,6 +7,12 @@ import * as _ from './../utils/utils';
 interface ISession {
     currentProjectId?: string;
     currentTopicId?: string;
+}
+
+interface IUI {
+    editingProjectCardIds: IObservableArray<string>;
+    editingTopicCardIds: IObservableArray<string>;
+    editingPostId?: string;
 }
 
 type S = AppStore;
@@ -40,6 +46,13 @@ export default class AppStore {
     session = observable<ISession>({
         currentProjectId: '',
         currentTopicId: ''
+    });
+
+    // ui
+    ui = observable<IUI>({
+        editingProjectCardIds: observable<string>([]),
+        editingTopicCardIds: observable<string>([]),
+        editingPostId: undefined,
     });
 
     /* helper
@@ -291,5 +304,73 @@ export class Session {
     @action
     static setCurrentTopicId(s: S, t: T) {
         s.session.currentTopicId = t.id;
+    }
+}
+
+
+
+export class UI {
+    @action
+    static setEditingId<U extends { id: string }>(s: S, u: U) {
+        if ((u instanceof M.Project) && !s.ui.editingProjectCardIds.includes(u.id)) {
+            s.ui.editingProjectCardIds.push(u.id);
+        }
+
+        if ((u instanceof M.Topic) && !s.ui.editingTopicCardIds.includes(u.id)) {
+            s.ui.editingTopicCardIds.push(u.id);
+        }
+
+        if (u instanceof M.Post) {
+            s.ui.editingPostId = u.id;
+        }
+
+        return s;
+    }
+
+    @action
+    static removeEditingId<U extends { id: string }>(s: S, u: U) {
+        if (u instanceof M.Project) {
+            s.ui.editingProjectCardIds.remove(u.id);
+        }
+
+        if (u instanceof M.Topic) {
+            s.ui.editingTopicCardIds.remove(u.id);
+        }
+
+        if (u instanceof M.Post) {
+            s.ui.editingPostId = undefined;
+        }
+
+        return s;
+    }
+
+    @action
+    static clearEditingIds<U extends { id: string }>(s: S, u: U) {
+        if (u instanceof M.Project) {
+            s.ui.editingProjectCardIds.clear();
+        }
+
+        if (u instanceof M.Topic) {
+            s.ui.editingTopicCardIds.clear();
+        }
+
+        if (u instanceof M.Post) {
+            s.ui.editingPostId = undefined;
+        }
+
+        return s;
+    }
+
+    @action
+    static toggleEditingCardIds<U extends { id: string }>(s: S, u: U) {
+        if (((u instanceof M.Project) && s.ui.editingProjectCardIds.includes(u.id)) ||
+            ((u instanceof M.Topic) && s.ui.editingTopicCardIds.includes(u.id)) ||
+            (u instanceof M.Post && s.ui.editingPostId !== undefined)) {
+            UI.removeEditingId(s, u);
+        } else {
+            UI.setEditingId(s, u);
+        }
+
+        return s;
     }
 }

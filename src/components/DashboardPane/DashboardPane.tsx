@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import { action, observable } from 'mobx';
-import { Data, Session } from './../../app/store';
+import { action } from 'mobx';
+import { Data, Session, UI } from './../../app/store';
 import abortIf from './../utils/abortTransaction';
 
 import ProjectForm from './ProjectFrom';
@@ -12,45 +12,40 @@ import ProjectCardList from './ProjectCardList';
 interface Props {
     projects: IAppStore['projects'];
     usecase: UseCase;
+    editingCardIds: string[];
 }
 
 @observer
 export class DashBoradPane extends React.Component<Props, {}> {
-    editingCardIds = observable.array<string>([]);
-
     @action
     addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
         (_, pj) => abortIf(() => !!pj.name),
-        (_, pj) => { this.editingCardIds.remove(pj.id); },
+        UI.removeEditingId,
         Data.setProject
     ]);
 
     @action
     updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
         (_, pj) => abortIf(() => !!pj.name),
-        (_, pj) => { this.editingCardIds.remove(pj.id); },
+        UI.removeEditingId,
         Data.setProject,
     ]);
 
     @action
     deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
-        (_, pj) => { this.editingCardIds.remove(pj.id); },
+        UI.removeEditingId,
         Data.deleteProject,
     ]);
 
     @action
     onCardSelect = this.props.usecase('PROJECT_SELECT').use<Model.IProject>([
-        () => { this.editingCardIds.clear(); },
+        UI.clearEditingIds,
         Session.setCurrentProjectId,
     ]);
 
     @action
     toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.IProject>([
-        (_, pj) => {
-            this.editingCardIds.includes(pj.id)
-                ? this.editingCardIds.remove(pj.id)
-                : this.editingCardIds.push(pj.id);
-        },
+        UI.toggleEditingCardIds,
     ]);
 
     render() {
@@ -70,7 +65,7 @@ export class DashBoradPane extends React.Component<Props, {}> {
                     deleteProject={this.deleteProject}
                     onCardSelect={this.onCardSelect}
                     toggleCardView={this.toggleCardView}
-                    editingCardIds={this.editingCardIds}
+                    editingCardIds={this.props.editingCardIds}
                     projects={this.props.projects}
                 />
             </div>
@@ -83,7 +78,8 @@ export class DashBoradPane extends React.Component<Props, {}> {
 ------------------------ */
 const mapStateToProps = (store: IAppStore) => ({
     projects: store.projects,
-    usecase: store.usecase
+    usecase: store.usecase,
+    editingCardIds: store.ui.editingProjectCardIds
 });
 
 export default inject(mapStateToProps)(DashBoradPane);

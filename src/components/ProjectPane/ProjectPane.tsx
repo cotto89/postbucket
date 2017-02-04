@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { action, computed, observable } from 'mobx';
+import { action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Data, Session } from './../../app/store';
+import { Data, Session, UI } from './../../app/store';
 import abortIf from './../utils/abortTransaction';
 
 import TopicList from './TopicList';
@@ -11,10 +11,10 @@ interface Props {
     topics: IAppStore['topics'];
     currentProject?: Model.IProject | undefined;
     usecase: UseCase;
+    editingCardIds: string[];
 }
 
 export class ProjectPane extends React.Component<Props, {}> {
-    editingCardIds = observable<string>([]);
 
     @computed get topics() {
         if (!this.props.currentProject) return [];
@@ -34,28 +34,24 @@ export class ProjectPane extends React.Component<Props, {}> {
     @action
     updateTopic = this.props.usecase('TOPIC_UPDATE').use<Model.ITopic>([
         (_, t) => abortIf(() => !!t.title),
-        (_, t) => { this.editingCardIds.remove(t.id); },
+        UI.removeEditingId,
         Data.updateTopic,
     ]);
 
     @action
     deleteTopic = this.props.usecase('TOPIC_DELETE').use<Model.ITopic>([
-        (_, t) => { this.editingCardIds.remove(t.id); },
+        UI.removeEditingId,
         Data.deleteTopic
     ]);
 
     @action
     toggleTopicView = this.props.usecase('TOPIC_VIEW_TOGGLE').use<Model.ITopic>([
-        (_, pj) => {
-            this.editingCardIds.includes(pj.id)
-                ? this.editingCardIds.remove(pj.id)
-                : this.editingCardIds.push(pj.id);
-        },
+        UI.toggleEditingCardIds
     ]);
 
     @action
     onTopicSelect = this.props.usecase('TOPIC_SELECT').use<Model.ITopic>([
-        () => { this.editingCardIds.clear(); },
+        UI.clearEditingIds,
         Session.setCurrentTopicId
     ]);
 
@@ -77,7 +73,7 @@ export class ProjectPane extends React.Component<Props, {}> {
 
                 <TopicList
                     topics={this.topics}
-                    editingIds={this.editingCardIds}
+                    editingIds={this.props.editingCardIds}
                     deleteTopic={this.deleteTopic}
                     onTopicSelect={this.onTopicSelect}
                     toggleTopicView={this.toggleTopicView}
@@ -91,7 +87,8 @@ export class ProjectPane extends React.Component<Props, {}> {
 const mapStateToProps = (store: IAppStore) => ({
     topics: store.topics,
     currentProject: store.projects.get(store.session.currentProjectId || ''),
-    usecase: store.usecase
+    usecase: store.usecase,
+    editingCardIds: store.ui.editingTopicCardIds
 });
 
 export default inject(mapStateToProps)(observer(ProjectPane));
