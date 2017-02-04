@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-import { Data, Session, UI } from './../../app/store';
+import { Data, Session, UI } from './../../mutation/index';
 import abortIf from './../utils/abortTransaction';
 
 import ProjectForm from './ProjectFrom';
@@ -76,7 +76,7 @@ export class DashBoradPane extends React.Component<Props, {}> {
 
 /* Container
 ------------------------ */
-const mapStateToProps = (store: IAppStore) => ({
+const mapStateToProps = (store: IAppStoreFromProvider) => ({
     projects: store.projects,
     usecase: store.usecase,
     editingCardIds: store.ui.editingProjectCardIds

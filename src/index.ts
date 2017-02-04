@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 --------------------------------- */
 import Router from './lib/router/Router';
 import routes, { history } from './app/routes';
-import { Session } from './app/store';
+import { Session } from './mutation/index';
 
 const onLocationChange = store.dispatch('ROUTER_LOCATION_UPDATE').use([
     Session.updateCurrentIds

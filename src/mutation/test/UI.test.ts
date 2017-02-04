@@ -1,13 +1,14 @@
 import * as assert from 'assert';
-import AppState, { UI } from './../store';
-import { Project, Topic, Post } from './../model';
+import AppStore from './../../app/store';
+import { Project, Topic, Post } from './../../app/model';
+import { UI } from './../index';
 
-let s: AppState;
+let s: AppStore;
 let pj: Project;
 let t: Topic;
 let p: Post;
 beforeEach(() => {
-    s = new AppState();
+    s = new AppStore();
     pj = new Project({ name: '' });
     t = new Topic({ projectId: pj.id, title: '' });
     p = new Post({ projectId: pj.id, topicId: t.id, content: '' });

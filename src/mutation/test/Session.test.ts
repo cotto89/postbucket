@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import * as assert from 'assert';
-import AppStore, { Session } from './../../store';
+import AppStore from './../../app/store';
+import { Session } from '../index';
 
 let s: AppStore;
 beforeEach(() => {

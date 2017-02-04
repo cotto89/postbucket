@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import AppStore from './../../store';
+import AppStore from './../store';
 
 describe('#setFixtureData()', () => {
     const s = new AppStore();

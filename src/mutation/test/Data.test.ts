@@ -1,7 +1,8 @@
 import * as assert from 'assert';
 import { } from 'mobx';
-import AppStore, { Data } from './../../store';
-import * as Model from './../../model';
+import AppStore from './../../app/store';
+import { Data } from './../index';
+import * as Model from './../../app/model';
 
 let s: AppStore;
 

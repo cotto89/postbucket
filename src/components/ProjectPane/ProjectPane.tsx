@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { Data, Session, UI } from './../../app/store';
+import { Data, Session, UI } from './../../mutation/index';
 import abortIf from './../utils/abortTransaction';
 
 import TopicList from './TopicList';
@@ -84,7 +84,7 @@ export class ProjectPane extends React.Component<Props, {}> {
     }
 }
 
-const mapStateToProps = (store: IAppStore) => ({
+const mapStateToProps = (store: IAppStoreFromProvider) => ({
     topics: store.topics,
     currentProject: store.projects.get(store.session.currentProjectId || ''),
     usecase: store.usecase,

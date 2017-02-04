@@ -1,7 +1,7 @@
 import { action, observable, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import * as React from 'react';
-import { Data } from './../../app/store';
+import { Data } from './../../mutation/index';
 
 import PostList from './PostList';
 
@@ -47,7 +47,7 @@ export class TopicPane extends React.Component<Props, {}> {
 }
 
 
-const mapStateToProps = (store: IAppStore) => {
+const mapStateToProps = (store: IAppStoreFromProvider) => {
     return {
         usecase: store.usecase,
         currentTopic: store.topics.get(store.session.currentTopicId || ''),
