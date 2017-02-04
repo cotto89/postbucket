@@ -1,7 +1,3 @@
-/* Polyfill
----------------------------------*/
-import './lib/polyfill/object';
-
 /* Store
 ---------------------------------*/
 import builder from './lib/flux/quex';

@@ -19,7 +19,7 @@ console.info(`
 let config = {
     entry: {
         vendor: ['react', 'react-dom'],
-        index: ['./src/index.ts', './style/index.scss']
+        index: ['./src/lib/polyfill/object.ts', './src/index.ts', './style/index.scss']
     },
     output: {
         path: path.join(__dirname, 'public', 'assets'),
@@ -76,6 +76,11 @@ let config = {
 
 if (isDev) {
     config = merge(config, {
+        // https://medium.com/webpack/whats-new-in-webpack-dev-server-2-0-a66848c3679#.qyeizw1h1
+        output: {
+            path: '/',
+            filename: '[name].bundle.js'
+        },
         devtool: 'inline-source-map',
         devServer: {
             contentBase: 'public',
