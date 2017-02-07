@@ -1,5 +1,6 @@
-import { Store } from './flux/types';
-export default function devTool(store: Store<IAppStore>) {
+import { Quex } from './flux/quex';
+
+export default function devTool(store: Quex<IAppStore>) {
     let reduxDevToolsExtension = (
         process.env.NODE_ENV === 'development' &&
         typeof window !== 'undefined' &&

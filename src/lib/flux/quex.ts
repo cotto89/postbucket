@@ -8,116 +8,146 @@ export type R1<S> = {
     (): void;
     readonly _queue: Q1<S>
 };
-
 export type R2<S, P> = {
     (p: P): void;
     readonly _queue: Q2<S, P>
 };
 
-export default function build<S>(initState: S, updator?: (state: S, taskResult: Partial<S>) => S) {
-    let $$state = initState;
-    let $$listener: Function[] = [];
+/* HelperTypes
+-----------------*/
+export interface Quex<S> {
+    readonly listenerCount: number;
+    getState: GetState<S>;
+    setState: SetState<S>;
+    subscribe: Subscribe<S>;
+    dispatch: UseCase<S>;
+    usecase: UseCase<S>;
+}
+
+
+export interface GetState<T> {
+    (): T;
+}
+
+export interface SetState<T> {
+    (state: Partial<T>): void;
+}
+
+export interface UseCase<S> {
+    (name?: string): {
+        use: {
+            (queue: Q1<S>): R1<S>;
+            <P>(queue: Q2<S, P>): R2<S, P>;
+            (queue: Function[]): R1<S> | R2<S, any>;
+        }
+    };
+}
+
+export interface Subscribe<T> {
+    (listener: (state: T, event?: string, error?: Error) => void): void;
+}
+
+
+export default function createFlux<S>(initialState: S, option?: {
+    updater?: (s1: S, s2: Partial<S>) => S
+}) {
+
+    let $state = initialState;
+    let $listener: Function[] = [];
+    let $updater = (() => {
+        const f1 = option && option.updater;
+        const f2 = (s1: S, s2: Partial<S>) => Object.assign({}, s1, s2);
+        return f1 || f2;
+    })();
 
     return {
         get listenerCount() {
-            return $$listener.length;
+            return $listener.length;
         },
         getState,
         setState,
-        dispatch: usecase, // alias for react-redux
+        dispatch: usecase, // alias
         usecase,
         subscribe,
     };
 
-
-    /**
-     * stateを返す
-     */
     function getState() {
-        return $$state;
+        return $state;
     }
 
-    /**
-     * stateをassign
-     */
     function setState(state: Partial<S>) {
-        // default
-        if (!updator) {
-            $$state = Object.assign({}, $$state, state);
-            return;
-        }
-
-        $$state = updator($$state, state);
+        return $state = $updater($state, state);
     }
 
-    /**
-     * stateの変更を購読
-     */
-    function subscribe(listener: (state: S, event: string, err?: Error) => void) {
-        $$listener.push(listener);
-        return () => {
-            $$listener = $$listener.filter(fn => fn !== listener);
-        };
+    function subscribe(listener: (state: S, event?: string, err?: Error) => void) {
+        $listener.push(listener);
+        return () => { $listener = $listener.filter(fn => fn !== listener); };
     }
 
-    /**
-     * stateの変更を通知
-     */
-    function publish(state: S, event: string | undefined, error?: Error | null) {
-        $$listener.forEach(f => f(state, event, error));
+    function publish(state: S, event?: string, error?: Error) {
+        $listener.forEach(f => f(state, event, error));
     }
 
     /*
-     * usecase('name').use([f1, f2, f3])(params)
+     * usecase('name').use([$.f1, $.f2])(params)
      */
-
     function usecase(name?: string) {
+        let $queue: Function[] = [];
+
         return { use };
 
         function use(queue: Q1<S>): R1<S>;
         function use<P>(queue: Q2<S, P>): R2<S, P>;
         function use(queue: Function[]): R1<S> | R2<S, any> {
+            $queue = queue;
+
+            /*
+                こんなの必要？
+                $queue = option.middleware($queue)
+            */
+
+            /*
+              testのためにuseでできたqueueを参照できるようにしてるんだけど、これ必要？
+            */
             let $run: any = run;
-            $run._queue = queue;
+            $run._queue = $queue;
             return $run;
+        };
 
-            function run() {
-                const p = arguments[0];
-                const i = queue[Symbol.iterator]();
-                next();
-                return;
+        function run() {
+            next($queue[Symbol.iterator](), arguments[0]);
+        }
 
-                /**
-                 * queueのiteratorからtaskを1つ取り出して実行する
-                 */
-                function next(task?: Function) {
-                    let iResult = task ? { value: task, done: false } : i.next();
+        /**
+         * queueのiteratorからtaskを1つ取り出して実行する
+         */
+        function next(i: Iterator<Function>, p: any, task?: Function) {
+            let iResult = task ? { value: task, done: false } : i.next();
 
-                    try {
-                        if (iResult.done) {
-                            publish($$state, name, null);
-                            return;
-                        }
-
-                        const result = iResult.value(getState(), p);
-
-                        if (result instanceof Promise) {
-                            result.then(next, e => publish($$state, name, e));
-                            publish($$state, name, null);
-                            return;
-                        }
-
-                        if (!iResult.done) {
-                            result && setState(result);
-                            next();
-                            return;
-                        }
-
-                    } catch (e) {
-                        publish($$state, name, e);
-                    }
+            try {
+                if (iResult.done) {
+                    publish($state, name);
+                    return;
                 }
-            };
+
+                const result = iResult.value($state, p);
+
+                /* Promise(Like) */
+                if (result && typeof result.then === 'function') {
+                    result.then((t: any) => next(i, p, t), (e: Error) => publish($state, name, e));
+                    publish($state, name);
+                    return;
+                }
+
+                if (!iResult.done) {
+                    result && setState(result);
+                    next(i, p);
+                    return;
+                }
+
+            } catch (e) {
+                publish($state, name, e);
+            }
         }
     }
 }

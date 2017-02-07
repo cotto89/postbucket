@@ -1,44 +1,37 @@
 import * as assert from 'assert';
 import * as sinon from 'sinon';
-import build from '../quex';
+import build from './../quex';
 
-interface State {
+interface S {
     count: number;
 }
 
-const initState = (): State => ({
+const initState = (): S => ({
     count: 0
 });
 
-let callStack: string[] = [];
-
 /* Task
 ---------------------------------*/
-const up = (s: State, count: number) => {
-    callStack.push('up');
-    return { count: s.count + count };
+const task = {
+    increment: (s: S, count: number) => ({
+        count: s.count + count
+    }),
+    asyncIncrement: async (_: S, count: number) => {
+        const n = await Promise.resolve(count);
+        return (s: S) => ({
+            count: s.count + n
+        });
+    },
+    multiIncrement: (s: S, count: number) => ({
+        count: s.count * count
+    })
 };
 
-const asyncUp = () => {
-    callStack.push('asyncUp');
-    return Promise.resolve().then(() => f1);
-};
-
-/* Spy
------------------------------------ */
-const s1 = sinon.spy(up);
-const s2 = sinon.spy(asyncUp);
-const f1 = s1 as typeof up;
-const f2 = s2 as typeof asyncUp;
-
-/* Quex
------------------------------------- */
+// /* Quex
+// ------------------------------------ */
 const quex = build(initState());
 beforeEach(() => {
-    s1.reset();
-    s2.reset();
     quex.setState(initState());
-    callStack = [];
 });
 
 
@@ -58,57 +51,50 @@ describe('setState()', () => {
 });
 
 
-describe('subscribe()/ unsubscribe()', () => {
-    const increment = quex.usecase('increment').use([up]);
-    it('expect that receive notification when state is updated', () => {
+describe('subscribe()', () => {
+    it('expect receive notification when state is updated', () => {
+        const increment = quex.usecase('increment').use([
+            task.increment
+        ]);
         const spy = sinon.spy();
-        const dispose = quex.subscribe(spy);
+        const unsubscribe = quex.subscribe(spy);
+
         increment(10);
-        assert(spy.calledWith({ count: 10 }, 'increment', null));
-        dispose();
+
+        assert(spy.calledWith({ count: 10 }, 'increment', undefined));
+        unsubscribe();
     });
 
     it('expect return unsubscribe()', () => {
-        const spy = sinon.spy();
-        const unsubscribe = quex.subscribe(spy);
+        const unsubscribe = quex.subscribe(() => { });
         assert.equal(quex.listenerCount, 1);
 
         unsubscribe();
         assert.equal(quex.listenerCount, 0);
-
-        increment(10);
-
-        assert(!spy.called);
     });
 });
 
-
-
 describe('usecase()', () => {
     it('expect be ensured calling of task order', async () => {
-        const increment = quex.usecase().use([f1, f2, f1]);
+        const increment = quex.usecase('increment').use([
+            task.increment,
+            task.asyncIncrement,
+            task.multiIncrement
+        ]);
 
-        const listenr = sinon.spy();
-        const dispose = quex.subscribe(listenr);
+        const listener = sinon.spy();
 
-        increment(10);
+        quex.subscribe(listener);
 
-        await new Promise((resolve) => {
+        increment(2);
+
+        await new Promise(resolve => {
             setTimeout(() => {
-                assert(s1.firstCall.calledWith({ count: 0 }, 10));
-                assert(s2.calledWith({ count: 10 }, 10));
-                assert(s1.secondCall.calledWith({ count: 10 }, 10));
-                assert(s1.thirdCall.calledWith({ count: 20 }, 10));
-
-                // listenr
                 // 同期処理のときはpublishされないので、非同期処理に入ったときと、done時の2回呼ばれる
-                assert(listenr.firstCall.calledWith({ count: 10 }));
-                assert(listenr.secondCall.calledWith({ count: 30 }));
-
-                // callstack
-                assert.deepEqual(callStack, ['up', 'asyncUp', 'up', 'up']);
-
-                dispose();
+                assert(listener.firstCall.calledWithExactly({ count: 2 }, 'increment', undefined));
+                assert(listener.secondCall.calledWithExactly({ count: 8 }, 'increment', undefined));
+                // もしtaskが非同期処理の完了を待っていなければ count は 6 になっている
+                assert.deepEqual(quex.getState(), { count: 8 });
                 resolve();
             });
         });

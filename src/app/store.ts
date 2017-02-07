@@ -25,8 +25,9 @@ export default class AppStore {
      * @memberOf AppStore
      */
     static initialize(builder: typeof quex) {
-        const self = new AppStore();
-        return builder(self, (s) => s);
+        return builder(new AppStore(), {
+            updater: (s) => s
+        });
     }
 
     /* member valiables
