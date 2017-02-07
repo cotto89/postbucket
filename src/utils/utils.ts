@@ -15,18 +15,9 @@ export {
  * @param {() => R3} [fallback]
  * @returns {(R2 | R3)}
  */
-function whenExists<R1, R2, R3>(test: (() => R1) | R1, then: (a: R1) => R2, fallback?: () => R3): R2 | R3;
-function whenExists<A, R1, R2, R3>(test: ((a: A) => R1) | R1, then: (a: R1) => R2, fallback?: () => R3): R2 | R3;
-function whenExists<A1, A2, R1, R2, R3>(test: ((a1: A1, a2: A2) => R1) | R1,
-    then: (a: R1) => R2, fallback?: () => R3): R2 | R3;
-function whenExists(test: Function | any, then: Function, fallback?: Function) {
-    let result = test;
-
-    if (typeof test === 'function') {
-        result = test();
-    }
-
-    if (existy(result)) return then(result);
+function whenExists<T, R1, R2>(test: T, then: (a: T) => R1, fallback?: () => R2): R1 | R2;
+function whenExists<T>(test: T | any, then: Function, fallback?: Function) {
+    if (existy(test)) return then(test);
     return fallback && fallback();
 }
 
