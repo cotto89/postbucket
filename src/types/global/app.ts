@@ -12,7 +12,7 @@ declare global {
         usecase: UseCase;
     }
 
-    namespace Entity {
+    namespace IEntity {
         interface IProject extends E.IProject { }
         interface ITopic extends E.ITopic { }
         interface IPost extends E.IPost { }

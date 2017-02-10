@@ -1,5 +1,5 @@
 export interface IState {
-    projects: { [projectId: string]: Entity.IProject };
+    projects: { [projectId: string]: IEntity.IProject };
     session: {
         currentProjectId?: string;
         currentTopicId?: string;
