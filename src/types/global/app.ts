@@ -1,15 +1,15 @@
 import { StatelessComponent } from 'react';
 import * as E from './../../app/entity';
-import AppStore from './../../app/store';
+import * as S from './../../app/state';
 import * as Quex from 'quex';
 
 declare global {
-    interface UseCase extends Quex.UseCase<AppStore> { }
+    interface UseCase extends Quex.UseCase<S.IState> { }
 
-    interface IAppStore extends AppStore { }
+    interface IAppState extends S.IState { }
 
-    interface IAppStoreFromProvider extends AppStore {
-        usecase: Quex.UseCase<AppStore>;
+    interface IAppStoreFromProvider extends S.IState {
+        usecase: UseCase;
     }
 
     namespace Entity {
