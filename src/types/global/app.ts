@@ -1,25 +1,21 @@
 import { StatelessComponent } from 'react';
-import { Project, Topic, Post } from './../../app/model';
-import AppStore from './../../app/store';
-import * as Quex from './../../lib/flux/quex';
+import * as E from './../../app/entity';
+import * as S from './../../app/state';
+import * as Quex from 'quex';
 
 declare global {
-    interface UseCase extends Quex.UseCase<AppStore> { }
+    interface UseCase extends Quex.UseCase<S.IState> { }
 
-    interface IAppStore extends AppStore { }
+    interface IAppState extends S.IState { }
 
-    interface IAppStoreFromProvider extends AppStore {
-        usecase: Quex.UseCase<AppStore>;
+    interface IAppStoreFromProvider extends S.IState {
+        usecase: UseCase;
     }
 
-
-    namespace Model {
-        interface IProject extends Project { }
-
-        interface ITopic extends Topic { }
-
-        interface IPost extends Post { }
-
+    namespace IEntity {
+        interface IProject extends E.IProject { }
+        interface ITopic extends E.ITopic { }
+        interface IPost extends E.IPost { }
         interface IRoute {
             component: StatelessComponent<any>;
             query: { [key: string]: string };
