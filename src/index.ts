@@ -32,19 +32,16 @@ const onLocationChange = store.dispatch('ROUTER_LOCATION_UPDATE').use([
 ---------------------------------- */
 import { createElement as $ } from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'mobx-react';
+import { Provider } from 'react-redux';
 
 window.addEventListener('DOMContentLoaded', () => {
     if (process.env.NODE_ENV === 'development') {
         require('./lib/devtool').default(store);
         require('inferno-devtools');
-
-        const DevTools = require('mobx-react-devtools').default;
-        render($(DevTools, { position: { bottom: 0, right: 20 } }), document.getElementById('devtool'));
     }
 
     render(
-        $(Provider, { ...state, usecase: store.usecase },
+        $(Provider, { store: store as any },
             $(Router, { routes, history, onLocationChange })
         ),
         document.getElementById('root')

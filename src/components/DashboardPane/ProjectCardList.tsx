@@ -1,24 +1,23 @@
-import { observer } from 'mobx-react';
 import * as React from 'react';
 import ProjectForm from './ProjectFrom';
 import ProjectView from './ProjectView';
 
 interface Props {
-    projects: IAppStore['projects'];
+    projects: IAppState['projects'];
     editingCardIds: string[];
-    updateProject: (pj: Model.IProject) => void;
-    deleteProject: (pj: Model.IProject) => void;
-    onCardSelect: (pj: Model.IProject) => void;
-    toggleCardView: (pj: Model.IProject) => void;
+    updateProject: (pj: IEntity.IProject) => void;
+    deleteProject: (pj: IEntity.IProject) => void;
+    onCardSelect: (pj: IEntity.IProject) => void;
+    toggleCardView: (pj: IEntity.IProject) => void;
 }
 
-export function ProjectCardList(props: Props) {
+export default function ProjectCardList(props: Props) {
     return (
         /* ProjectList
         ----------------------- */
         <div className='ProjectCardList'>
             {
-                props.projects.entries().map(([id, project]) =>
+                Object.entries(props.projects).map(([id, project]) =>
                     /* ProjectCard
                     --------------------------*/
                     <div className='ProjectCard' key={id}>
@@ -49,5 +48,3 @@ export function ProjectCardList(props: Props) {
         </div>
     );
 }
-
-export default observer(ProjectCardList);

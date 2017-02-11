@@ -1,60 +1,56 @@
-import { observable, action } from 'mobx';
-import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Topic } from './../../app/model';
+import * as Entity from './../../app/entity';
 
 /* NOTE:
 ProjectFormと共通化できそう
 */
 
+interface State {
+    newTopicTitle: string;
+}
+
 interface Props {
     isNew?: boolean;
-    topic: Model.ITopic;
-    onSubmit?: (t: Model.ITopic) => void;
-    onCancel?: (t: Model.ITopic) => void;
+    topic: IEntity.ITopic;
+    onSubmit?: (t: IEntity.ITopic) => void;
+    onCancel?: (t: IEntity.ITopic) => void;
     onChange?: React.FormEventHandler<HTMLInputElement>;
 }
 
-@observer
-export class TopicForm extends React.Component<Props, {}> {
-    @observable newTopicTitle: string = '';
-    @observable isNew: boolean = false;
-
+export default class TopicForm extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.newTopicTitle = props.topic.title || '';
-        this.isNew = props.isNew || false;
+        this.state = {
+            newTopicTitle: props.topic.title || ''
+        };
     }
 
-    @action.bound
-    submit(e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
+    submit = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
-        const title = this.newTopicTitle.trim();
-        const t = new Topic({ ...this.props.topic, title });
+        const title = this.state.newTopicTitle.trim();
+        const t = Entity.topic({ ...this.props.topic, title });
 
         this.props.onSubmit && this.props.onSubmit(t);
-        this.newTopicTitle = '';
+        this.setState({ newTopicTitle: '' });
     }
 
-    @action.bound
-    cancal(e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
+    cancal = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
         this.props.onCancel && this.props.onCancel(this.props.topic);
-        this.newTopicTitle = '';
+        this.setState({ newTopicTitle: '' });
     }
 
-    @action.bound
-    onChange(e: React.FormEvent<HTMLInputElement>) {
+    onChange = (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         this.props.onChange && this.props.onChange(e);
-        this.newTopicTitle = e.currentTarget.value;
+        this.setState({ newTopicTitle: e.currentTarget.value });
     }
 
     render() {
         return (
             <div className='ProjectForm'>
                 <form onSubmit={this.submit}>
-                    <input type='text' value={this.newTopicTitle} onChange={this.onChange} autoFocus />
+                    <input type='text' value={this.state.newTopicTitle} onChange={this.onChange} autoFocus />
                     <button type='submit' onClick={this.submit} >
                         {this.props.isNew ? 'ADD' : 'UPDATE'}
                     </button>
@@ -66,5 +62,3 @@ export class TopicForm extends React.Component<Props, {}> {
         );
     }
 }
-
-export default TopicForm;

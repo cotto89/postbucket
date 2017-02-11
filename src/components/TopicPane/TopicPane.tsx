@@ -1,58 +1,49 @@
-import { action, observable, computed } from 'mobx';
-import { observer, inject } from 'mobx-react';
 import * as React from 'react';
-import { Data } from './../../mutation/index';
+import { connect } from 'react-redux';
+import { Project } from './../../mutation/index';
 
 import PostList from './PostList';
 
 interface Props {
     usecase: UseCase;
-    posts: IAppStore['posts'];
-    currentTopic: Model.ITopic;
+    posts: IEntity.IPost[];
+    currentTopic: IEntity.ITopic;
 }
 
 export class TopicPane extends React.Component<Props, {}> {
-    @observable editingPostId?: string;
-
-    @computed get posts() {
-        if (!this.props.currentTopic) return [];
-
-        return this.props.currentTopic.postIds
-            .map(pid => this.props.posts.get(pid))
-            .filter(p => !!p) as Model.IPost[];
-    }
-
-    @action
-    setPostToEditor = this.props.usecase('POST::SET_EDITOR').use<Model.IPost>([
+    setPostToEditor = this.props.usecase('POST::SET_EDITOR').use<IEntity.IPost>([
 
     ]);
 
-    @action
-    deletePost = this.props.usecase('POST::DELETE').use<Model.IPost>([
-        Data.deletePost,
+    deletePost = this.props.usecase('POST::DELETE').use<IEntity.IPost>([
+        Project.deletePost,
     ]);
 
     render() {
         return (
             <div className='TopicPane'>
                 <PostList
-                    posts={this.posts}
+                    posts={this.props.posts}
                     onSelect={this.setPostToEditor}
                     deletePost={this.deletePost}
                 />
             </div>
         );
     }
-
 }
 
-
 const mapStateToProps = (store: IAppStoreFromProvider) => {
+    const { currentTopicId, currentProjectId } = store.session;
+    const currentProject = store.projects[currentProjectId || ''];
+    const currentTopic = currentProject && currentProject.topics[currentTopicId || ''];
     return {
-        usecase: store.usecase,
-        currentTopic: store.topics.get(store.session.currentTopicId || ''),
-        posts: store.posts
+        currentTopic: currentTopic,
+        posts: currentTopic ? Object.values(currentTopic.posts) : []
     };
 };
 
-export default inject(mapStateToProps)(observer(TopicPane));
+const mapDispatchToProps = (usecase: UseCase) => ({
+    usecase
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopicPane);

@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
 import TopicForm from './TopicForm';
 import TopicView from './TopicView';
 
-type topicAction = (t: Model.ITopic) => void;
+type topicAction = (t: IEntity.ITopic) => void;
 
 interface Props {
-    topics: Model.ITopic[];
+    topics: IEntity.ITopic[];
     editingIds: string[];
     deleteTopic: topicAction;
     onTopicSelect: topicAction;
@@ -15,7 +14,7 @@ interface Props {
     updateTopic: topicAction;
 }
 
-function TopicList(props: Props) {
+export default function TopicList(props: Props) {
     return (
         <div className='TopicList'>
             {
@@ -45,4 +44,3 @@ function TopicList(props: Props) {
 
 }
 
-export default observer(TopicList);
