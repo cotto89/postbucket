@@ -23,6 +23,7 @@ const mapDispatchToProps = (usecase: UseCase) => {
 
             updateProject: usecase('PROJECT::UPDATE').use<IEntity.IProject>([
                 (_, pj) => abortIf(() => !!pj.name),
+
                 UI.removeEditingId(scope),
                 Project.setProject,
             ]),
