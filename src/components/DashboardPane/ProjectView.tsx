@@ -1,16 +1,14 @@
-import { observer } from 'mobx-react';
 import * as React from 'react';
 import Link from './../../lib/router/Link';
 
 interface Props {
-    project: Model.IProject;
-    deleteProject: (project: Model.IProject) => void;
-    toggleCardView: (project: Model.IProject) => void;
-    onSelect: (propject: Model.IProject) => void;
+    project: IEntity.IProject;
+    deleteProject: (project: IEntity.IProject) => void;
+    toggleCardView: (project: IEntity.IProject) => void;
+    onSelect: (propject: IEntity.IProject) => void;
 }
 
-@observer
-export class ProjectView extends React.Component<Props, {}> {
+export default class ProjectView extends React.Component<Props, {}> {
     delete = () => this.props.deleteProject(this.props.project);
     toggle = () => this.props.toggleCardView(this.props.project);
     select = () => this.props.onSelect(this.props.project);
@@ -31,6 +29,4 @@ export class ProjectView extends React.Component<Props, {}> {
         );
     }
 }
-
-export default ProjectView;
 

@@ -1,17 +1,15 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
 
-type PostAction = (post: Model.IPost) => void;
+type PostAction = (post: IEntity.IPost) => void;
 
 namespace PostView {
     export interface Props {
-        post: Model.IPost;
+        post: IEntity.IPost;
         onSelect: PostAction;
         deletePost: PostAction;
     }
 }
 
-@observer
 export class PostView extends React.Component<PostView.Props, {}> {
     handleSelect = () => this.props.onSelect(this.props.post);
     delete = () => this.props.deletePost(this.props.post);
@@ -28,12 +26,11 @@ export class PostView extends React.Component<PostView.Props, {}> {
 }
 
 interface Props {
-    posts: Model.IPost[];
+    posts: IEntity.IPost[];
     onSelect: PostAction;
     deletePost: PostAction;
 }
 
-@observer
 export default class PostList extends React.Component<Props, {}> {
     render() {
         return (

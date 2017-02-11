@@ -1,15 +1,13 @@
-import { observer } from 'mobx-react';
 import * as React from 'react';
 import Link from './../../lib/router/Link';
 
 interface Props {
-    topic: Model.ITopic;
-    deleteTopic: (t: Model.ITopic) => void;
-    toggleToicView: (t: Model.ITopic) => void;
-    onSelect: (t: Model.ITopic) => void;
+    topic: IEntity.ITopic;
+    deleteTopic: (t: IEntity.ITopic) => void;
+    toggleToicView: (t: IEntity.ITopic) => void;
+    onSelect: (t: IEntity.ITopic) => void;
 }
 
-@observer
 export class TopicView extends React.Component<Props, {}> {
     delete = () => this.props.deleteTopic(this.props.topic);
     toggle = () => this.props.toggleToicView(this.props.topic);

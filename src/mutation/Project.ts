@@ -34,7 +34,7 @@ export class Project {
     static deleteProject(s: S, pj: PJ) {
         return {
             projects: omit(s.projects, [pj.id])
-        };
+        } as IAppState;
     }
 
     /**

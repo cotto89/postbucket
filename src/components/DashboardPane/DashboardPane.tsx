@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { observer, inject } from 'mobx-react';
-import { action } from 'mobx';
-import { Data, Session, UI } from './../../mutation/index';
+import { connect } from 'react-redux';
+import { Project, Session, UI } from './../../mutation/index';
 import abortIf from './../utils/abortTransaction';
 
 import ProjectForm from './ProjectFrom';
@@ -10,42 +9,36 @@ import ProjectCardList from './ProjectCardList';
 /* DashBoradPane
 ----------------------------------- */
 interface Props {
-    projects: IAppStore['projects'];
+    projects: IAppState['projects'];
     usecase: UseCase;
     editingCardIds: string[];
 }
 
-@observer
 export class DashBoradPane extends React.Component<Props, {}> {
-    @action
-    addProject = this.props.usecase('PROJECT_ADD').use<Model.IProject>([
+    addProject = this.props.usecase('PROJECT::ADD').use<IEntity.IProject>([
         (_, pj) => abortIf(() => !!pj.name),
-        UI.removeEditingId,
-        Data.setProject
+        UI.removeEditingId('editingProjectCardIds'),
+        Project.setProject
     ]);
 
-    @action
-    updateProject = this.props.usecase('PROJECT_UPDATE').use<Model.IProject>([
+    updateProject = this.props.usecase('PROJECT::UPDATE').use<IEntity.IProject>([
         (_, pj) => abortIf(() => !!pj.name),
-        UI.removeEditingId,
-        Data.setProject,
+        UI.removeEditingId('editingProjectCardIds'),
+        Project.setProject,
     ]);
 
-    @action
-    deleteProject = this.props.usecase('PROJECT_DELETE').use<Model.IProject>([
-        UI.removeEditingId,
-        Data.deleteProject,
+    deleteProject = this.props.usecase('PROJECT::DELETE').use<IEntity.IProject>([
+        UI.removeEditingId('editingProjectCardIds'),
+        Project.deleteProject
     ]);
 
-    @action
-    onCardSelect = this.props.usecase('PROJECT_SELECT').use<Model.IProject>([
-        UI.clearEditingIds,
+    onCardSelect = this.props.usecase('PROJECT::SELECT').use<IEntity.IProject>([
+        UI.clearEditingIds('editingProjectCardIds'),
         Session.setCurrentProjectId,
     ]);
 
-    @action
-    toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<Model.IProject>([
-        UI.toggleEditingCardIds,
+    toggleCardView = this.props.usecase('PROJECT_CARD_TOGGLE').use<IEntity.IProject>([
+        UI.toggleEditingIds('editingProjectCardIds'),
     ]);
 
     render() {
@@ -55,7 +48,7 @@ export class DashBoradPane extends React.Component<Props, {}> {
                     <h1>Dashboard</h1>
                 </header>
                 <ProjectForm
-                    project={{ name: '' } as Model.IProject}
+                    project={{ name: '' } as IEntity.IProject}
                     isNew
                     onSubmit={this.addProject}
                 />
@@ -82,4 +75,8 @@ const mapStateToProps = (store: IAppStoreFromProvider) => ({
     editingCardIds: store.ui.editingProjectCardIds
 });
 
-export default inject(mapStateToProps)(DashBoradPane);
+const mapDispatchToProps = (usecase: UseCase) => ({
+    usecase
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashBoradPane);

@@ -45,7 +45,7 @@ export const history = createHashHistory({
 class RoutingError extends Error { }
 
 export function createActionResult(component: StatelessComponent<any>) {
-    return (context: any): Model.IRoute => {
+    return (context: any): IEntity.IRoute => {
         const { query, params } = context;
         return {
             query,

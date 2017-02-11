@@ -1,68 +1,62 @@
-import { observable, action } from 'mobx';
-import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Project } from './../../app/model';
+import * as Entity from './../../app/entity';
+
+interface State {
+    newProjectName: string;
+}
 
 interface Props {
     isNew?: boolean;
-    project: Model.IProject;
-    onSubmit?: (project: Model.IProject) => void;
-    onCancel?: (project: Model.IProject) => void;
+    project: IEntity.IProject;
+    onSubmit?: (project: IEntity.IProject) => void;
+    onCancel?: (project: IEntity.IProject) => void;
     onChange?: React.FormEventHandler<HTMLInputElement>;
 }
 
-@observer
-export class ProjectForm extends React.Component<Props, {}> {
-    @observable newProjectName: string = '';
-    @observable isProcessing: boolean = false;
-    @observable isNew: boolean = false;
-
+export default class ProjectForm extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.newProjectName = props.project.name || '';
-        this.isNew = props.isNew || false;
+        this.state = {
+            newProjectName: props.project.name || ''
+        };
     }
 
-    @action.bound
-    submit(e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
+    submit = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
-        this.isProcessing = true;
 
-        const name = this.newProjectName.trim();
-        const pj = new Project({ ...this.props.project, name });
+        const name = this.state.newProjectName.trim();
+        const pj = Entity.project({ ...this.props.project, name });
 
         this.props.onSubmit && this.props.onSubmit(pj);
 
-        this.newProjectName = '';
-        this.isProcessing = false;
+        this.setState({
+            newProjectName: '',
+        });
     }
 
-    @action.bound
-    cancal(e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
+    cancal = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
         this.props.onCancel && this.props.onCancel(this.props.project);
-        this.newProjectName = '';
-        this.isProcessing = false;
+        this.setState({ newProjectName: '' });
     }
 
-    @action.bound
-    onChange(e: React.FormEvent<HTMLInputElement>) {
+    onChange = (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         this.props.onChange && this.props.onChange(e);
-        this.newProjectName = e.currentTarget.value;
+        this.setState({ newProjectName: e.currentTarget.value });
     }
 
     render() {
-        const {newProjectName, isProcessing} = this;
+        const {newProjectName} = this.state;
 
         return (
             <div className='ProjectForm'>
                 <form onSubmit={this.submit}>
                     <input type='text' value={newProjectName} onChange={this.onChange} autoFocus />
-                    <button type='submit' onClick={this.submit} disabled={isProcessing}>
+                    <button type='submit' onClick={this.submit}>
                         {this.props.isNew ? 'ADD' : 'UPDATE'}
                     </button>
-                    <button type='submit' onClick={this.cancal} disabled={isProcessing}>
+                    <button type='submit' onClick={this.cancal}>
                         CANCEL
                     </button>
                 </form>
@@ -70,5 +64,3 @@ export class ProjectForm extends React.Component<Props, {}> {
         );
     }
 }
-
-export default ProjectForm;

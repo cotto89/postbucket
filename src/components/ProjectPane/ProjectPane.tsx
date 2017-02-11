@@ -1,57 +1,41 @@
 import * as React from 'react';
-import { action, computed } from 'mobx';
-import { observer, inject } from 'mobx-react';
-import { Data, Session, UI } from './../../mutation/index';
+import { connect } from 'react-redux';
+import { Project, Session, UI } from './../../mutation/index';
 import abortIf from './../utils/abortTransaction';
 
 import TopicList from './TopicList';
 import TopicForm from './TopicForm';
 
 interface Props {
-    topics: IAppStore['topics'];
-    currentProject?: Model.IProject | undefined;
+    topics: IEntity.ITopic[];
+    currentProject: IEntity.IProject | undefined;
     usecase: UseCase;
     editingCardIds: string[];
 }
 
 export class ProjectPane extends React.Component<Props, {}> {
-
-    @computed get topics() {
-        if (!this.props.currentProject) return [];
-        const ts = this.props.currentProject.topicIds
-            .map(tid => this.props.topics.get(tid))
-            .filter(t => !!t) as Model.ITopic[];
-
-        return ts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
-    }
-
-    @action
-    addTopic = this.props.usecase('TOPIC_ADD').use<Model.ITopic>([
+    addTopic = this.props.usecase('TOPIC_ADD').use<IEntity.ITopic>([
         (_, t) => abortIf(() => !!t.title),
-        Data.addTopic,
+        Project.addTopic,
     ]);
 
-    @action
-    updateTopic = this.props.usecase('TOPIC_UPDATE').use<Model.ITopic>([
+    updateTopic = this.props.usecase('TOPIC_UPDATE').use<IEntity.ITopic>([
         (_, t) => abortIf(() => !!t.title),
-        UI.removeEditingId,
-        Data.updateTopic,
+        UI.removeEditingId('editingTopicCardIds'),
+        Project.updateTopic,
     ]);
 
-    @action
-    deleteTopic = this.props.usecase('TOPIC_DELETE').use<Model.ITopic>([
-        UI.removeEditingId,
-        Data.deleteTopic
+    deleteTopic = this.props.usecase('TOPIC_DELETE').use<IEntity.ITopic>([
+        UI.removeEditingId('editingTopicCardIds'),
+        Project.deleteTopic
     ]);
 
-    @action
-    toggleTopicView = this.props.usecase('TOPIC_VIEW_TOGGLE').use<Model.ITopic>([
-        UI.toggleEditingCardIds
+    toggleTopicView = this.props.usecase('TOPIC_VIEW_TOGGLE').use<IEntity.ITopic>([
+        UI.toggleEditingIds('editingTopicCardIds')
     ]);
 
-    @action
-    onTopicSelect = this.props.usecase('TOPIC_SELECT').use<Model.ITopic>([
-        UI.clearEditingIds,
+    onTopicSelect = this.props.usecase('TOPIC_SELECT').use<IEntity.ITopic>([
+        UI.clearEditingIds('editingTopicCardIds'),
         Session.setCurrentTopicId
     ]);
 
@@ -66,13 +50,13 @@ export class ProjectPane extends React.Component<Props, {}> {
                     <h1>{currentProject.name}</h1>
                 </header>
                 <TopicForm
-                    topic={{ projectId: currentProject.id } as Model.ITopic}
+                    topic={{ projectId: currentProject.id } as IEntity.ITopic}
                     isNew
                     onSubmit={this.addTopic}
                 />
 
                 <TopicList
-                    topics={this.topics}
+                    topics={this.props.topics}
                     editingIds={this.props.editingCardIds}
                     deleteTopic={this.deleteTopic}
                     onTopicSelect={this.onTopicSelect}
@@ -84,11 +68,19 @@ export class ProjectPane extends React.Component<Props, {}> {
     }
 }
 
-const mapStateToProps = (store: IAppStoreFromProvider) => ({
-    topics: store.topics,
-    currentProject: store.projects.get(store.session.currentProjectId || ''),
-    usecase: store.usecase,
-    editingCardIds: store.ui.editingTopicCardIds
+const mapStateToProps = (store: IAppStoreFromProvider) => {
+    const { currentProjectId  } = store.session;
+    const currentProject = store.projects[currentProjectId || ''] as IEntity.IProject;
+    return {
+        // この型通らないんだけど謎
+        currentProject: currentProject as any,
+        topics: currentProject ? Object.values(currentProject.topics) : [],
+        editingCardIds: store.ui.editingTopicCardIds
+    };
+};
+
+const mapDispatchToProps = (usecase: UseCase) => ({
+    usecase
 });
 
-export default inject(mapStateToProps)(observer(ProjectPane));
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPane);
