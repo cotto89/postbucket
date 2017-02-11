@@ -1,70 +1,33 @@
-import { action } from 'mobx';
-import * as M from './../app/model';
+import set = require('lodash/fp/set');
 
-type S = IAppStore;
+type S = IAppState;
 
 export class UI {
-    @action
-    static setEditingId<U extends { id: string }>(s: S, u: U) {
-        if ((u instanceof M.Project) && !s.ui.editingProjectCardIds.includes(u.id)) {
-            s.ui.editingProjectCardIds.push(u.id);
-        }
-
-        if ((u instanceof M.Topic) && !s.ui.editingTopicCardIds.includes(u.id)) {
-            s.ui.editingTopicCardIds.push(u.id);
-        }
-
-        if (u instanceof M.Post) {
-            s.ui.editingPostId = u.id;
-        }
-
-        return s;
+    static setEditingId(context: 'editingProjectCardIds' | 'editingTopicCardIds' | 'editingPostIds') {
+        return <U extends { id: string }>(s: S, u: U) => {
+            return set(['ui', context], [...s.ui[context], u.id], s);
+        };
     }
 
-    @action
-    static removeEditingId<U extends { id: string }>(s: S, u: U) {
-        if (u instanceof M.Project) {
-            s.ui.editingProjectCardIds.remove(u.id);
-        }
-
-        if (u instanceof M.Topic) {
-            s.ui.editingTopicCardIds.remove(u.id);
-        }
-
-        if (u instanceof M.Post) {
-            s.ui.editingPostId = undefined;
-        }
-
-        return s;
+    static removeEditingId(context: 'editingProjectCardIds' | 'editingTopicCardIds' | 'editingPostIds') {
+        return <U extends { id: string }>(s: S, u: U) => {
+            return set(['ui', context], s.ui[context].filter(id => id !== u.id), s);
+        };
     }
 
-    @action
-    static clearEditingIds<U extends { id: string }>(s: S, u: U) {
-        if (u instanceof M.Project) {
-            s.ui.editingProjectCardIds.clear();
-        }
-
-        if (u instanceof M.Topic) {
-            s.ui.editingTopicCardIds.clear();
-        }
-
-        if (u instanceof M.Post) {
-            s.ui.editingPostId = undefined;
-        }
-
-        return s;
+    static clearEditingIds(context: 'editingProjectCardIds' | 'editingTopicCardIds' | 'editingPostIds') {
+        return <U extends { id: string }>(s: S, _u: U) => {
+            return set(['ui', context], [], s);
+        };
     }
 
-    @action
-    static toggleEditingCardIds<U extends { id: string }>(s: S, u: U) {
-        if (((u instanceof M.Project) && s.ui.editingProjectCardIds.includes(u.id)) ||
-            ((u instanceof M.Topic) && s.ui.editingTopicCardIds.includes(u.id)) ||
-            (u instanceof M.Post && s.ui.editingPostId !== undefined)) {
-            UI.removeEditingId(s, u);
-        } else {
-            UI.setEditingId(s, u);
-        }
+    static toggleEditingIds(context: 'editingProjectCardIds' | 'editingTopicCardIds' | 'editingPostIds') {
+        return <U extends { id: string }>(s: S, u: U) => {
+            if (s.ui[context].includes(u.id)) {
+                return UI.removeEditingId(context)(s, u);
+            }
 
-        return s;
+            return UI.setEditingId(context)(s, u);
+        };
     }
 }

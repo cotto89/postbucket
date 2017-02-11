@@ -7,7 +7,7 @@ export interface IState {
     ui: {
         editingProjectCardIds: string[];
         editingTopicCardIds: string[];
-        editingPostId?: string;
+        editingPostIds: string[];
     };
 }
 
@@ -21,7 +21,7 @@ export function initialState(props?: Partial<IState>): IState {
         ui: {
             editingProjectCardIds: [],
             editingTopicCardIds: [],
-            editingPostId: undefined
+            editingPostIds: []
         },
         ...props
     };

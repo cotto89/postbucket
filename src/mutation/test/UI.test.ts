@@ -1,84 +1,97 @@
 import * as assert from 'assert';
-import AppStore from './../../app/store';
-import { Project, Topic, Post } from './../../app/model';
-import { UI } from './../index';
+import { initialState } from './../../app/state';
+import { UI } from './../UI';
+import * as Entity from './../../app/entity';
 
-let s: AppStore;
-let pj: Project;
-let t: Topic;
-let p: Post;
+let s: IAppState;
 beforeEach(() => {
-    s = new AppStore();
-    pj = new Project({ name: '' });
-    t = new Topic({ projectId: pj.id, title: '' });
-    p = new Post({ projectId: pj.id, topicId: t.id, content: '' });
+    s = initialState();
 });
 
 /*
  * setEditingCardIdとremoveEditingCardIdのテストをこれで済ます
  */
 describe('toggleEditingCardIds', () => {
-    context('Project', () => {
-        it('editingProjectCardIdsにidが更新される', () => {
-            UI.toggleEditingCardIds(s, pj);
-            assert(s.ui.editingProjectCardIds.includes(pj.id));
+    context('editingProjectCardIds', () => {
+        it('editingProjectCardIdsが更新される', () => {
+            const ctx = 'editingProjectCardIds';
+            const pj = Entity.project({ name: '' });
 
-            UI.toggleEditingCardIds(s, pj);
-            assert(!s.ui.editingProjectCardIds.includes(pj.id));
+            const r1 = UI.toggleEditingIds(ctx)(s, pj);
+            assert.deepEqual(r1.ui.editingProjectCardIds, [pj.id]);
+
+            const r2 = UI.toggleEditingIds(ctx)(r1, pj);
+            assert.deepEqual(r2.ui.editingProjectCardIds, []);
         });
     });
 
+    context('editingTopicCardIds', () => {
+        it('editingTopicCardIdsが更新される', () => {
+            const ctx = 'editingTopicCardIds';
+            const t = Entity.topic({ projectId: '1' });
 
-    context('Topic', () => {
-        it('editingTopicCardIdsにidが更新される', () => {
-            UI.toggleEditingCardIds(s, t);
-            assert(s.ui.editingTopicCardIds.includes(t.id));
+            const r1 = UI.toggleEditingIds(ctx)(s, t);
+            assert.deepEqual(r1.ui.editingTopicCardIds, [t.id]);
 
-            UI.toggleEditingCardIds(s, t);
-            assert(!s.ui.editingTopicCardIds.includes(t.id));
+            const r2 = UI.toggleEditingIds(ctx)(r1, t);
+            assert.deepEqual(r2.ui.editingTopicCardIds, []);
         });
     });
 
-    context('Post', () => {
-        it('editingPostIdが更新される', () => {
-            UI.toggleEditingCardIds(s, p);
-            assert.equal(s.ui.editingPostId, p.id);
+    context('editingPostIds', () => {
+        it('editingPostIdsが更新される', () => {
+            const ctx = 'editingPostIds';
+            const p = Entity.post({ projectId: '1', topicId: '1' });
 
-            UI.toggleEditingCardIds(s, p);
-            assert.equal(s.ui.editingPostId, undefined);
+            const r1 = UI.toggleEditingIds(ctx)(s, p);
+            assert.deepEqual(r1.ui.editingPostIds, [p.id]);
+
+            const r2 = UI.toggleEditingIds(ctx)(r1, p);
+            assert.deepEqual(r2.ui.editingPostIds, []);
         });
     });
 });
 
-describe('.crearEditingCardIds', () => {
-    context('Project', () => {
-        it('editingProjectCardIdsにidが空になる', () => {
-            UI.setEditingId(s, pj);
-            assert(s.ui.editingProjectCardIds.includes(pj.id));
+describe('clearEditingIds', () => {
+    context('editingProjectCardIds', () => {
+        it('editingProjectCardIdsが空になる', () => {
+            const ctx = 'editingProjectCardIds';
+            const pj = Entity.project({ name: '' });
 
-            UI.clearEditingIds(s, pj);
-            assert.equal(s.ui.editingProjectCardIds.length, 0);
+            const r1 = UI.setEditingId(ctx)(s, pj);
+            const r2 = UI.setEditingId(ctx)(r1, pj);
+            assert.deepEqual(r2.ui.editingProjectCardIds, [pj.id, pj.id]);
+
+            const r3 = UI.clearEditingIds(ctx)(r2, pj);
+            assert.deepEqual(r3.ui.editingProjectCardIds, []);
         });
     });
 
+    context('editingTopicCardIds', () => {
+        it('editingTopicCardIdsが更新される', () => {
+            const ctx = 'editingTopicCardIds';
+            const t = Entity.topic({ projectId: '1' });
 
-    context('Topic', () => {
-        it('editingTopicCardIdsにidが空になる', () => {
-            UI.setEditingId(s, t);
-            assert(s.ui.editingTopicCardIds.includes(t.id));
+            const r1 = UI.setEditingId(ctx)(s, t);
+            const r2 = UI.setEditingId(ctx)(r1, t);
+            assert.deepEqual(r2.ui.editingTopicCardIds, [t.id, t.id]);
 
-            UI.clearEditingIds(s, t);
-            assert.equal(s.ui.editingTopicCardIds.length, 0);
+            const r3 = UI.clearEditingIds(ctx)(r2, t);
+            assert.deepEqual(r3.ui.editingTopicCardIds, []);
         });
     });
 
-    context('Post', () => {
-        it('editingPostIdがundefinedになる', () => {
-            UI.setEditingId(s, p);
-            assert.equal(s.ui.editingPostId, p.id);
+    context('editingPostIds', () => {
+        it('editingPostIdsが更新される', () => {
+            const ctx = 'editingPostIds';
+            const p = Entity.post({ projectId: '1', topicId: '1' });
 
-            UI.clearEditingIds(s, p);
-            assert.equal(s.ui.editingPostId, undefined);
+            const r1 = UI.setEditingId(ctx)(s, p);
+            const r2 = UI.setEditingId(ctx)(r1, p);
+            assert.deepEqual(r2.ui.editingPostIds, [p.id, p.id]);
+
+            const r3 = UI.clearEditingIds(ctx)(r2, p);
+            assert.deepEqual(r3.ui.editingPostIds, []);
         });
     });
 });
