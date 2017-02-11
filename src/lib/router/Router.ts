@@ -1,33 +1,34 @@
 /*
-#lib
 * universal-router: path matchingとmatchした場合のroute.actionを叩く。actionの結果はPromiseで返って来る。
 * history: browser historyを模したライブラリ。pathの更新をlistenできる。
+
 # routerのざっくりした仕組み
 - history.listenでpathの変更を監視
 - 変更があればstateを更新してcomponentをrender
 */
-
-import { observable, action } from 'mobx';
-import { observer } from 'mobx-react';
 import { Component, createElement, StatelessComponent } from 'react';
 import { resolve, Routes } from 'universal-router';
 import * as qs from 'query-string';
 import { History, Location } from 'history';
 
+interface State {
+    component: StatelessComponent<any>;
+}
+
 interface Props {
     history: History;
     routes: Routes<any, any>;
     fallbackView?: StatelessComponent<any>;
-    onLocationChange?: (location: Model.IRoute) => void;
+    onLocationChange?: (location: IEntity.IRoute) => void;
 }
 
-@observer
-export default class Router extends Component<Props, {}> {
-    @observable component: StatelessComponent<any>;
-
+export default class Router extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.component = this.props.fallbackView || this.defaultFallbackView;
+
+        this.state = {
+            component: this.props.fallbackView || this.defaultFallbackView,
+        };
 
         this.handleRouting(props.history.location);
         // listen history
@@ -36,11 +37,10 @@ export default class Router extends Component<Props, {}> {
 
     defaultFallbackView = () => createElement('div', {}, '...NotFound');
 
-    @action
-    handleLocationChange = (result: Model.IRoute) => {
+    handleLocationChange = (result: IEntity.IRoute) => {
         const {onLocationChange} = this.props;
         onLocationChange && onLocationChange(result);
-        this.component = result.component;
+        this.setState({ component: result.component });
     }
 
     handleRouting = (location: Location) => {
@@ -55,7 +55,7 @@ export default class Router extends Component<Props, {}> {
     }
 
     render() {
-        let component = this.component || this.props.fallbackView || this.defaultFallbackView;
+        let component = this.state.component || this.props.fallbackView || this.defaultFallbackView;
         return createElement(component);
     }
 }
