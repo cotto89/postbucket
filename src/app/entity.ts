@@ -62,5 +62,3 @@ export function project(props: Partial<IProject> & { name: string }): IProject {
         ...props
     };
 }
-
-
