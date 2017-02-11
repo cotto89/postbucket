@@ -1,16 +1,21 @@
+/* tslint:disable:no-var-requires */
+
 /* Store
 ---------------------------------*/
-import builder from './lib/flux/quex';
-import Store from './app/store';
-const store = Store.initialize(builder);
-const state = store.getState();
+import creaetStore from 'quex';
+import { initialState } from './app/state';
+
+const store = creaetStore(initialState());
 
 if (process.env.NODE_ENV === 'development') {
-    Store.setFixtureData(state, {
+    const fixture = require('./app/helper/createProjectData').default;
+    const projects = fixture({
         projectCount: 3,
         topicCountPerProject: 3,
-        postCountPerTopic: 5
+        postCountPerTopic: 3,
     });
+
+    store.setState({ projects });
 }
 
 /* Router
@@ -31,7 +36,6 @@ import { Provider } from 'mobx-react';
 
 window.addEventListener('DOMContentLoaded', () => {
     if (process.env.NODE_ENV === 'development') {
-        /* tslint:disable:no-var-requires */
         require('./lib/devtool').default(store);
         require('inferno-devtools');
 
