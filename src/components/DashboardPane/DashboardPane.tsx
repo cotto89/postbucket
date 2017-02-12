@@ -11,34 +11,34 @@ const mapStateToProps = (store: IAppStoreFromProvider) => ({
 });
 
 const mapDispatchToProps = (usecase: UseCase) => {
-    const ctx = 'editingProjectCardIds';
+    const scope = 'editingProjectCardIds';
 
     return {
         actions: {
             addProject: usecase('PROJECT::ADD').use<IEntity.IProject>([
                 (_, pj) => abortIf(() => !!pj.name),
-                UI.removeEditingId(ctx),
+                UI.removeEditingId(scope),
                 Project.setProject
             ]),
 
             updateProject: usecase('PROJECT::UPDATE').use<IEntity.IProject>([
                 (_, pj) => abortIf(() => !!pj.name),
-                UI.removeEditingId(ctx),
+                UI.removeEditingId(scope),
                 Project.setProject,
             ]),
 
             deleteProject: usecase('PROJECT::DELETE').use<IEntity.IProject>([
-                UI.removeEditingId(ctx),
+                UI.removeEditingId(scope),
                 Project.deleteProject
             ]),
 
             onCardSelect: usecase('PROJECT::SELECT').use<IEntity.IProject>([
-                UI.clearEditingIds(ctx),
+                UI.clearEditingIds(scope),
                 Session.setCurrentProjectId,
             ]),
 
             toggleCardView: usecase('PROJECT::TOGGLE_CARD').use<IEntity.IProject>([
-                UI.toggleEditingIds(ctx),
+                UI.toggleEditingIds(scope),
             ])
         }
     };
