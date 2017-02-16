@@ -14,7 +14,7 @@ export class SessionAction {
      * routing resultからcrrentXXXIdを更新する
      * paramsにtopicIdがあった場合, topicからprojectIdを探して追加する
      */
-    updateCurrentIds = (s: S, r: IEntity.IRoute) => {
+    updateCurrentIds = u.task('updateCurrentIds', (s: S, r: IEntity.IRoute) => {
         const pjid = r.params['projectId'];
         const tid = r.params['topicId'];
 
@@ -31,12 +31,12 @@ export class SessionAction {
                 session: Object.assign(result, { currentProjectId: pj!.id })
             };
         }, () => s);
-    }
+    });
 
     /**
      * currentProjectIdを更新する
      */
-    setCurrentProjectId = (s: S, pj: PJ) => {
+    setCurrentProjectId = u.task('setCurrentProjectId', (s: S, pj: PJ) => {
         return {
             ...s,
             session: {
@@ -44,12 +44,12 @@ export class SessionAction {
                 currentTopicId: undefined
             }
         };
-    }
+    });
 
     /**
      * currentTopicIdを更新する
      */
-    setCurrentTopicId = (s: S, t: T) => {
+    setCurrentTopicId = u.task('setCurrentTopicId', (s: S, t: T) => {
         return {
             ...s,
             session: {
@@ -57,5 +57,5 @@ export class SessionAction {
                 currentTopicId: t.id
             }
         };
-    }
+    });
 }
