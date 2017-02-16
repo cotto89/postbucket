@@ -1,10 +1,12 @@
 import * as assert from 'assert';
 import { initialState } from './../../app/state';
-import { UI } from './../UI';
+import { UIAction } from './../UIAction';
 import * as Entity from './../../app/entity';
 
 let s: IAppState;
+let action: UIAction;
 beforeEach(() => {
+    action = new UIAction();
     s = initialState();
 });
 
@@ -17,10 +19,10 @@ describe('toggleEditingCardIds', () => {
             const ctx = 'editingProjectCardIds';
             const pj = Entity.project({ name: '' });
 
-            const r1 = UI.toggleEditingIds(ctx)(s, pj);
+            const r1 = action.toggleEditingIds(ctx)(s, pj);
             assert.deepEqual(r1.ui.editingProjectCardIds, [pj.id]);
 
-            const r2 = UI.toggleEditingIds(ctx)(r1, pj);
+            const r2 = action.toggleEditingIds(ctx)(r1, pj);
             assert.deepEqual(r2.ui.editingProjectCardIds, []);
         });
     });
@@ -30,10 +32,10 @@ describe('toggleEditingCardIds', () => {
             const ctx = 'editingTopicCardIds';
             const t = Entity.topic({ projectId: '1' });
 
-            const r1 = UI.toggleEditingIds(ctx)(s, t);
+            const r1 = action.toggleEditingIds(ctx)(s, t);
             assert.deepEqual(r1.ui.editingTopicCardIds, [t.id]);
 
-            const r2 = UI.toggleEditingIds(ctx)(r1, t);
+            const r2 = action.toggleEditingIds(ctx)(r1, t);
             assert.deepEqual(r2.ui.editingTopicCardIds, []);
         });
     });
@@ -43,10 +45,10 @@ describe('toggleEditingCardIds', () => {
             const ctx = 'editingPostIds';
             const p = Entity.post({ projectId: '1', topicId: '1' });
 
-            const r1 = UI.toggleEditingIds(ctx)(s, p);
+            const r1 = action.toggleEditingIds(ctx)(s, p);
             assert.deepEqual(r1.ui.editingPostIds, [p.id]);
 
-            const r2 = UI.toggleEditingIds(ctx)(r1, p);
+            const r2 = action.toggleEditingIds(ctx)(r1, p);
             assert.deepEqual(r2.ui.editingPostIds, []);
         });
     });
@@ -58,11 +60,11 @@ describe('clearEditingIds', () => {
             const ctx = 'editingProjectCardIds';
             const pj = Entity.project({ name: '' });
 
-            const r1 = UI.setEditingId(ctx)(s, pj);
-            const r2 = UI.setEditingId(ctx)(r1, pj);
+            const r1 = action.setEditingId(ctx)(s, pj);
+            const r2 = action.setEditingId(ctx)(r1, pj);
             assert.deepEqual(r2.ui.editingProjectCardIds, [pj.id, pj.id]);
 
-            const r3 = UI.clearEditingIds(ctx)(r2, pj);
+            const r3 = action.clearEditingIds(ctx)(r2, pj);
             assert.deepEqual(r3.ui.editingProjectCardIds, []);
         });
     });
@@ -72,11 +74,11 @@ describe('clearEditingIds', () => {
             const ctx = 'editingTopicCardIds';
             const t = Entity.topic({ projectId: '1' });
 
-            const r1 = UI.setEditingId(ctx)(s, t);
-            const r2 = UI.setEditingId(ctx)(r1, t);
+            const r1 = action.setEditingId(ctx)(s, t);
+            const r2 = action.setEditingId(ctx)(r1, t);
             assert.deepEqual(r2.ui.editingTopicCardIds, [t.id, t.id]);
 
-            const r3 = UI.clearEditingIds(ctx)(r2, t);
+            const r3 = action.clearEditingIds(ctx)(r2, t);
             assert.deepEqual(r3.ui.editingTopicCardIds, []);
         });
     });
@@ -86,11 +88,11 @@ describe('clearEditingIds', () => {
             const ctx = 'editingPostIds';
             const p = Entity.post({ projectId: '1', topicId: '1' });
 
-            const r1 = UI.setEditingId(ctx)(s, p);
-            const r2 = UI.setEditingId(ctx)(r1, p);
+            const r1 = action.setEditingId(ctx)(s, p);
+            const r2 = action.setEditingId(ctx)(r1, p);
             assert.deepEqual(r2.ui.editingPostIds, [p.id, p.id]);
 
-            const r3 = UI.clearEditingIds(ctx)(r2, p);
+            const r3 = action.clearEditingIds(ctx)(r2, p);
             assert.deepEqual(r3.ui.editingPostIds, []);
         });
     });

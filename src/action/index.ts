@@ -1,3 +1,3 @@
-export { UI } from './UI'
-export { Session } from './Session'
-export { Project } from './Project'
+export { UIAction } from './UIAction'
+export { SessionAction } from './SessionAction'
+export { ProjectAction } from './ProjectAction'

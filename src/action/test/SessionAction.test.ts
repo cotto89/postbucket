@@ -2,9 +2,10 @@ import { createElement } from 'react';
 import * as assert from 'assert';
 import { initialState } from './../../app/state';
 import fixture from './../../app/helper/createProjectData';
-import { Session } from './../Session';
+import { SessionAction } from './../SessionAction';
 
 let s: IAppState;
+let action: SessionAction;
 let target: {
     pj: IEntity.IProject,
     t: IEntity.ITopic,
@@ -17,6 +18,8 @@ beforeEach(() => {
         topicCountPerProject: 2,
         postCountPerTopic: 2
     });
+
+    action = new SessionAction();
 
     s = initialState({ projects });
     const [pj] = Object.values(s.projects);
@@ -42,7 +45,7 @@ describe('.updateCurrentIds()', () => {
                 }
             });
 
-            const {session} = Session.updateCurrentIds(s, route);
+            const {session} = action.updateCurrentIds(s, route);
             assert.deepEqual(session, {
                 currentProjectId: '1',
                 currentTopicId: undefined
@@ -58,7 +61,7 @@ describe('.updateCurrentIds()', () => {
                 }
             });
 
-            const { session } = Session.updateCurrentIds(s, route);
+            const { session } = action.updateCurrentIds(s, route);
 
             assert.deepEqual(session, {
                 currentProjectId: target.pj.id,
@@ -70,7 +73,7 @@ describe('.updateCurrentIds()', () => {
 
 describe('.setCurrentProjectIds', () => {
     it('currentProjectIdに追加されること', () => {
-        const {session} = Session.setCurrentProjectId(s, { id: '1' } as IEntity.IProject);
+        const {session} = action.setCurrentProjectId(s, { id: '1' } as IEntity.IProject);
         assert.deepEqual(session, {
             currentProjectId: '1',
             currentTopicId: undefined
@@ -80,7 +83,7 @@ describe('.setCurrentProjectIds', () => {
 
 describe('.setCurrentTopicIds', () => {
     it('currentTopicIdに追加されること', () => {
-        const {session} = Session.setCurrentTopicId(s, { id: '1', projectId: '2' } as IEntity.ITopic);
+        const {session} = action.setCurrentTopicId(s, { id: '1', projectId: '2' } as IEntity.ITopic);
         assert.deepEqual(session, {
             currentProjectId: '2',
             currentTopicId: '1'

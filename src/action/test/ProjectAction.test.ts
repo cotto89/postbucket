@@ -3,15 +3,17 @@ import hasIn = require('lodash/hasIn');
 import get = require('lodash/get');
 import { initialState } from './../../app/state';
 import fixture from './../../app/helper/createProjectData';
-import { Project } from './../Project';
+import { ProjectAction } from './../ProjectAction';
 import * as Entity from './../../app/entity';
 
 let s: IAppState;
+let action: ProjectAction;
 let target: {
     pj: IEntity.IProject,
     t: IEntity.ITopic,
     p: IEntity.IPost
 };
+
 
 beforeEach(() => {
     const projects = fixture({
@@ -19,6 +21,8 @@ beforeEach(() => {
         topicCountPerProject: 2,
         postCountPerTopic: 2
     });
+
+    action = new ProjectAction();
 
     s = initialState({ projects });
     const [pj] = Object.values(s.projects);
@@ -30,7 +34,7 @@ beforeEach(() => {
 describe('.setProject()', () => {
     it('projectが1件増える', () => {
         const pj = Entity.project({ name: 'pj' });
-        const result = Project.setProject(s, pj);
+        const result = action.setProject(s, pj);
         assert(hasIn(result.projects, [pj.id]));
         assert(!hasIn(s.projects, [pj.id]));
     });
@@ -39,7 +43,7 @@ describe('.setProject()', () => {
 
 describe('.deleteProject', () => {
     it('projectが削除されること', () => {
-        const r = Project.deleteProject(s, target.pj);
+        const r = action.deleteProject(s, target.pj);
         assert.equal(Object.keys(r.projects).length, 1);
         assert(!hasIn(r.projects, [target.pj.id]));
         assert(hasIn(s.projects, [target.pj.id]));
@@ -49,7 +53,7 @@ describe('.deleteProject', () => {
 describe('.addTopic()', () => {
     it('topicがもつprojectIdのprojectのtopicsにtopicが追加されること', () => {
         const t = Entity.topic({ projectId: target.pj.id });
-        const r = Project.addTopic(s, t);
+        const r = action.setTopic(s, t);
         assert(hasIn(r.projects, [target.pj.id, 'topics', t.id]));
         assert(!hasIn(s.projects, [target.pj.id, 'topics', t.id]));
     });
@@ -57,16 +61,16 @@ describe('.addTopic()', () => {
 
 describe('.deleteTopic()', () => {
     it('projects[topic.projectId]のproject.topicsからtopicが削除されること', () => {
-        const r = Project.deleteTopic(s, target.t);
+        const r = action.deleteTopic(s, target.t);
         assert(hasIn(s.projects, [target.pj.id, 'topics', target.t.id]));
         assert(!hasIn(r.projects, [target.pj.id, 'topics', target.t.id]));
     });
 });
 
-describe('.addPost()/.updatePost()', () => {
+describe('setPost()', () => {
     it('topicにpostが1つ追加されること', () => {
         const p = Entity.post({ projectId: target.pj.id, topicId: target.t.id });
-        const r = Project.addPost(s, p);
+        const r = action.setPost(s, p);
         assert(hasIn(r.projects, [target.pj.id, 'topics', target.t.id, 'posts', p.id]));
         assert(!hasIn(s.projects, [target.pj.id, 'topics', target.t.id, 'posts', p.id]));
     });
@@ -77,8 +81,8 @@ describe('.addPost()/.updatePost()', () => {
 
         const path = ['projects', target.pj.id, 'topics', target.t.id, 'posts', p1.id, 'content'];
 
-        const r1 = Project.addPost(s, p1);
-        const r2 = Project.updatePost(r1 as IAppState, p2);
+        const r1 = action.setPost(s, p1);
+        const r2 = action.setPost(r1 as IAppState, p2);
 
         assert.equal(get(r1, path), '');
         assert.equal(get(r2, path), 'hello');
@@ -87,7 +91,7 @@ describe('.addPost()/.updatePost()', () => {
 
 describe('.deletePost()', () => {
     it('topicからpostが削除されること', () => {
-        const r = Project.deletePost(s, target.p);
+        const r = action.deletePost(s, target.p);
         const path = [target.pj.id, 'topics', target.t.id, 'posts', target.p.id];
 
         assert(!hasIn(r.projects, path));

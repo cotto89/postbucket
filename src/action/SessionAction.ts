@@ -9,19 +9,12 @@ export function getProjectByTopicId(s: S, tid: string) {
     return Object.values(s.projects).find(pj => has(pj.topics, [tid]));
 };
 
-export class Session {
-
+export class SessionAction {
     /**
      * routing resultからcrrentXXXIdを更新する
      * paramsにtopicIdがあった場合, topicからprojectIdを探して追加する
-     *
-     * @static
-     * @param {S} s
-     * @param {IEntity.IRoute} r
-     *
-     * @memberOf Session
      */
-    static updateCurrentIds(s: S, r: IEntity.IRoute) {
+    updateCurrentIds = (s: S, r: IEntity.IRoute) => {
         const pjid = r.params['projectId'];
         const tid = r.params['topicId'];
 
@@ -30,24 +23,22 @@ export class Session {
             currentTopicId: tid,
         };
 
-        if (!tid) return { session: result };
+        if (!tid) return { ...s, session: result };
 
         return u.whenExists(getProjectByTopicId(s, tid), pj => {
-            return { session: Object.assign(result, { currentProjectId: pj!.id }) };
+            return {
+                ...s,
+                session: Object.assign(result, { currentProjectId: pj!.id })
+            };
         }, () => s);
     }
 
     /**
      * currentProjectIdを更新する
-     *
-     * @static
-     * @param {S} s
-     * @param {PJ} pj
-     *
-     * @memberOf Session
      */
-    static setCurrentProjectId(_: S, pj: PJ) {
+    setCurrentProjectId = (s: S, pj: PJ) => {
         return {
+            ...s,
             session: {
                 currentProjectId: pj.id,
                 currentTopicId: undefined
@@ -57,15 +48,10 @@ export class Session {
 
     /**
      * currentTopicIdを更新する
-     *
-     * @static
-     * @param {S} s
-     * @param {T} t
-     *
-     * @memberOf Session
      */
-    static setCurrentTopicId(_: S, t: T) {
+    setCurrentTopicId = (s: S, t: T) => {
         return {
+            ...s,
             session: {
                 currentProjectId: t.projectId,
                 currentTopicId: t.id
