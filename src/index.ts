@@ -4,10 +4,9 @@
 ---------------------------------*/
 import creaetStore from 'quex';
 import { initialState } from './app/state';
+import reduxDevtools from './lib/devtool';
 
-const store = creaetStore(initialState(), {
-    updater: (_, s) => s as IAppState,
-});
+let state = initialState();
 
 if (process.env.NODE_ENV === 'development') {
     const fixture = require('./app/helper/createProjectData').default;
@@ -17,8 +16,16 @@ if (process.env.NODE_ENV === 'development') {
         postCountPerTopic: 3,
     });
 
-    store.setState({ ...store.getState(), projects });
+    state = initialState({ projects });
 }
+
+const {reduxDevToolsEnhancer} = reduxDevtools(state);
+const store = creaetStore(state, {
+    updater: (_, s) => s as IAppState,
+    enhancer: reduxDevToolsEnhancer
+});
+
+
 
 /* Router
 --------------------------------- */
@@ -39,7 +46,6 @@ import { Provider } from 'react-redux';
 
 window.addEventListener('DOMContentLoaded', () => {
     if (process.env.NODE_ENV === 'development') {
-        require('./lib/devtool').default(store);
         require('inferno-devtools');
     }
 
