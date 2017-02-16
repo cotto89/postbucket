@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Project } from './../../action/index';
+import * as Action from './../../action/index';
 
 /* Container
 --------------------------- */
@@ -15,18 +15,21 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
     };
 };
 
-const mapDispatchToProps = (usecase: UseCase) => ({
-    actions: {
-        setPostToEditor: usecase('POST::SET_EDITOR').use<IEntity.IPost>([
+const mapDispatchToProps = (usecase: UseCase) => {
+    const project = new Action.ProjectAction();
 
+    return {
+        actions: {
+            setPostToEditor: usecase('POST::SET_EDITOR').use<IEntity.IPost>([
 
-        ]),
+            ]),
 
-        deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
-            Project.deletePost,
-        ])
-    }
-});
+            deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
+                project.deletePost,
+            ])
+        }
+    };
+};
 
 /* TopicPane
 -------------------------------- */

@@ -5,7 +5,9 @@
 import creaetStore from 'quex';
 import { initialState } from './app/state';
 
-const store = creaetStore(initialState());
+const store = creaetStore(initialState(), {
+    updater: (_, s) => s as IAppState,
+});
 
 if (process.env.NODE_ENV === 'development') {
     const fixture = require('./app/helper/createProjectData').default;
@@ -15,17 +17,18 @@ if (process.env.NODE_ENV === 'development') {
         postCountPerTopic: 3,
     });
 
-    store.setState({ projects });
+    store.setState({ ...store.getState(), projects });
 }
 
 /* Router
 --------------------------------- */
 import Router from './lib/router/Router';
 import routes, { history } from './app/routes';
-import { Session } from './action/index';
+import { SessionAction } from './action/index';
+const session = new SessionAction();
 
 const onLocationChange = store.dispatch('ROUTER_LOCATION_UPDATE').use([
-    Session.updateCurrentIds
+    session.updateCurrentIds
 ]);
 
 /* View
