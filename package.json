@@ -14,7 +14,7 @@
     "object.entries": "^1.0.4",
     "object.values": "^1.0.4",
     "query-string": "^4.3.1",
-    "quex": "^0.0.2",
+    "quex": "^0.0.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",
