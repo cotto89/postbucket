@@ -69,6 +69,7 @@ let config = {
         alias: {
             'react': 'inferno-compat',
             'react-dom': 'inferno-compat',
+            'react-redux': 'inferno-redux'
         }
     },
 };
