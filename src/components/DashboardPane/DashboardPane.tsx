@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Project, Session, UI } from './../../mutation/index';
+import { Project, Session, UI } from './../../action/index';
 import abortIf from './../utils/abortTransaction';
 
 /* Container
