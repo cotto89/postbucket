@@ -19,10 +19,11 @@ if (process.env.NODE_ENV === 'development') {
     state = initialState({ projects });
 }
 
-const {reduxDevToolsEnhancer} = reduxDevtools(state);
+const devtools = reduxDevtools(state);
+const enhancer = devtools && devtools.reduxDevToolsEnhancer;
 const store = creaetStore(state, {
     updater: (_, s) => s as IAppState,
-    enhancer: reduxDevToolsEnhancer
+    enhancer
 });
 
 

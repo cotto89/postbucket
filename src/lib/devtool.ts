@@ -5,6 +5,8 @@ export default function initReduxDevtools(state: any) {
         (window as any).__REDUX_DEVTOOLS_EXTENSION__
     );
 
+    if (!reduxDevToolsExtension) return;
+
     let isStarted = false;
     const devtool = reduxDevToolsExtension.connect();
 
@@ -22,16 +24,17 @@ export default function initReduxDevtools(state: any) {
     function reduxDevToolsEnhancer(name: string, task: Function) {
         return function EnhancedTask(s: IAppState, p: any) {
             let result;
+            const taskName = (task as any)._taskName || 'AnonymousTask';
 
             try {
-                const taskName = (task as any)._taskName || 'AnonymousTask';
-
                 result = task(s, p);
 
+                if (!isStarted) return result;
+
                 if (result instanceof Promise) {
-                    isStarted && devtool.send(`$AsyncProcessing in {taskName} on ${name}`, s);
+                    devtool.send(`$AsyncProcessing in {taskName} on ${name}`, s);
                 } else {
-                    isStarted && devtool.send(`${taskName} on ${name}`, result);
+                    devtool.send(`${taskName} on ${name}`, result || s);
                 }
             } catch (err) {
                 if (err.name === 'AbortTransaction') {
