@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as Action from './../../action/index';
-import abortIf from './../utils/abortTransaction';
+import abortIf from './../utils/abortIf';
 
 import RenderCase from './../utils/RenderCase';
 import TopicForm from './TopicForm';

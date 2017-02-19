@@ -1,4 +1,43 @@
-export default function initReduxDevtools(state: any) {
+import * as EventEmitter from 'events';
+
+const notifer = new EventEmitter();
+const assign = Object.assign;
+
+interface NotificationResult {
+    result: any;
+    name: string;
+    taskName: string;
+    state: any;
+    error?: Error;
+}
+
+export function noticify(name: string, task: Function & { _taskName: string }) {
+    return enhancedTask;
+
+    function enhancedTask(state: any, params: any) {
+        let result;
+        const taskName = task._taskName || 'Anonymous';
+        const processInfo: NotificationResult = {
+            result,
+            name,
+            taskName,
+            state,
+            error: undefined
+        };
+
+        try {
+            result = task(state, params);
+            notifer.emit('TASK::EMIT', assign(processInfo, { result }));
+        } catch (err) {
+            notifer.emit('TASK::EMIT', assign(processInfo, { result, error: err }));
+            throw err;
+        }
+
+        return result;
+    };
+}
+
+export function bootstrapReduxDevtools(state: any) {
     let reduxDevToolsExtension = (
         process.env.NODE_ENV === 'development' &&
         typeof window !== 'undefined' &&
@@ -17,36 +56,19 @@ export default function initReduxDevtools(state: any) {
         }
     });
 
-    return {
-        reduxDevToolsEnhancer
-    };
+    notifer.addListener('TASK::EMIT', (info: NotificationResult) => {
+        if (!isStarted) return;
 
-    function reduxDevToolsEnhancer(name: string, task: Function) {
-        return function EnhancedTask(s: IAppState, p: any) {
-            let result;
-            const taskName = (task as any)._taskName || 'AnonymousTask';
+        if (info.result instanceof Promise) {
+            devtool.send(`AsyncProcessing in ${info.taskName} on ${info.name}`, info.state);
+            return;
+        }
 
-            try {
-                result = task(s, p);
+        if (info.error && info.error.name === 'AbortTransition') {
+            devtool.send(`AbortTransition on ${info.name}`, info.state);
+            return;
+        }
 
-                if (!isStarted) return result;
-
-                if (result instanceof Promise) {
-                    devtool.send(`$AsyncProcessing in {taskName} on ${name}`, s);
-                } else {
-                    devtool.send(`${taskName} on ${name}`, result || s);
-                }
-            } catch (err) {
-                if (err.name === 'AbortTransaction') {
-                    isStarted && devtool.send(`${err.name} on ${name}`, s);
-                } else {
-                    console.error(err);
-                }
-
-                throw err;
-            }
-
-            return result;
-        };
-    }
-};
+        devtool.send(`${info.taskName} on ${info.name}`, info.result || info.state);
+    });
+}

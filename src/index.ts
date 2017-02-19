@@ -4,11 +4,12 @@
 ---------------------------------*/
 import creaetStore from 'quex';
 import { initialState } from './app/state';
-import reduxDevtools from './lib/devtool';
 
 let state = initialState();
+let enhancer;
 
 if (process.env.NODE_ENV === 'development') {
+    const { noticify, bootstrapReduxDevtools} = require('./lib/devtool');
     const fixture = require('./app/helper/createProjectData').default;
     const projects = fixture({
         projectCount: 3,
@@ -17,13 +18,19 @@ if (process.env.NODE_ENV === 'development') {
     });
 
     state = initialState({ projects });
+    enhancer = noticify;
+    bootstrapReduxDevtools(state);
 }
 
-const devtools = reduxDevtools(state);
-const enhancer = devtools && devtools.reduxDevToolsEnhancer;
 const store = creaetStore(state, {
     updater: (_, s) => s as IAppState,
     enhancer
+});
+
+store.subscribe((_, err) => {
+    if (err && err.name !== 'AbortTransition') {
+        console.error(err);
+    }
 });
 
 
