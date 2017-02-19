@@ -1,4 +1,4 @@
-import { createElement as $, StatelessComponent } from 'react';
+import { SFC, ComponentClass } from 'react';
 import { createHashHistory } from 'history';
 import DashboardPane from './../components/DashboardPane/DashboardPane';
 import ProjectPane from './../components/ProjectPane/ProjectPane';
@@ -17,15 +17,15 @@ export function routes() {
             children: [
                 {
                     path: '/',
-                    action: result(() => $(DashboardPane)),
+                    action: result(DashboardPane),
                 },
                 {
                     path: '/projects/:projectId',
-                    action: result(() => $(ProjectPane))
+                    action: result(ProjectPane)
                 },
                 {
                     path: '/topics/:topicId',
-                    action: result(() => $(TopicPane))
+                    action: result(TopicPane)
                 },
             ]
         }
@@ -44,7 +44,7 @@ export const history = createHashHistory({
 ------------------------------------ */
 class RoutingError extends Error { }
 
-export function createActionResult(component: StatelessComponent<any>) {
+export function createActionResult(component: SFC<any> | ComponentClass<any>) {
     return (context: any): IEntity.IRoute => {
         const { query, params } = context;
         return {

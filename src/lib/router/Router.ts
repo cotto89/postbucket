@@ -6,19 +6,19 @@
 - history.listenでpathの変更を監視
 - 変更があればstateを更新してcomponentをrender
 */
-import { Component, createElement, StatelessComponent } from 'react';
+import { Component, createElement, SFC, ComponentClass } from 'react';
 import { resolve, Routes } from 'universal-router';
 import * as qs from 'query-string';
 import { History, Location } from 'history';
 
 interface State {
-    component: StatelessComponent<any>;
+    component: SFC<any> | ComponentClass<any>;
 }
 
 interface Props {
     history: History;
     routes: Routes<any, any>;
-    fallbackView?: StatelessComponent<any>;
+    fallbackView?: SFC<any>;
     onLocationChange?: (location: IEntity.IRoute) => void;
 }
 
@@ -56,6 +56,6 @@ export default class Router extends Component<Props, State> {
 
     render() {
         let component = this.state.component || this.props.fallbackView || this.defaultFallbackView;
-        return createElement(component);
+        return createElement(component as SFC<any>);
     }
 }

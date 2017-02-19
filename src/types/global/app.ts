@@ -1,4 +1,4 @@
-import { StatelessComponent } from 'react';
+import { StatelessComponent, ComponentClass } from 'react';
 import * as E from './../../app/entity';
 import * as S from './../../app/state';
 import * as Quex from 'quex';
@@ -17,7 +17,7 @@ declare global {
         interface ITopic extends E.ITopic { }
         interface IPost extends E.IPost { }
         interface IRoute {
-            component: StatelessComponent<any>;
+            component: StatelessComponent<any> | ComponentClass<any>;
             query: { [key: string]: string };
             params: { [key: string]: string };
             path: string;
