@@ -7,14 +7,6 @@ import rehype2react = require('rehype-react');
 import highlight from './highlight';
 import { checkboxIdentityOnHAST, checkboxIndexOnMDAST, toggleCheckboxOnMDAST } from './checkbox';
 
-const processor = unified()
-    .use(parse)
-    .use(checkboxIndexOnMDAST)
-    .use(remark2rehype)
-    .use(checkboxIdentityOnHAST)
-    .use(highlight);
-
-
 /* Component
 ----------------------------- */
 interface Props {
@@ -49,7 +41,12 @@ export default class MarkdownView extends React.Component<Props, void> {
         return (
             <div>
                 {
-                    processor
+                    unified()
+                        .use(parse)
+                        .use(checkboxIndexOnMDAST)
+                        .use(remark2rehype)
+                        .use(checkboxIdentityOnHAST)
+                        .use(highlight)
                         .use(rehype2react, {
                             createElement: React.createElement,
                             components: {
