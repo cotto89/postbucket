@@ -24,6 +24,10 @@ const mapDispatchToProps = (usecase: UseCase) => {
 
             ]),
 
+            updatePost: usecase('POST:UPDATE').use<IEntity.IPost>([
+                project.setPost
+            ]),
+
             deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
                 project.deletePost,
             ])
@@ -42,6 +46,7 @@ interface Props {
     actions: {
         setPostToEditor: PostAction;
         deletePost: PostAction;
+        updatePost: PostAction;
     };
 }
 
@@ -59,6 +64,7 @@ export class TopicPane extends React.Component<Props, {}> {
                                 post={post}
                                 onSelect={actions.setPostToEditor}
                                 deletePost={actions.deletePost}
+                                updatePost={actions.updatePost}
                             />
                         )
                     }
