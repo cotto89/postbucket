@@ -120,7 +120,7 @@ declare module 'unified' {
          * processor().use(attacher).process('# hello world')みたいにさらにpluginを咬ませることができる
          *
          */
-        abstract(): Processor<T>
+        abstract(): typeof processor
 
 
         /*
