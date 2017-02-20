@@ -34,7 +34,7 @@ let config = {
             {
                 test: /\.s?css$/,
                 loader: ExtractTextPlugin.extract({
-                    fallbackLoader: 'style-loader',
+                    fallback: 'style-loader',
                     loader: [
                         `css-loader?minimize=${isProd}?localIdentName=[path][name]___[local]___[hash:base64:5]`,
                         'postcss-loader',
