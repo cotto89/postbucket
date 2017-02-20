@@ -13,3 +13,5 @@ declare module 'mdast-util-to-hast';
 declare module 'hast-util-to-html';
 declare module 'remark-rehype';
 declare module 'rehype-react'; // これだけ型書きたいかも
+
+declare module 'highlight.js/*';

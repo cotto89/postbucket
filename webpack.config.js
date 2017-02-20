@@ -41,6 +41,10 @@ let config = {
                         'sass-loader'
                     ]
                 })
+            },
+            {
+                test: /\.json$/,
+                use: 'json-loader'
             }
         ]
     },
@@ -65,7 +69,7 @@ let config = {
         })
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         alias: {
             'react': 'inferno-compat',
             'react-dom': 'inferno-compat',
