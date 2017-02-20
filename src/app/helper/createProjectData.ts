@@ -2,6 +2,36 @@ import range = require('lodash/range');
 import set = require('lodash/set');
 import * as Entity from './../entity';
 
+const content = `
+- [ ] item1
+- [ ] item2
+- [ ] item3
+
+\`\`\`ts
+export default class PostView extends React.Component<Props, {}> {
+    handleSelect = () => this.props.onSelect(this.props.post);
+    delete = () => this.props.deletePost(this.props.post);
+    update = (content: string) => {
+        const newPost = Entity.post({ ...this.props.post, content });
+        this.props.updatePost(newPost);
+    }
+
+    render() {
+        return (
+            <div>
+                <MarkdownView src={this.props.post.content}
+                    onSrcUpdated={this.update}
+                />
+                <button onClick={this.handleSelect}>EDIT</button>
+                <button onClick={this.delete}>DELETE</button>
+            </div>
+        );
+    }
+}
+\`\`\`
+
+`;
+
 export default function createProjectData(props: {
     projectCount: number,
     topicCountPerProject: number,
@@ -18,7 +48,7 @@ export default function createProjectData(props: {
                 const post = Entity.post({
                     projectId: project.id,
                     topicId: topic.id,
-                    content: `Sample Post ${iden + n}-${i}`
+                    content: `Sample Post ${iden + n}-${i}\n\n ${content}`
                 });
                 set(topic, ['posts', post.id], post);
             });
