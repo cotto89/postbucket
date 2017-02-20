@@ -51,7 +51,8 @@ export default class Router extends Component<Props, State> {
 
         resolve(this.props.routes, ctx)
             .then(this.handleLocationChange)
-            .catch(_ => {
+            .catch(e => {
+                console.error(e);
                 this.setState({ component: this.props.fallbackView || this.defaultFallbackView });
             });
     }
