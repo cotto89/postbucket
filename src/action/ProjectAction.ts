@@ -1,5 +1,5 @@
 import omit = require('lodash/omit');
-import set = require('lodash/fp/set');
+import * as _ from './../utils/object';
 import * as u from './../utils/utils';
 
 type S = IAppState;
@@ -12,40 +12,32 @@ export class ProjectAction {
      * projectの追加または更新
      */
     setProject = u.task('setProject', (s: S, pj: PJ) => {
-        return {
-            ...s,
-            projects: { ...s.projects, [pj.id]: pj }
-        };
+        return _.set(s, ['projects', pj.id], pj);
     });
 
     /**
      * projectを削除
      */
     deleteProject = u.task('deleteProject', (s: S, pj: PJ) => {
-        return {
-            ...s,
-            projects: omit(s.projects, [pj.id])
-        } as IAppState;
+        return _.update(s, ['projects'], (v) => omit(v, pj.id));
     });
 
     /**
      * projectにtopicを追加または更新
      */
     setTopic = u.task('setTopic', (s: S, t: T) => {
-        return u.whenExists(s.projects[t.projectId], pj => ({
-            ...s,
-            projects: set([pj.id, 'topics', t.id], t, s.projects)
-        }), () => s);
+        return u.whenExists(s.projects[t.projectId], (pj) => {
+            return _.set(s, ['projects', pj.id, 'topics', t.id], t);
+        }, () => s);
     });
 
     /**
      * projects[topic.projectId]からtopicを削除
      */
     deleteTopic = u.task('deleteTopic', (s: S, t: T) => {
-        return u.whenExists(s.projects[t.projectId], pj => ({
-            ...s,
-            projects: set([pj.id, 'topics'], omit(pj.topics, t.id), s.projects)
-        }), () => s);
+        return u.whenExists(s.projects[t.projectId], (pj) => {
+            return _.update(s, ['projects', pj.id, 'topics'], (v) => omit(v, t.id));
+        }, () => s);
     });
 
     /**
@@ -53,10 +45,9 @@ export class ProjectAction {
      */
     setPost = u.task('setPost', (s: S, p: P) => {
         return u.whenExists(s.projects[p.projectId], pj => {
-            return u.whenExists(pj.topics[p.topicId], t => ({
-                ...s,
-                projects: set([pj.id, 'topics', t.id, 'posts', p.id], p, s.projects)
-            }), () => s);
+            return u.whenExists(pj.topics[p.topicId], t => {
+                return _.set(s, ['projects', pj.id, 'topics', t.id, 'posts', p.id], p);
+            }, () => s);
         }, () => s);
     });
 
@@ -65,10 +56,9 @@ export class ProjectAction {
      */
     deletePost = u.task('deletePost', (s: S, p: P) => {
         return u.whenExists(s.projects[p.projectId], pj => {
-            return u.whenExists(pj.topics[p.topicId], t => ({
-                ...s,
-                projects: set([pj.id, 'topics', t.id, 'posts'], omit(t.posts, p.id), s.projects)
-            }), () => s);
+            return u.whenExists(pj.topics[p.topicId], t => {
+                return _.update(s, ['projects', pj.id, 'topics', t.id, 'posts'], (v) => omit(v, p.id));
+            }, () => s);
         }, () => s);
     });
 }

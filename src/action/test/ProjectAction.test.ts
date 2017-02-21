@@ -50,7 +50,7 @@ describe('.deleteProject', () => {
     });
 });
 
-describe('.addTopic()', () => {
+describe('.setTopic()', () => {
     it('topicがもつprojectIdのprojectのtopicsにtopicが追加されること', () => {
         const t = Entity.topic({ projectId: target.pj.id });
         const r = action.setTopic(s, t);
@@ -58,6 +58,7 @@ describe('.addTopic()', () => {
         assert(!hasIn(s.projects, [target.pj.id, 'topics', t.id]));
     });
 });
+
 
 describe('.deleteTopic()', () => {
     it('projects[topic.projectId]のproject.topicsからtopicが削除されること', () => {
