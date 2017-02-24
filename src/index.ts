@@ -39,16 +39,17 @@ store.subscribe((_, err) => {
     if (err && err.name !== 'AbortTransition') console.error(err);
 });
 
+
 /* Router
 --------------------------------- */
 import Router from './lib/router/Router';
 import routes, { history } from './app/routes';
-import { SessionAction } from './action/index';
-const session = new SessionAction();
+import action from './action/index';
 
 const onLocationChange = store.dispatch('ROUTER::LOCATION_UPDATE').use([
-    session.updateCurrentIds
+    action.session.updateCurrentIds
 ]);
+
 
 /* View
 ---------------------------------- */

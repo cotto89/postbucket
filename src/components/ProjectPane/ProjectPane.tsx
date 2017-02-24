@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as Action from './../../action/index';
-import abortIf from './../utils/abortIf';
+import $ from './../../action/index';
 
 import RenderCase from './../utils/RenderCase';
 import TopicForm from './TopicForm';
@@ -22,33 +21,30 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
 };
 
 const mapDispatchToProps = (usecase: UseCase) => {
-    const project = new Action.ProjectAction();
-    const ui = new Action.UIAction();
-
     return {
         actions: {
             addTopic: usecase('TOPIC::ADD').use<IEntity.ITopic>([
-                (_, t) => abortIf(() => !!t.title),
-                project.setTopic,
+                (_, t) => $.abortIf(t.title.trim().length <= 0),
+                $.project.setTopic,
             ]),
 
             updateTopic: usecase('TOPIC::UPDATE').use<IEntity.ITopic>([
-                (_, t) => abortIf(() => !!t.title),
-                ui.removeEditingId('editingTopicCardIds'),
-                project.setTopic,
+                (_, t) => $.abortIf(t.title.trim().length <= 0),
+                $.ui.removeEditingId('editingTopicCardIds'),
+                $.project.setTopic,
             ]),
 
             deleteTopic: usecase('TOPIC::DELETE').use<IEntity.ITopic>([
-                ui.removeEditingId('editingTopicCardIds'),
-                project.deleteTopic
+                $.ui.removeEditingId('editingTopicCardIds'),
+                $.project.deleteTopic
             ]),
 
             toggleTopicCard: usecase('TOPIC::TOGGLE_CARD').use<IEntity.ITopic>([
-                ui.toggleEditingIds('editingTopicCardIds')
+                $.ui.toggleEditingIds('editingTopicCardIds')
             ]),
 
             onTopicSelect: usecase('TOPIC::SELECT').use<IEntity.ITopic>([
-                ui.clearEditingIds('editingTopicCardIds'),
+                $.ui.clearEditingIds('editingTopicCardIds'),
             ])
         }
     };

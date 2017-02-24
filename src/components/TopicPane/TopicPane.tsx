@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as Action from './../../action/index';
+import $ from './../../action/index';
 
 /* Container
 --------------------------- */
@@ -16,8 +16,6 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
 };
 
 const mapDispatchToProps = (usecase: UseCase) => {
-    const project = new Action.ProjectAction();
-
     return {
         actions: {
             setPostToEditor: usecase('POST::SET_EDITOR').use<IEntity.IPost>([
@@ -25,11 +23,11 @@ const mapDispatchToProps = (usecase: UseCase) => {
             ]),
 
             updatePost: usecase('POST:UPDATE').use<IEntity.IPost>([
-                project.setPost
+                $.project.setPost
             ]),
 
             deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
-                project.deletePost,
+                $.project.deletePost,
             ])
         }
     };

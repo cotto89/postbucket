@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as Action from './../../action/index';
-import abortIf from './../utils/abortIf';
+import $ from './../../action/index';
 
 /* Container
 ------------------------ */
@@ -12,34 +11,32 @@ const mapStateToProps = (store: IAppStoreFromProvider) => ({
 
 const mapDispatchToProps = (usecase: UseCase) => {
     const scope = 'editingProjectCardIds';
-    const project = new Action.ProjectAction();
-    const ui = new Action.UIAction();
 
     return {
         actions: {
             addProject: usecase('PROJECT::ADD').use<IEntity.IProject>([
-                (_, pj) => abortIf(() => !!pj.name),
-                ui.removeEditingId(scope),
-                project.setProject
+                (_, pj) => $.abortIf(pj.name.trim().length <= 0),
+                $.ui.removeEditingId(scope),
+                $.project.setProject
             ]),
 
             updateProject: usecase('PROJECT::UPDATE').use<IEntity.IProject>([
-                (_, pj) => abortIf(() => !!pj.name),
-                ui.removeEditingId(scope),
-                project.setProject,
+                (_, pj) => $.abortIf(pj.name.trim().length <= 0),
+                $.ui.removeEditingId(scope),
+                $.project.setProject,
             ]),
 
             deleteProject: usecase('PROJECT::DELETE').use<IEntity.IProject>([
-                ui.removeEditingId(scope),
-                project.deleteProject
+                $.ui.removeEditingId(scope),
+                $.project.deleteProject
             ]),
 
             onCardSelect: usecase('PROJECT::SELECT').use<IEntity.IProject>([
-                ui.clearEditingIds(scope),
+                $.ui.clearEditingIds(scope),
             ]),
 
             toggleCardView: usecase('PROJECT::TOGGLE_CARD').use<IEntity.IProject>([
-                ui.toggleEditingIds(scope),
+                $.ui.toggleEditingIds(scope),
             ])
         }
     };
