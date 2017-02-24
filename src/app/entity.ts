@@ -53,12 +53,17 @@ export interface IProject {
     readonly id: string;
     readonly name: string;
     readonly topics: { [topicId: string]: ITopic };
+    readonly createdAt: Date;
+    readonly updateAt: Date;
+
 }
 
 export function project(props: Partial<IProject> & { name: string }): IProject {
     return {
         id: props.id || shortId.generate(),
         topics: {},
+        createdAt: new Date(),
+        updateAt: new Date(),
         ...props
     };
 }

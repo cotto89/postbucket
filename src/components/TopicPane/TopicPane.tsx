@@ -51,6 +51,9 @@ interface Props {
 }
 
 export class TopicPane extends React.Component<Props, {}> {
+    get posts() {
+        return this.props.posts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+    }
     render() {
         const {actions} = this.props;
 
@@ -58,7 +61,7 @@ export class TopicPane extends React.Component<Props, {}> {
             <div className='TopicPane'>
                 <div className='PostList'>
                     {
-                        this.props.posts.map(post =>
+                        this.posts.map(post =>
                             <PostView
                                 key={post.id}
                                 post={post}

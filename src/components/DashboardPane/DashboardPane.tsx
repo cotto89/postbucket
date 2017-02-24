@@ -68,7 +68,7 @@ interface Props {
 
 export class DashBoradPane extends React.Component<Props, {}> {
     get projects() {
-        return this.props.projects;
+        return this.props.projects.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
     }
 
     render() {

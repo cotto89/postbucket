@@ -74,8 +74,7 @@ interface Props {
 
 export class ProjectPane extends React.Component<Props, void> {
     get topics() {
-        // sortとかやる
-        return this.props.topics;
+        return this.props.topics.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
     }
     render() {
         const {currentProject, actions} = this.props;
