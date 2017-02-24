@@ -4,12 +4,15 @@
 ---------------------------------*/
 import creaetStore from 'quex';
 import { initialState } from './app/state';
+import combineEnhancer from './lib/quex-helper/combineEnhancer';
+import notifier, { Listener } from './lib/enhancer/notifier';
 
 let state = initialState();
-let enhancer;
+let enhancers: Function[] = [];
+let listeners: Listener[] = [];
 
 if (process.env.NODE_ENV === 'development') {
-    const { noticify, bootstrapReduxDevtools} = require('./lib/devtool');
+    // dummpy project dataを生成
     const fixture = require('./app/helper/createProjectData').default;
     const projects = fixture({
         projectCount: 3,
@@ -18,21 +21,23 @@ if (process.env.NODE_ENV === 'development') {
     });
 
     state = initialState({ projects });
-    enhancer = noticify;
-    bootstrapReduxDevtools(state);
+
+    // devtoolをsetup
+    const setupReduxDevtool = require('./lib/devtools/reduxDevtools').default;
+    const devtool = setupReduxDevtool(state);
+    if (devtool) listeners.push(devtool);
 }
+
+enhancers.push(notifier(...listeners));
 
 const store = creaetStore(state, {
     updater: (_, s) => s as IAppState,
-    enhancer
+    enhancer: combineEnhancer(enhancers)
 });
 
 store.subscribe((_, err) => {
-    if (err && err.name !== 'AbortTransition') {
-        console.error(err);
-    }
+    if (err) console.error(err);
 });
-
 
 /* Router
 --------------------------------- */
