@@ -15,10 +15,11 @@ export class TopicView extends React.Component<Props, {}> {
 
     render() {
         const {topic} = this.props;
+        const path = `/projects/${topic.projectId}/topics/${topic.id}`;
         return (
             <div className='TopicView'>
                 <h1>
-                    <Link to={`/topics/${topic.id}`} onClick={this.select}>
+                    <Link to={path} onClick={this.select}>
                         {topic.title}
                     </Link>
                 </h1>

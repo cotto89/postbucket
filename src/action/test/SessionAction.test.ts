@@ -57,6 +57,7 @@ describe('.updateCurrentIds()', () => {
         it('currentTopicIdとcurrentProjectIdが更新される', () => {
             const route = createRoute({
                 params: {
+                    projectId: target.pj.id,
                     topicId: target.t.id
                 }
             });
@@ -70,24 +71,3 @@ describe('.updateCurrentIds()', () => {
         });
     });
 });
-
-describe('.setCurrentProjectIds', () => {
-    it('currentProjectIdに追加されること', () => {
-        const {session} = action.setCurrentProjectId(s, { id: '1' } as IEntity.IProject);
-        assert.deepEqual(session, {
-            currentProjectId: '1',
-            currentTopicId: undefined
-        });
-    });
-});
-
-describe('.setCurrentTopicIds', () => {
-    it('currentTopicIdに追加されること', () => {
-        const {session} = action.setCurrentTopicId(s, { id: '1', projectId: '2' } as IEntity.ITopic);
-        assert.deepEqual(session, {
-            currentProjectId: '2',
-            currentTopicId: '1'
-        });
-    });
-});
-

@@ -24,7 +24,7 @@ export function routes() {
                     action: result(ProjectPane)
                 },
                 {
-                    path: '/topics/:topicId',
+                    path: '/projects/:projectId/topics/:topicId',
                     action: result(TopicPane)
                 },
             ]

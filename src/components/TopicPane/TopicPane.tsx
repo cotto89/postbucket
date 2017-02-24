@@ -5,9 +5,9 @@ import * as Action from './../../action/index';
 /* Container
 --------------------------- */
 const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const { currentTopicId, currentProjectId } = store.session;
-    const currentProject = store.projects[currentProjectId || ''];
-    const currentTopic: IEntity.ITopic | undefined = currentProject && currentProject.topics[currentTopicId || ''];
+    const { currentTopicId = '', currentProjectId = '' } = store.session;
+    const currentProject = store.projects[currentProjectId];
+    const currentTopic: IEntity.ITopic | undefined = currentProject && currentProject.topics[currentTopicId];
     const posts: IEntity.IPost[] = currentTopic ? Object.values(currentTopic.posts) : [];
 
     return {

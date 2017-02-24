@@ -14,10 +14,12 @@ export default class ProjectView extends React.Component<Props, {}> {
     select = () => this.props.onSelect(this.props.project);
 
     render() {
+        const path = `/projects/${this.props.project.id}`;
+
         return (
             <div className='ProjectView'>
                 <h1>
-                    <Link to={`/projects/${this.props.project.id}`} onClick={this.select}>
+                    <Link to={path} onClick={this.select}>
                         {this.props.project.name}
                     </Link>
                 </h1>

@@ -10,8 +10,8 @@ import TopicView from './TopicView';
 /* Container
 --------------------------------- */
 const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const { currentProjectId } = store.session;
-    const currentProject = store.projects[currentProjectId || ''] as IEntity.IProject | undefined;
+    const { currentProjectId = '' } = store.session;
+    const currentProject = store.projects[currentProjectId] as IEntity.IProject | undefined;
     const topics: IEntity.ITopic[] = currentProject ? Object.values(currentProject.topics) : [];
 
     return {
@@ -23,7 +23,6 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
 
 const mapDispatchToProps = (usecase: UseCase) => {
     const project = new Action.ProjectAction();
-    const session = new Action.SessionAction();
     const ui = new Action.UIAction();
 
     return {
@@ -50,7 +49,6 @@ const mapDispatchToProps = (usecase: UseCase) => {
 
             onTopicSelect: usecase('TOPIC::SELECT').use<IEntity.ITopic>([
                 ui.clearEditingIds('editingTopicCardIds'),
-                session.setCurrentTopicId
             ])
         }
     };

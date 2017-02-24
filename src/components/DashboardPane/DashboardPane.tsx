@@ -13,7 +13,6 @@ const mapStateToProps = (store: IAppStoreFromProvider) => ({
 const mapDispatchToProps = (usecase: UseCase) => {
     const scope = 'editingProjectCardIds';
     const project = new Action.ProjectAction();
-    const session = new Action.SessionAction();
     const ui = new Action.UIAction();
 
     return {
@@ -37,7 +36,6 @@ const mapDispatchToProps = (usecase: UseCase) => {
 
             onCardSelect: usecase('PROJECT::SELECT').use<IEntity.IProject>([
                 ui.clearEditingIds(scope),
-                session.setCurrentProjectId,
             ]),
 
             toggleCardView: usecase('PROJECT::TOGGLE_CARD').use<IEntity.IProject>([

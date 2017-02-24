@@ -34,7 +34,6 @@ store.subscribe((_, err) => {
 });
 
 
-
 /* Router
 --------------------------------- */
 import Router from './lib/router/Router';
@@ -42,7 +41,7 @@ import routes, { history } from './app/routes';
 import { SessionAction } from './action/index';
 const session = new SessionAction();
 
-const onLocationChange = store.dispatch('ROUTER_LOCATION_UPDATE').use([
+const onLocationChange = store.dispatch('ROUTER::LOCATION_UPDATE').use([
     session.updateCurrentIds
 ]);
 
