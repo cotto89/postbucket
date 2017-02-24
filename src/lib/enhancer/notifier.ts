@@ -20,17 +20,17 @@ export default function notifier(...listeners: Listener[]) {
                 result = task(state, params);
             } catch (err) {
                 error = err;
+                throw error;
+            } finally {
+                const notification: Notification = {
+                    result,
+                    state,
+                    error,
+                    name,
+                    taskName: task._taskName || task.name || 'anonymous'
+                };
+                listeners.forEach(f => f(notification));
             }
-
-            const notification: Notification = {
-                result,
-                state,
-                error,
-                name,
-                taskName: task._taskName || task.name || 'anonymous'
-            };
-
-            listeners.forEach(f => f(notification));
             return result;
         };
     };

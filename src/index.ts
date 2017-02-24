@@ -36,7 +36,7 @@ const store = creaetStore(state, {
 });
 
 store.subscribe((_, err) => {
-    if (err) console.error(err);
+    if (err && err.name !== 'AbortTransition') console.error(err);
 });
 
 /* Router
