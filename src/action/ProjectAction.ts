@@ -1,64 +1,64 @@
 import omit = require('lodash/omit');
 import * as _ from './../utils/object';
 import * as u from './../utils/utils';
+import { project } from './../app/entity';
 
 type S = IAppState;
 type PJ = IEntity.IProject;
 type T = IEntity.ITopic;
-type P = IEntity.IPost;
 
 export class ProjectAction {
     /**
-     * projectの追加または更新
+     * projectを追加・更新
      */
     setProject = u.task('setProject', (s: S, pj: PJ) => {
-        return _.set(s, ['projects', pj.id], pj);
+        return _.set(s, ['projects', pj.name], pj);
     });
 
     /**
      * projectを削除
      */
     deleteProject = u.task('deleteProject', (s: S, pj: PJ) => {
-        return _.update(s, ['projects'], (v) => omit(v, pj.id));
+        return _.update(s, ['projects'], (v) => omit(v, pj.name));
+    });
+
+
+    /**
+     * topicからprojectを作成・更新
+     */
+    setProjectByTopic = u.task('setProject', (s: S, t: T) => {
+        if (!t.projectName) throw new Error(`topic.projectName is required on setProjectByTopic`);
+
+        const name = t.projectName;
+        const pj = u.whenExists(s.projects[name],
+            (_pj) => project({ name, topicIds: [..._pj.topicIds, t.id] }),
+            () => project({ name, topicIds: [t.id] })
+        );
+
+        return _.set(s, ['projects', pj.name], pj);
     });
 
     /**
-     * projectにtopicを追加または更新
+     * topicIdをProjectに追加
      */
-    setTopic = u.task('setTopic', (s: S, t: T) => {
-        return u.whenExists(s.projects[t.projectId], (pj) => {
-            return _.set(s, ['projects', pj.id, 'topics', t.id], t);
-        }, () => s);
+    setTopicId = u.task('setTopicId', (s: S, t: T) => {
+        if (!t.projectName) throw new Error(`topic.projectName is required on setTopicId`);
+
+        return u.whenExists(s.projects[t.projectName], (pj) => {
+            return _.update(s, ['projects', pj.name, 'topicIds'], (ids) => {
+                return ids.includes(t.id) ? ids : [...ids, t.id];
+            });
+        }, () => this.setProjectByTopic(s, t));
     });
 
     /**
-     * projects[topic.projectId]からtopicを削除
+     * projectからtopicIdを削除
      */
-    deleteTopic = u.task('deleteTopic', (s: S, t: T) => {
-        return u.whenExists(s.projects[t.projectId], (pj) => {
-            return _.update(s, ['projects', pj.id, 'topics'], (v) => omit(v, t.id));
-        }, () => s);
-    });
+    removeTopicId = u.task('removeTopicId', (s: S, t: T) => {
+        if (!t.projectName) throw new Error(`topic.projectName is required on removeTopicId`);
 
-    /**
-     * postを追加または更新
-     */
-    setPost = u.task('setPost', (s: S, p: P) => {
-        return u.whenExists(s.projects[p.projectId], pj => {
-            return u.whenExists(pj.topics[p.topicId], t => {
-                return _.set(s, ['projects', pj.id, 'topics', t.id, 'posts', p.id], p);
-            }, () => s);
-        }, () => s);
-    });
-
-    /**
-     * topicからpostを削除
-     */
-    deletePost = u.task('deletePost', (s: S, p: P) => {
-        return u.whenExists(s.projects[p.projectId], pj => {
-            return u.whenExists(pj.topics[p.topicId], t => {
-                return _.update(s, ['projects', pj.id, 'topics', t.id, 'posts'], (v) => omit(v, p.id));
-            }, () => s);
+        return u.whenExists(s.projects[t.projectName], (pj) => {
+            return _.update(s, ['projects', pj.name, 'topicIds'], (ids) => ids.filter(id => id !== t.id));
         }, () => s);
     });
 }
