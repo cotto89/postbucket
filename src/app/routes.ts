@@ -1,7 +1,6 @@
 import { SFC, ComponentClass } from 'react';
 import { createHashHistory } from 'history';
 import DashboardPane from './../components/DashboardPane/DashboardPane';
-import ProjectPane from './../components/ProjectPane/ProjectPane';
 import TopicPane from './../components/TopicPane/TopicPane';
 
 /* Routes
@@ -11,20 +10,15 @@ export function routes() {
 
     return [
         {
-            /* { path: '/' } は middlewareとして使う */
             path: '/',
             action: middleware,
             children: [
                 {
                     path: '/',
-                    action: result(DashboardPane),
+                    action: result(DashboardPane)
                 },
                 {
-                    path: '/projects/:projectId',
-                    action: result(ProjectPane)
-                },
-                {
-                    path: '/projects/:projectId/topics/:topicId',
+                    path: '/topics/:topicId',
                     action: result(TopicPane)
                 },
             ]
