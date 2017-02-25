@@ -11,7 +11,7 @@ export interface Props {
     deletePost: PostAction;
 }
 
-export default class PostView extends React.Component<Props, {}> {
+export default class PostView extends React.PureComponent<Props, {}> {
     handleSelect = () => this.props.onSelect(this.props.post);
     delete = () => this.props.deletePost(this.props.post);
     update = (content: string) => {
