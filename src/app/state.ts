@@ -1,11 +1,13 @@
 export interface IState {
-    projects: { [projectId: string]: IEntity.IProject };
+    projects: {
+        [projectName: string]: IEntity.IProject
+    };
+    topics: { [topicId: string]: IEntity.ITopic };
     session: {
         currentProjectId?: string;
         currentTopicId?: string;
     };
     ui: {
-        editingProjectCardIds: string[];
         editingTopicCardIds: string[];
         editingPostIds: string[];
     };
@@ -14,12 +16,12 @@ export interface IState {
 export function initialState(props?: Partial<IState>): IState {
     return {
         projects: {},
+        topics: {},
         session: {
             currentProjectId: undefined,
             currentTopicId: undefined,
         },
         ui: {
-            editingProjectCardIds: [],
             editingTopicCardIds: [],
             editingPostIds: []
         },

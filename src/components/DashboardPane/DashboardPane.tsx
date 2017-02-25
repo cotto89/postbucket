@@ -2,117 +2,114 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import $ from './../../action/index';
 
-/* Container
------------------------- */
-const mapStateToProps = (store: IAppStoreFromProvider) => ({
-    projects: Object.values(store.projects),
-    editingCardIds: store.ui.editingProjectCardIds
-});
+import RenderCase from './../utils/RenderCase';
+import TopicForm from './TopicForm';
+import TopicView from './TopicView';
 
-const mapDispatchToProps = (usecase: UseCase) => {
-    const scope = 'editingProjectCardIds';
+/* Container
+--------------------------------- */
+const mapStateToProps = (store: IAppStoreFromProvider) => {
+    const {currentProjectId} = store.session;
+    const project = currentProjectId && store.projects[currentProjectId];
+    const topics = project ?
+        project.topicIds.map(tid => store.topics[tid]) :
+        Object.values(store.topics);
 
     return {
+        topics,
+        editingCardIds: store.ui.editingTopicCardIds
+    };
+};
+
+const mapDispatchToProps = (usecase: UseCase) => {
+    return {
         actions: {
-            addProject: usecase('PROJECT::ADD').use<IEntity.IProject>([
-                (_, pj) => $.abortIf(pj.name.trim().length <= 0),
-                $.ui.removeEditingId(scope),
-                $.project.setProject
+            addTopic: usecase('TOPIC::ADD').use<IEntity.ITopic>([
+                (_, t) => $.abortIf(t.title.trim().length <= 0),
+                $.topics.setTopic
             ]),
 
-            updateProject: usecase('PROJECT::UPDATE').use<IEntity.IProject>([
-                (_, pj) => $.abortIf(pj.name.trim().length <= 0),
-                $.ui.removeEditingId(scope),
-                $.project.setProject,
+            updateTopic: usecase('TOPIC::UPDATE').use<IEntity.ITopic>([
+                (_, t) => $.abortIf(t.title.trim().length <= 0),
+                $.ui.removeEditingId('editingTopicCardIds'),
+                $.topics.setTopic,
             ]),
 
-            deleteProject: usecase('PROJECT::DELETE').use<IEntity.IProject>([
-                $.ui.removeEditingId(scope),
-                $.project.deleteProject
+            deleteTopic: usecase('TOPIC::DELETE').use<IEntity.ITopic>([
+                $.ui.removeEditingId('editingTopicCardIds'),
+                $.topics.deleteTopic
             ]),
 
-            onCardSelect: usecase('PROJECT::SELECT').use<IEntity.IProject>([
-                $.ui.clearEditingIds(scope),
+            toggleTopicCard: usecase('TOPIC::TOGGLE_CARD').use<IEntity.ITopic>([
+                $.ui.toggleEditingIds('editingTopicCardIds')
             ]),
 
-            toggleCardView: usecase('PROJECT::TOGGLE_CARD').use<IEntity.IProject>([
-                $.ui.toggleEditingIds(scope),
+            onTopicSelect: usecase('TOPIC::SELECT').use<IEntity.ITopic>([
+                $.ui.clearEditingIds('editingTopicCardIds'),
             ])
         }
     };
 };
 
 
-/* DashBoradPane
------------------------------------ */
-import RenderCase from './../utils/RenderCase';
-import ProjectView from './ProjectView';
-import ProjectForm from './ProjectFrom';
-
-type ProjectAction = (pj: IEntity.IProject) => void;
+/* ProjectPane
+-------------------------------------- */
+type TopicAction = (topic: IEntity.ITopic) => any;
 
 interface Props {
-    projects: IEntity.IProject[];
+    topics: IEntity.ITopic[];
     editingCardIds: string[];
     actions: {
-        addProject: ProjectAction;
-        updateProject: ProjectAction;
-        deleteProject: ProjectAction;
-        onCardSelect: ProjectAction;
-        toggleCardView: ProjectAction;
+        addTopic: TopicAction;
+        updateTopic: TopicAction;
+        deleteTopic: TopicAction;
+        toggleTopicCard: TopicAction;
+        onTopicSelect: TopicAction;
     };
 }
 
-export class DashBoradPane extends React.Component<Props, {}> {
-    get projects() {
-        return this.props.projects.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+export class ProjectPane extends React.Component<Props, void> {
+    get topics() {
+        return this.props.topics.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
     }
-
     render() {
         const {actions} = this.props;
+
+
         return (
-            <div>
-                <header>
-                    <h1>Dashboard</h1>
-                </header>
-                <ProjectForm
-                    project={{ name: '' } as IEntity.IProject}
+            <div className='ProjectPane'>
+                <TopicForm
+                    topic={{} as IEntity.ITopic}
                     isNew
-                    onSubmit={actions.addProject}
+                    onSubmit={actions.addTopic}
                 />
 
-                {
-                    /* ProjectCardList
-                    --------------------- */
-                    this.projects.map(pj =>
-                        /* ProjectCard
-                       --------------------- */
-                        <div className='ProjectCard' key={pj.id}>
-                            <RenderCase cond={!this.props.editingCardIds.includes(pj.id)}>
-                                {/* ProjectView
-                                -------------------------- */}
-                                <ProjectView
-                                    project={pj}
-                                    deleteProject={actions.deleteProject}
-                                    toggleCardView={actions.toggleCardView}
-                                    onSelect={actions.onCardSelect}
-                                />
+                <div className='TopicList'>
+                    {
+                        this.topics.map(t =>
+                            <div key={t.id} className='TopicCard'>
+                                <RenderCase cond={!this.props.editingCardIds.includes(t.id)}>
+                                    <TopicView
+                                        topic={t}
+                                        deleteTopic={actions.deleteTopic}
+                                        onSelect={actions.onTopicSelect}
+                                        toggleToicView={actions.toggleTopicCard}
+                                    />
 
-                                {/* ProjectForm
-                                ---------------------*/}
-                                <ProjectForm
-                                    project={pj}
-                                    onSubmit={actions.updateProject}
-                                    onCancel={actions.toggleCardView}
-                                />
-                            </RenderCase>
-                        </div>
-                    )
-                }
+                                    <TopicForm
+                                        topic={t}
+                                        onCancel={actions.toggleTopicCard}
+                                        onSubmit={actions.updateTopic}
+                                    />
+                                </RenderCase>
+                            </div>)
+                    }
+                </div>
+
             </div>
         );
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashBoradPane);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPane);

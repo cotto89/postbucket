@@ -32,38 +32,29 @@ export default class PostView extends React.Component<Props, {}> {
 
 `;
 
-export default function createProjectData(props: {
-    projectCount: number,
-    topicCountPerProject: number,
+export default function createTopicsData(props: {
+    topicCount: number,
     postCountPerTopic: number;
 }) {
-    let iden = 1;
+    let iden = 0;
     const fixture = () => {
-        const project = Entity.project({ name: `SampleProject ${iden}` });
+        ++iden;
 
-        range(props.topicCountPerProject).forEach(i => {
-            const topic = Entity.topic({ title: `Sample Topic ${iden + i}`, projectId: project.id });
+        const topic = Entity.topic({ title: `Sample Topic ${iden}` });
 
-            range(props.postCountPerTopic).forEach(n => {
-                const post = Entity.post({
-                    projectId: project.id,
-                    topicId: topic.id,
-                    content: `Sample Post ${iden + n}-${i}\n\n ${content}`
-                });
-                set(topic, ['posts', post.id], post);
+        range(props.postCountPerTopic).forEach(i => {
+            const post = Entity.post({
+                topicId: topic.id,
+                content: `# SamplePost ${iden}-${i}\n\n${content}`
             });
-
-            set(project, ['topics', topic.id], topic);
+            set(topic, ['posts', post.id], post);
         });
 
-        iden += 1;
-        return project;
+        return topic;
     };
 
-    return range(props.projectCount).reduce((s) => {
-        const pj = fixture();
-        return Object.assign(s, { [pj.id]: pj });
-    }, {} as { [id: string]: Entity.IProject });
+    return range(props.topicCount).reduce(s => {
+        const t = fixture();
+        return { ...s, [t.id]: t };
+    }, {} as { [id: string]: Entity.ITopic });
 }
-
-
