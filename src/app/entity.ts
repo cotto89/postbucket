@@ -4,7 +4,6 @@ import shortId = require('shortid');
 ------------------------------- */
 export interface IPost {
     readonly id: string;
-    readonly projectId: string;
     readonly topicId: string;
     readonly replyIds: string[];
     readonly createdAt: Date;
@@ -12,12 +11,12 @@ export interface IPost {
     readonly content: string;
 }
 
-export function post(props: Partial<IPost> & { projectId: string, topicId: string }): IPost {
+export function post(props: Partial<IPost> & { topicId: string }): IPost {
     return {
         id: props.id || shortId.generate(),
-        replyIds: [],
-        createdAt: new Date(),
-        updateAt: new Date(),
+        replyIds: props.replyIds ? [...props.replyIds] : [],
+        createdAt: props.createdAt || new Date(),
+        updateAt: props.updateAt || new Date(),
         content: '',
         ...props,
     };
@@ -28,20 +27,21 @@ export function post(props: Partial<IPost> & { projectId: string, topicId: strin
 ------------------------------- */
 export interface ITopic {
     readonly id: string;
-    readonly projectId: string;
+    readonly projectName?: string;
     readonly title: string;
     readonly posts: { [postId: string]: IPost };
     readonly createdAt: Date;
     readonly updateAt: Date;
 }
 
-export function topic(props: Partial<ITopic> & { projectId: string }): ITopic {
+export function topic(props: Partial<ITopic>): ITopic {
     return {
         id: props.id || shortId.generate(),
+        projectName: undefined,
         title: '',
         posts: {},
-        createdAt: new Date(),
-        updateAt: new Date(),
+        createdAt: props.createdAt || new Date(),
+        updateAt: props.updateAt || new Date(),
         ...props
     };
 }
@@ -50,20 +50,13 @@ export function topic(props: Partial<ITopic> & { projectId: string }): ITopic {
 /* Project
 ------------------------------- */
 export interface IProject {
-    readonly id: string;
-    readonly name: string;
-    readonly topics: { [topicId: string]: ITopic };
-    readonly createdAt: Date;
-    readonly updateAt: Date;
-
+    name: string;
+    topicIds: string[];
 }
 
 export function project(props: Partial<IProject> & { name: string }): IProject {
     return {
-        id: props.id || shortId.generate(),
-        topics: {},
-        createdAt: new Date(),
-        updateAt: new Date(),
-        ...props
+        name: props.name || '',
+        topicIds: props.topicIds ? [...props.topicIds] : []
     };
 }
