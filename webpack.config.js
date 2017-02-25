@@ -35,16 +35,12 @@ let config = {
                 test: /\.s?css$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    loader: [
+                    use: [
                         `css-loader?minimize=${isProd}?localIdentName=[path][name]___[local]___[hash:base64:5]`,
                         'postcss-loader',
                         'sass-loader'
                     ]
                 })
-            },
-            {
-                test: /\.json$/,
-                use: 'json-loader'
             }
         ]
     },
