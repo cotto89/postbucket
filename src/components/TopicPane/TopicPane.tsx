@@ -10,10 +10,9 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
 
     const project = currentProjectId ? store.projects[currentProjectId] : undefined;
     const topicId = project ? project.topicIds.find((id) => id === currentTopicId) : currentTopicId;
-    const posts = topicId ? Object.values(store.topics[topicId].posts) : [];
-
+    const topic = topicId ? store.topics[topicId] : undefined;
     return {
-        posts
+        posts: topic ? Object.values(topic.posts) : []
     };
 };
 
@@ -54,7 +53,7 @@ export class TopicPane extends React.Component<Props, {}> {
         return this.props.posts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
     }
     render() {
-        const {actions} = this.props;
+        const { actions } = this.props;
 
         return (
             <div className='TopicPane'>
