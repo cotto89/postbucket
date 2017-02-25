@@ -34,7 +34,7 @@ export interface ITopic {
     readonly updateAt: Date;
 }
 
-export function topic(props: Partial<ITopic>): ITopic {
+export function topic(props: Partial<ITopic> = {}): ITopic {
     return {
         id: props.id || shortId.generate(),
         projectName: undefined,
