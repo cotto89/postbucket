@@ -13,14 +13,13 @@ let listeners: Listener[] = [];
 
 if (process.env.NODE_ENV === 'development') {
     // dummpy project dataを生成
-    const fixture = require('./app/helper/createProjectData').default;
-    const projects = fixture({
-        projectCount: 3,
-        topicCountPerProject: 3,
-        postCountPerTopic: 3,
+    const createTopics = require('./app/helper/createTopicsData').default;
+    const topics = createTopics({
+        topicCount: 5,
+        postCountPerTopic: 5,
     });
 
-    state = initialState({ projects });
+    state = initialState({ topics });
 
     // devtoolをsetup
     const setupReduxDevtool = require('./lib/devtools/reduxDevtools').default;

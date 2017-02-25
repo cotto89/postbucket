@@ -15,7 +15,7 @@ export class TopicView extends React.Component<Props, {}> {
 
     render() {
         const {topic} = this.props;
-        const path = `/projects/${topic.projectId}/topics/${topic.id}`;
+        const path = `topics/${topic.id}`;
         return (
             <div className='TopicView'>
                 <h1>

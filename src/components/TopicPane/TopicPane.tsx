@@ -5,10 +5,12 @@ import $ from './../../action/index';
 /* Container
 --------------------------- */
 const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const { currentTopicId = '', currentProjectId = '' } = store.session;
-    const currentProject = store.projects[currentProjectId];
-    const currentTopic: IEntity.ITopic | undefined = currentProject && currentProject.topics[currentTopicId];
-    const posts: IEntity.IPost[] = currentTopic ? Object.values(currentTopic.posts) : [];
+    const { currentTopicId, currentProjectId } = store.session;
+    if (!currentTopicId) return { posts: [] };
+
+    const project = currentProjectId ? store.projects[currentProjectId] : undefined;
+    const topicId = project ? project.topicIds.find((id) => id === currentTopicId) : currentTopicId;
+    const posts = topicId ? Object.values(store.topics[topicId].posts) : [];
 
     return {
         posts
@@ -21,13 +23,12 @@ const mapDispatchToProps = (usecase: UseCase) => {
             setPostToEditor: usecase('POST::SET_EDITOR').use<IEntity.IPost>([
 
             ]),
-
             updatePost: usecase('POST:UPDATE').use<IEntity.IPost>([
-                $.project.setPost
+                $.topics.setPost
             ]),
 
             deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
-                $.project.deletePost,
+                $.topics.deletePost,
             ])
         }
     };
