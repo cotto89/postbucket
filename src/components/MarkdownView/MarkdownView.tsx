@@ -14,6 +14,12 @@ interface Props {
     onSrcUpdated?: (src: string) => void;
 }
 
+interface CheckBoxProps {
+    type: string;
+    checked: string;
+    identity: string;
+}
+
 export default class MarkdownView extends React.Component<Props, void> {
     handleCheckboxItemClick = (id: string) => {
         const src = unified()
@@ -26,11 +32,7 @@ export default class MarkdownView extends React.Component<Props, void> {
         this.props.onSrcUpdated && this.props.onSrcUpdated(src.contents as string);
     }
 
-    $checkbox = (props: {
-        type: string;
-        checked: string;
-        identity: string;
-    }) => {
+    $checkbox = (props: CheckBoxProps) => {
         return <input {...props}
             checked={props.hasOwnProperty('checked')}
             onClick={() => this.handleCheckboxItemClick(props.identity)}
