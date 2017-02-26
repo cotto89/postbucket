@@ -5,7 +5,7 @@ import stringify = require('remark-stringify');
 import remark2rehype = require('remark-rehype');
 import rehype2react = require('rehype-react');
 import highlight from './highlight';
-import { checkboxIdentityOnHAST, checkboxIndexOnMDAST, toggleCheckboxOnMDAST } from './checkbox';
+import plugin from './checkbox';
 
 /* Component
 ----------------------------- */
@@ -24,10 +24,10 @@ export default class MarkdownView extends React.Component<Props, void> {
     handleCheckboxItemClick = (id: string) => {
         const src = unified()
             .use(parse)
-            .use(checkboxIndexOnMDAST)
-            .use(toggleCheckboxOnMDAST, id)
+            .use(plugin.mdast.listItemIndex)
+            .use(plugin.mdast.toggleCheckbox, id)
             .use(stringify)
-            .process(this.props.src);
+            .processSync(this.props.src);
 
         this.props.onSrcUpdated && this.props.onSrcUpdated(src.contents as string);
     }
@@ -44,10 +44,12 @@ export default class MarkdownView extends React.Component<Props, void> {
             <div>
                 {
                     unified()
-                        .use(parse)
-                        .use(checkboxIndexOnMDAST)
+                        .use(parse, {
+                            breaks: true
+                        })
+                        .use(plugin.mdast.listItemIndex)
                         .use(remark2rehype)
-                        .use(checkboxIdentityOnHAST)
+                        .use(plugin.hast.checkboxIdentity)
                         .use(highlight)
                         .use(rehype2react, {
                             createElement: React.createElement,
@@ -55,9 +57,7 @@ export default class MarkdownView extends React.Component<Props, void> {
                                 input: this.$checkbox
                             }
                         })
-                        .process(this.props.src, {
-                            breaks: true
-                        }).contents
+                        .processSync(this.props.src, ).contents
                 }
             </div>
         );

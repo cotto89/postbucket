@@ -3,7 +3,7 @@ import visit = require('unist-util-visit');
 /**
  * MDAST上のid一致したnodeのcheckedをtoggleする
  */
-export function toggleCheckboxOnMDAST(_: any, id: string) {
+export function toggleCheckbox(id: string) {
     return function transformer(tree: any) {
         visit(tree, 'listItem', visitor);
     };
@@ -23,7 +23,7 @@ export function toggleCheckboxOnMDAST(_: any, id: string) {
  * MDAST上のcheckbox nodeにidを降る
  * propertyとしてcomponentに渡す場合にstringになるので明示的にstringにしている
  */
-export function checkboxIndexOnMDAST() {
+export function listItemIndex() {
     let iden = 0;
 
     return function transformer(tree: any) {
@@ -39,7 +39,7 @@ export function checkboxIndexOnMDAST() {
  * HAST上のcheckbox要素にid(index)をpropertyとして付与する
  * propertyとしてcomponentに渡す場合にstringになるので明示的にstringにしている
  */
-export function checkboxIdentityOnHAST() {
+export function checkboxIdentity() {
     let iden = 0;
     return function transformer(tree: any) {
         visit(tree, 'element', visitor);
@@ -52,3 +52,13 @@ export function checkboxIdentityOnHAST() {
         node.properties.identity = ++iden + '';
     }
 }
+
+export default {
+    mdast: {
+        toggleCheckbox,
+        listItemIndex
+    },
+    hast: {
+        checkboxIdentity
+    }
+};
