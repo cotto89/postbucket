@@ -58,11 +58,10 @@ export function createActionResult(component: SFC<any> | ComponentClass<any>) {
  * 例外が捕捉されRouterのcatchが呼ばれるが、わかりやすさのために明示的に捕捉してる
  */
 export async function middleware(ctx: any) {
-    const result = createActionResult;
     try {
         const child = await ctx.next();
         if (!child) throw new RoutingError();
-        return result(child.component)(child);
+        return child;
     } catch (e) {
         throw new RoutingError(e);
     }
