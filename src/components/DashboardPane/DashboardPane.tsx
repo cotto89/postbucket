@@ -9,7 +9,7 @@ import TopicView from './TopicView';
 /* Container
 --------------------------------- */
 const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const {currentProjectId} = store.session;
+    const { currentProjectId } = store.session;
     const project = currentProjectId && store.projects[currentProjectId];
     const topics = project ?
         project.topicIds.map(tid => store.topics[tid]) :
@@ -70,10 +70,10 @@ interface Props {
 
 export class ProjectPane extends React.Component<Props, void> {
     get topics() {
-        return this.props.topics.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+        return this.props.topics.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
     render() {
-        const {actions} = this.props;
+        const { actions } = this.props;
 
 
         return (

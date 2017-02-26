@@ -1,10 +1,6 @@
 import * as React from 'react';
 import * as Entity from './../../app/entity';
 
-/* NOTE:
-ProjectFormと共通化できそう
-*/
-
 interface State {
     newTopicTitle: string;
 }
@@ -28,7 +24,7 @@ export default class TopicForm extends React.Component<Props, State> {
     submit = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
         const title = this.state.newTopicTitle.trim();
-        const t = Entity.topic({ ...this.props.topic, title });
+        const t = Entity.topic({ ...this.props.topic, title, updatedAt: new Date() });
 
         this.props.onSubmit && this.props.onSubmit(t);
         this.setState({ newTopicTitle: '' });

@@ -7,7 +7,7 @@ export interface IPost {
     readonly topicId: string;
     readonly replyIds: string[];
     readonly createdAt: Date;
-    readonly updateAt: Date;
+    readonly updatedAt: Date;
     readonly content: string;
 }
 
@@ -16,7 +16,7 @@ export function post(props: Partial<IPost> & { topicId: string }): IPost {
         id: props.id || shortId.generate(),
         replyIds: props.replyIds ? [...props.replyIds] : [],
         createdAt: props.createdAt || new Date(),
-        updateAt: props.updateAt || new Date(),
+        updatedAt: props.updatedAt || new Date(),
         content: '',
         ...props,
     };
@@ -31,7 +31,7 @@ export interface ITopic {
     readonly title: string;
     readonly posts: { [postId: string]: IPost };
     readonly createdAt: Date;
-    readonly updateAt: Date;
+    readonly updatedAt: Date;
 }
 
 export function topic(props: Partial<ITopic> = {}): ITopic {
@@ -41,7 +41,7 @@ export function topic(props: Partial<ITopic> = {}): ITopic {
         title: '',
         posts: {},
         createdAt: props.createdAt || new Date(),
-        updateAt: props.updateAt || new Date(),
+        updatedAt: props.updatedAt || new Date(),
         ...props
     };
 }

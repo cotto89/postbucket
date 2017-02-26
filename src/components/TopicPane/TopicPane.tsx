@@ -50,7 +50,7 @@ interface Props {
 
 export class TopicPane extends React.Component<Props, {}> {
     get posts() {
-        return this.props.posts.sort((a, b) => b.updateAt.getTime() - a.updateAt.getTime());
+        return this.props.posts.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
     render() {
         const { actions } = this.props;
