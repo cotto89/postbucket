@@ -1,7 +1,7 @@
 /*
 [wooorm/unified: ☔ Text processing umbrella: Parse / Transform / Compile](https://github.com/wooorm/unified#processoruseplugin-options)
 
-version: 5.1.0
+version: 6.0.1
 */
 
 declare module 'unified' {
@@ -30,7 +30,7 @@ declare module 'unified' {
          * transformerを返すことでastに触ることができる
          */
         export interface Attacher<T, U> {
-            (processor: Processor<T>, options?: U): Transformer<T> | undefined
+            (options?: U): Transformer<T> | undefined
         }
 
         /**
@@ -78,8 +78,8 @@ declare module 'unified' {
          * Parse text to a syntax tree.
          * processor.Parserにsetされたparserを使ってsyntax treeを作る
          */
-        parse<U extends T, O>(value: string, options?: O): U;
-        parse<U extends T>(file: File, options?: U): U;
+        parse<U extends T, O>(value: string): U;
+        parse<U extends T>(file: File): U;
 
 
         /**
@@ -87,32 +87,47 @@ declare module 'unified' {
          * processor.Compilerにsetされたcompilerを使ってsyntax treeからstringを作る
          * setするCompilerによって吐き出されるのもは変わる
          */
-        stringify<O>(tree: T, options?: O): string;
-        stringify<O>(tree: T, file?: File, options?: O): string;
+        stringify<O>(tree: T): string;
+        stringify<O>(tree: T, file?: File): string;
 
 
         /**
-         * Transform a syntax tree by applying plug-ins to it.
-         * processorに async pluginを持つ場合はdoneが必要
+         * Transform a syntax tree by applying plug-ins to it with asycn
+         * doneが存在しない場合はPromise<Tree>を返す
+         * doneが存在する場合はvoidを返す
          */
-        run<U extends T>(tree: T, done?: (err: Error, tree: T, file: File) => void): U;
-        run<U extends T>(tree: T, file?: File, done?: (err: Error, tree: T, file: File) => void): U;
+        run<U extends T>(tree: T): Promise<T>;
+        run<U extends T>(tree: T, done?: (err: Error, tree: T, file: File) => void): void;
+        run<U extends T>(tree: T, file?: File, done?: (err: Error, tree: T, file: File) => void): void;
 
         /**
-         * The process invokes parse, run, and stringify internally.
-         * processorに async pluginを持つ場合はdoneが必要
+         * Transform a syntax tree by applying plug-ins to it with sync
+         * async pluginが含まれている場合は例外が投げられる
          */
-        process(value: string, done?: (err: Error, file: File) => void): File;
-        process(file: File, done?: (err: Error, file: File) => void): File;
-        process<O>(value: string, options?: O, done?: (err: Error, file: File) => void): File;
-        process<O>(file: File, options: O, done?: (err: Error, file: File) => void): File;
+        runSync<U extends T>(tree: T): U;
+        runSync<U extends T>(tree: T, file?: File): U;
+
+        /**
+         * The process invokes parse, run, and stringify internally with async
+         * async pluginが含まれている場合は例外が投げられる
+         */
+        process(value: string): Promise<File>;
+        process(value: string, done?: (err: Error, file: File) => void): void;
+        process(file: File): Promise<File>;
+        process(file: File, done?: (err: Error, file: File) => void): void;
+
+        /**
+         * The process invokes parse, run, and stringify internally with sync
+         */
+        processSync(value: string): File;
+        processSync(file: File): File
 
 
         /**
-         * pluginを適用されたabstructo processor(?)
+         * あらかじめpluginやcompler, parserが含まれたprocessorを作る
          *
          * Example:
-         * const processor = unified().use([html, parse]).abstract();
+         * const processor = unified().use([html, parse]).freeze();
          * processor().process('# hello world');
          *
          * 予め特定のparserやcompilerを所有したprocessorを作る。
@@ -120,7 +135,7 @@ declare module 'unified' {
          * processor().use(attacher).process('# hello world')みたいにさらにpluginを咬ませることができる
          *
          */
-        abstract(): typeof processor
+        freeze(): typeof processor
 
 
         /*
