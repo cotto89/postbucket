@@ -31,7 +31,7 @@ export class ProjectAction {
 
         const name = t.projectName;
         const pj = u.whenExists(s.projects[name],
-            (_pj) => project({ name, topicIds: [..._pj.topicIds, t.id] }),
+            (_pj) => project({ name, topicIds: _pj.topicIds.includes(name) ? _pj.topicIds : [..._pj.topicIds, t.id] }),
             () => project({ name, topicIds: [t.id] })
         );
 
