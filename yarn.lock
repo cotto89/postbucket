@@ -3092,67 +3092,67 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
-inferno-compat@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno-compat/-/inferno-compat-1.3.0-rc.7.tgz#abdcb83bf1184f4839e383417fcac7b2421cfb99"
+inferno-compat@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-compat/-/inferno-compat-1.3.0-rc.8.tgz#2d6f57ec7d92d9a63363e6f5083e612019189eb1"
   dependencies:
-    inferno "^1.3.0-rc.7"
-    inferno-component "^1.3.0-rc.7"
-    inferno-create-class "^1.3.0-rc.7"
-    inferno-create-element "^1.3.0-rc.7"
-    inferno-shared "^1.3.0-rc.4"
+    inferno "^1.3.0-rc.8"
+    inferno-component "^1.3.0-rc.8"
+    inferno-create-class "^1.3.0-rc.8"
+    inferno-create-element "^1.3.0-rc.8"
+    inferno-shared "^1.3.0-rc.8"
     inferno-transition-group "1.1.1"
     inferno-vnode-flags "^1.3.0-rc.4"
     proptypes "0.14.4"
     rc-css-transition-group-modern "^2.1.6"
 
-inferno-component@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno-component/-/inferno-component-1.3.0-rc.7.tgz#6dcbad3d374543fd033b88addfd2cfc3d0ce3d26"
+inferno-component@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-component/-/inferno-component-1.3.0-rc.8.tgz#8421f1523b250708e7da201d2531e47d26a8f6e1"
   dependencies:
-    inferno "^1.3.0-rc.7"
-    inferno-shared "^1.3.0-rc.4"
+    inferno "^1.3.0-rc.8"
+    inferno-shared "^1.3.0-rc.8"
     inferno-vnode-flags "^1.3.0-rc.4"
 
-inferno-create-class@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno-create-class/-/inferno-create-class-1.3.0-rc.7.tgz#50f218307fdc0e1abbd3991f9f563fc0eb068fba"
+inferno-create-class@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-create-class/-/inferno-create-class-1.3.0-rc.8.tgz#37a1d275b03bffbdda7baf421d99b26c8c1075b8"
   dependencies:
-    inferno-component "^1.3.0-rc.7"
-    inferno-shared "^1.3.0-rc.4"
+    inferno-component "^1.3.0-rc.8"
+    inferno-shared "^1.3.0-rc.8"
 
-inferno-create-element@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno-create-element/-/inferno-create-element-1.3.0-rc.7.tgz#86f5e7e3596c31398b9a51b7241f4ec33f31bc61"
+inferno-create-element@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-create-element/-/inferno-create-element-1.3.0-rc.8.tgz#8fe7ae864081aa0e261e9bc03fcd7a0eb9f6d7eb"
   dependencies:
-    inferno "^1.3.0-rc.7"
-    inferno-component "^1.3.0-rc.7"
-    inferno-shared "^1.3.0-rc.4"
+    inferno "^1.3.0-rc.8"
+    inferno-component "^1.3.0-rc.8"
+    inferno-shared "^1.3.0-rc.8"
     inferno-vnode-flags "^1.3.0-rc.4"
 
-inferno-devtools@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno-devtools/-/inferno-devtools-1.3.0-rc.7.tgz#8511c05e6a440b91ebc618efcfe152b9fc2cdbd7"
+inferno-devtools@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-devtools/-/inferno-devtools-1.3.0-rc.8.tgz#17a2e2a4a3769d5e681b11728c895e7a03f056e1"
   dependencies:
-    inferno "^1.3.0-rc.7"
-    inferno-component "^1.3.0-rc.7"
-    inferno-shared "^1.3.0-rc.4"
+    inferno "^1.3.0-rc.8"
+    inferno-component "^1.3.0-rc.8"
+    inferno-shared "^1.3.0-rc.8"
     inferno-vnode-flags "^1.3.0-rc.4"
 
-inferno-redux@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno-redux/-/inferno-redux-1.3.0-rc.7.tgz#828285de15b343a0ef68f1b5376eb15f05c19a9c"
+inferno-redux@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-redux/-/inferno-redux-1.3.0-rc.8.tgz#b22b47eced77fc9cb92349e3eab56efdc12a5a30"
   dependencies:
     hoist-non-inferno-statics "^1.1.3"
-    inferno "^1.3.0-rc.7"
-    inferno-component "^1.3.0-rc.7"
-    inferno-create-element "^1.3.0-rc.7"
-    inferno-shared "^1.3.0-rc.4"
+    inferno "^1.3.0-rc.8"
+    inferno-component "^1.3.0-rc.8"
+    inferno-create-element "^1.3.0-rc.8"
+    inferno-shared "^1.3.0-rc.8"
     redux "*"
 
-inferno-shared@^1.3.0-rc.4:
-  version "1.3.0-rc.4"
-  resolved "https://registry.yarnpkg.com/inferno-shared/-/inferno-shared-1.3.0-rc.4.tgz#2d9f655b15ea4920f93508c796c1c92a87bbb0c5"
+inferno-shared@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno-shared/-/inferno-shared-1.3.0-rc.8.tgz#2cbb22d3eb6cdf20b7b38682b4f19522a91af7f1"
 
 inferno-transition-group@1.1.1:
   version "1.1.1"
@@ -3168,11 +3168,11 @@ inferno@^1.1.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.2.2.tgz#0094e4ed428db30184bfa348a5aa38211945e67d"
 
-inferno@^1.3.0-rc.7:
-  version "1.3.0-rc.7"
-  resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.3.0-rc.7.tgz#c52f5ae63f77b1a4a01b721211ae46440ef1b5bb"
+inferno@^1.3.0-rc.8:
+  version "1.3.0-rc.8"
+  resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.3.0-rc.8.tgz#cdbb8e705119f5998c7f9094938eeebb79b59661"
   dependencies:
-    inferno-shared "^1.3.0-rc.4"
+    inferno-shared "^1.3.0-rc.8"
     inferno-vnode-flags "^1.3.0-rc.4"
 
 inflight@^1.0.4:
