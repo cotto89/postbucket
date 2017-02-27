@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from './../../lib/router/Link';
 
 interface Props {
     topic: IEntity.ITopic;
@@ -14,14 +13,11 @@ export class TopicView extends React.Component<Props, {}> {
     select = () => this.props.onSelect(this.props.topic);
 
     render() {
-        const {topic} = this.props;
-        const path = `topics/${topic.id}`;
+        const { topic } = this.props;
         return (
             <div className='TopicView'>
-                <h1>
-                    <Link to={path} onClick={this.select}>
-                        {topic.title}
-                    </Link>
+                <h1 onClick={this.select}>
+                    {topic.title}
                 </h1>
                 <div>
                     <button onClick={this.delete}>DELETE</button>
