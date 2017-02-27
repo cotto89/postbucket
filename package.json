@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "author": "cotto",
   "dependencies": {
+    "brace": "^0.10.0",
     "hast-util-to-html": "^3.0.0",
     "hast-util-to-string": "^1.0.0",
     "highlight.js": "^9.9.0",
