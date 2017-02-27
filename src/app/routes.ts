@@ -1,38 +1,29 @@
 import { SFC, ComponentClass } from 'react';
-import { createHashHistory } from 'history';
+import history from './../lib/router/history';
 import DashboardPane from './../components/DashboardPane/DashboardPane';
 import TopicPane from './../components/TopicPane/TopicPane';
 
+export { history }
+
 /* Routes
 -----------------------------------------*/
-export function routes() {
-    const result = createActionResult;
-
-    return [
-        {
-            path: '/',
-            action: middleware,
-            children: [
-                {
-                    path: '/',
-                    action: result(DashboardPane)
-                },
-                {
-                    path: '/topics/:topicId',
-                    action: result(TopicPane)
-                },
-            ]
-        }
-    ];
-}
-
-
-/* history
--------------------------------- */
-export const history = createHashHistory({
-    hashType: 'hashbang'
-});
-
+const result = createActionResult;
+export default [
+    {
+        path: '/',
+        action: middleware,
+        children: [
+            {
+                path: '/',
+                action: result(DashboardPane)
+            },
+            {
+                path: '/topics/:topicId',
+                action: result(TopicPane)
+            },
+        ]
+    }
+];
 
 /* Helper
 ------------------------------------ */
@@ -67,5 +58,4 @@ export async function middleware(ctx: any) {
     }
 };
 
-export default routes();
 

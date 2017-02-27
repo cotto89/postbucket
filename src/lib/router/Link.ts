@@ -1,7 +1,7 @@
 import { Component, createElement as $, SyntheticEvent, HTMLProps } from 'react';
-import { createPath } from 'history';
 import omit = require('lodash/omit');
-import { history } from './../../app/routes';
+import history from './history';
+import createLinkPath from './createLinkPath';
 
 interface Props {
     to: string | { pathname: string, search?: string };
@@ -9,13 +9,8 @@ interface Props {
     children?: any;
 }
 
-const createLinkPath = (path: Props['to']) => {
-    if (typeof path === 'string') return path;
-    return createPath(path);
-};
-
 // onClick eventを統合する
-export const combine = (...fns: (Function | undefined)[]) => {
+const combine = (...fns: (Function | undefined)[]) => {
     return (...args: any[]) => {
         fns.forEach((f) => {
             f && f(...args);
