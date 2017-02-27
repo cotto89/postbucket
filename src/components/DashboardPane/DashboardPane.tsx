@@ -45,7 +45,7 @@ const mapDispatchToProps = (usecase: UseCase) => {
             ]),
 
             onTopicSelect: usecase('TOPIC::SELECT').use<IEntity.ITopic>([
-                (_, t) => $.updateLocation(`topics/${t.id}`),
+                (_, t) => $.updateLocation(({ search }) => ({ pathname: `topics/${t.id}`, search })),
                 $.ui.clearEditingIds('editingTopicCardIds'),
             ])
         }
