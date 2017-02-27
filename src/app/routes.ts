@@ -57,5 +57,3 @@ export async function middleware(ctx: any) {
         throw new RoutingError(e);
     }
 };
-
-
