@@ -25,23 +25,15 @@ interface Props {
 export default class Router extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
         this.state = {
             component: this.props.fallbackView || this.defaultFallbackView,
         };
 
         this.handleRouting(props.history.location);
-        // listen history
         props.history.listen(this.handleRouting);
     }
 
     defaultFallbackView = () => createElement('div', {}, '...NotFound');
-
-    handleLocationChange = (result: IEntity.IRoute) => {
-        const {onLocationChange} = this.props;
-        onLocationChange && onLocationChange(result);
-        this.setState({ component: result.component });
-    }
 
     handleRouting = (location: Location) => {
         const ctx = {
@@ -50,7 +42,11 @@ export default class Router extends Component<Props, State> {
         };
 
         resolve(this.props.routes, ctx)
-            .then(this.handleLocationChange)
+            .then((result: IEntity.IRoute) => {
+                const { onLocationChange } = this.props;
+                onLocationChange && onLocationChange(result);
+                this.setState({ component: result.component });
+            })
             .catch(e => {
                 console.error(e);
                 this.setState({ component: this.props.fallbackView || this.defaultFallbackView });
