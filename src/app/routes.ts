@@ -21,6 +21,10 @@ export default [
                 path: '/topics/:topicId',
                 action: result(TopicPane)
             },
+            {
+                path: '/topics/:topicId/posts/:postId',
+                action: result(TopicPane)
+            },
         ]
     }
 ];

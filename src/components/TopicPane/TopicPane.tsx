@@ -19,15 +19,23 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
 const mapDispatchToProps = (usecase: UseCase) => {
     return {
         actions: {
-            setPostToEditor: usecase('POST::SET_EDITOR').use<IEntity.IPost>([
-
+            setPostToEditor: usecase('POST::SET_POST_TO_EDITOR').use<IEntity.IPost>([
+                (_, p) => $.updateLocation((loc) => ({
+                    pathname: `/topics/${p.topicId}/posts/${p.id}`,
+                    search: loc.search,
+                }), 'replace')
             ]),
+
             updatePost: usecase('POST:UPDATE').use<IEntity.IPost>([
                 $.topics.setPost
             ]),
 
             deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
                 $.topics.deletePost,
+                (_, p) => $.updateLocation(loc => ({
+                    pathname: `/topics/${p.topicId}`,
+                    search: loc.search,
+                }), 'replace'),
             ])
         }
     };
