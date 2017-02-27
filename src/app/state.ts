@@ -6,6 +6,7 @@ export interface IState {
     session: {
         currentProjectId?: string;
         currentTopicId?: string;
+        currentPostId?: string;
     };
     ui: {
         editingTopicCardIds: string[];
@@ -20,6 +21,7 @@ export function initialState(props?: Partial<IState>): IState {
         session: {
             currentProjectId: undefined,
             currentTopicId: undefined,
+            currentPostId: undefined,
         },
         ui: {
             editingTopicCardIds: [],
