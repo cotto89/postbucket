@@ -67,7 +67,7 @@ export class ProjectPane extends React.Component<Props, State> {
 
     onTopicSelect = this.props.dispatch('TOPIC::SELECT').use<IEntity.ITopic>([
         () => this.setState({ editingCardId: '' }),
-        (_, t) => $.updateLocation(({ search }) => ({ pathname: `topics/${t.id}`, search })),
+        (_, t) => $.router.pushLocationTo(`topics/${t.id}`)
     ]);
 
     render() {
