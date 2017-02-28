@@ -24,7 +24,7 @@ export default class Ace extends React.Component<Props, void> {
         this.editor.setValue(this.props.value || '', 1);
         this.editor.setFontSize('13px');
         this.editor.setShowPrintMargin(false);
-        this.editor.setShowInvisibles(true);
+        this.editor.setShowInvisibles(false);
         this.editor.setOption('scrollPastEnd', true);
 
         this.editor.session.setMode('ace/mode/markdown');
