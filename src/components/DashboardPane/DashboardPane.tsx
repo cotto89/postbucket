@@ -8,99 +8,93 @@ import TopicView from './TopicView';
 
 /* Container
 --------------------------------- */
-const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const { currentProjectId } = store.session;
-    const project = currentProjectId && store.projects[currentProjectId];
+const mapStateToProps = (state: IAppState) => {
+    const { currentProjectId } = state.session;
+    const project = currentProjectId && state.projects[currentProjectId];
     const topics = project ?
-        project.topicIds.map(tid => store.topics[tid]) :
-        Object.values(store.topics);
+        project.topicIds.map(tid => state.topics[tid]) :
+        Object.values(state.topics);
 
     return {
         topics,
-        editingCardIds: store.ui.editingTopicCardIds
     };
 };
-
-const mapDispatchToProps = (usecase: UseCase) => {
-    return {
-        actions: {
-            addTopic: usecase('TOPIC::ADD').use<IEntity.ITopic>([
-                (_, t) => $.abortIf(t.title.trim().length <= 0),
-                $.topics.setTopic
-            ]),
-
-            updateTopic: usecase('TOPIC::UPDATE').use<IEntity.ITopic>([
-                (_, t) => $.abortIf(t.title.trim().length <= 0),
-                $.ui.removeEditingId('editingTopicCardIds'),
-                $.topics.setTopic,
-            ]),
-
-            deleteTopic: usecase('TOPIC::DELETE').use<IEntity.ITopic>([
-                $.ui.removeEditingId('editingTopicCardIds'),
-                $.topics.deleteTopic
-            ]),
-
-            toggleTopicCard: usecase('TOPIC::TOGGLE_CARD').use<IEntity.ITopic>([
-                $.ui.toggleEditingIds('editingTopicCardIds')
-            ]),
-
-            onTopicSelect: usecase('TOPIC::SELECT').use<IEntity.ITopic>([
-                (_, t) => $.updateLocation(({ search }) => ({ pathname: `topics/${t.id}`, search })),
-                $.ui.clearEditingIds('editingTopicCardIds'),
-            ])
-        }
-    };
-};
-
 
 /* ProjectPane
 -------------------------------------- */
-type TopicAction = (topic: IEntity.ITopic) => any;
+interface State {
+    editingCardId: string;
+}
 
 interface Props {
     topics: IEntity.ITopic[];
-    editingCardIds: string[];
-    actions: {
-        addTopic: TopicAction;
-        updateTopic: TopicAction;
-        deleteTopic: TopicAction;
-        toggleTopicCard: TopicAction;
-        onTopicSelect: TopicAction;
-    };
+    dispatch: UseCase;
 }
 
-export class ProjectPane extends React.Component<Props, void> {
+export class ProjectPane extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            editingCardId: ''
+        };
+    }
+
     get topics() {
         return this.props.topics.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
+
+    /* usecase
+    ------------------------------- */
+    addTopic = this.props.dispatch('TOPIC::ADD').use<IEntity.ITopic>([
+        (_, t) => $.abortIf(t.title.trim().length <= 0),
+        $.topics.setTopic
+    ]);
+
+    updateTopic = this.props.dispatch('TOPIC::UPDATE').use<IEntity.ITopic>([
+        (_, t) => $.abortIf(t.title.trim().length <= 0),
+        () => this.setState({ editingCardId: '' }),
+        $.topics.setTopic,
+    ]);
+
+    deleteTopic = this.props.dispatch('TOPIC::DELETE').use<IEntity.ITopic>([
+        () => this.setState({ editingCardId: '' }),
+        $.topics.deleteTopic
+    ]);
+
+    toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD').use<IEntity.ITopic>([
+        (_, t) => this.setState({ editingCardId: t.id }),
+    ]);
+
+    onTopicSelect = this.props.dispatch('TOPIC::SELECT').use<IEntity.ITopic>([
+        () => this.setState({ editingCardId: '' }),
+        (_, t) => $.updateLocation(({ search }) => ({ pathname: `topics/${t.id}`, search })),
+    ]);
+
     render() {
-        const { actions } = this.props;
-
-
         return (
             <div className='ProjectPane'>
                 <TopicForm
                     topic={{} as IEntity.ITopic}
                     isNew
-                    onSubmit={actions.addTopic}
+                    onSubmit={this.addTopic}
                 />
 
                 <div className='TopicList'>
                     {
                         this.topics.map(t =>
                             <div key={t.id} className='TopicCard'>
-                                <RenderCase cond={!this.props.editingCardIds.includes(t.id)}>
+                                <RenderCase cond={this.state.editingCardId !== t.id}>
                                     <TopicView
                                         topic={t}
-                                        deleteTopic={actions.deleteTopic}
-                                        onSelect={actions.onTopicSelect}
-                                        toggleToicView={actions.toggleTopicCard}
+                                        deleteTopic={this.deleteTopic}
+                                        onSelect={this.onTopicSelect}
+                                        toggleToicView={this.toggleEditingCardId}
                                     />
 
                                     <TopicForm
                                         topic={t}
-                                        onCancel={actions.toggleTopicCard}
-                                        onSubmit={actions.updateTopic}
+                                        onCancel={this.toggleEditingCardId}
+                                        onSubmit={this.updateTopic}
                                     />
                                 </RenderCase>
                             </div>)
@@ -113,4 +107,4 @@ export class ProjectPane extends React.Component<Props, void> {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectPane);
+export default connect(mapStateToProps)(ProjectPane);
