@@ -1,7 +1,4 @@
 import * as React from 'react';
-import * as ace from 'brace';
-import 'brace/mode/markdown';
-import 'brace/theme/tomorrow';
 
 interface Props {
     value?: string;
