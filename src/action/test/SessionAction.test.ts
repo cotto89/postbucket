@@ -33,36 +33,50 @@ const createRoute = (props: Partial<IEntity.IRoute>): IEntity.IRoute => ({
 });
 
 describe('.updateCurrentIds()', () => {
-    context('route.paramsまたはroute.queryにprojectあった場合', () => {
-        it('currentProjecIdが更新される', () => {
-            const route = createRoute({
-                query: {
-                    project: '1'
-                }
-            });
+    it('route.queryにxxxIdが存在する場合, session.currentXXXIdが更新される', () => {
+        const route = createRoute({
+            query: {
+                project: '1',
+                topicId: '2',
+                postId: '3'
+            }
+        });
 
-            const {session} = action.updateCurrentIds(s, route);
-            assert.deepEqual(session, {
-                currentProjectId: '1',
-                currentTopicId: undefined
-            });
+        assert.deepEqual(s.session, {
+            currentProjectId: undefined,
+            currentTopicId: undefined,
+            currentPostId: undefined
+        });
+
+        const { session } = action.updateCurrentIds(s, route);
+
+        assert.deepEqual(session, {
+            currentProjectId: '1',
+            currentTopicId: '2',
+            currentPostId: '3'
         });
     });
 
-    context('route.paramsまたはroute.queryにtopicIdがあった場合', () => {
-        it('currentTopicIdとcurrentProjectIdが更新される', () => {
-            const route = createRoute({
-                params: {
-                    topicId: target.t.id
-                }
-            });
+    it('route.paramsにxxxIdが存在する場合, session.currentXXXIdが更新される', () => {
+        const route = createRoute({
+            params: {
+                project: '1',
+                topicId: '2',
+                postId: '3'
+            }
+        });
 
-            const { session } = action.updateCurrentIds(s, route);
+        assert.deepEqual(s.session, {
+            currentProjectId: undefined,
+            currentTopicId: undefined,
+            currentPostId: undefined
+        });
 
-            assert.deepEqual(session, {
-                currentProjectId: undefined,
-                currentTopicId: target.t.id
-            });
+        const { session } = action.updateCurrentIds(s, route);
+        assert.deepEqual(session, {
+            currentProjectId: '1',
+            currentTopicId: '2',
+            currentPostId: '3'
         });
     });
 });
