@@ -8,10 +8,6 @@ export interface IState {
         currentTopicId?: string;
         currentPostId?: string;
     };
-    ui: {
-        editingTopicCardIds: string[];
-        editingPostIds: string[];
-    };
 }
 
 export function initialState(props?: Partial<IState>): IState {
@@ -22,10 +18,6 @@ export function initialState(props?: Partial<IState>): IState {
             currentProjectId: undefined,
             currentTopicId: undefined,
             currentPostId: undefined,
-        },
-        ui: {
-            editingTopicCardIds: [],
-            editingPostIds: []
         },
         ...props
     };
