@@ -16,53 +16,43 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
     };
 };
 
-const mapDispatchToProps = (usecase: UseCase) => {
-    return {
-        actions: {
-            setPostToEditor: usecase('POST::SET_POST_TO_EDITOR').use<IEntity.IPost>([
-                (_, p) => $.updateLocation((loc) => ({
-                    pathname: `/topics/${p.topicId}/posts/${p.id}`,
-                    search: loc.search,
-                }), 'replace')
-            ]),
-
-            updatePost: usecase('POST:UPDATE').use<IEntity.IPost>([
-                $.topics.setPost
-            ]),
-
-            deletePost: usecase('POST::DELETE').use<IEntity.IPost>([
-                $.topics.deletePost,
-                (_, p) => $.updateLocation(loc => ({
-                    pathname: `/topics/${p.topicId}`,
-                    search: loc.search,
-                }), 'replace'),
-            ])
-        }
-    };
-};
-
 /* TopicPane
 -------------------------------- */
 import PostView from './PostView';
 
-type PostAction = (post: IEntity.IPost) => void;
-
 interface Props {
     posts: IEntity.IPost[];
-    actions: {
-        setPostToEditor: PostAction;
-        deletePost: PostAction;
-        updatePost: PostAction;
-    };
+    dispatch: UseCase;
 }
 
 export class TopicPane extends React.Component<Props, {}> {
     get posts() {
         return this.props.posts.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
-    render() {
-        const { actions } = this.props;
 
+    /* usecase
+    ---------------------------- */
+    setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR').use<IEntity.IPost>([
+        (_, p) => this.locationTo(`/topics/${p.topicId}/posts/${p.id}`)
+    ]);
+
+    updatePost = this.props.dispatch('POST:UPDATE').use<IEntity.IPost>([
+        $.topics.setPost
+    ]);
+
+    deletePost = this.props.dispatch('POST::DELETE').use<IEntity.IPost>([
+        $.topics.deletePost,
+        (_, p) => this.locationTo(`/topics/${p.topicId}`)
+    ]);
+
+    locationTo(path: string) {
+        $.updateLocation(loc => ({
+            pathname: path,
+            search: loc.search
+        }), 'replace');
+    }
+
+    render() {
         return (
             <div className='TopicPane'>
                 <div className='PostList'>
@@ -71,9 +61,9 @@ export class TopicPane extends React.Component<Props, {}> {
                             <PostView
                                 key={post.id}
                                 post={post}
-                                onSelect={actions.setPostToEditor}
-                                deletePost={actions.deletePost}
-                                updatePost={actions.updatePost}
+                                onSelect={this.setPostToEditor}
+                                deletePost={this.deletePost}
+                                updatePost={this.updatePost}
                             />
                         )
                     }
@@ -83,4 +73,4 @@ export class TopicPane extends React.Component<Props, {}> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TopicPane);
+export default connect(mapStateToProps)(TopicPane);
