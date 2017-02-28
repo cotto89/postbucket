@@ -33,7 +33,9 @@ export class TopicPane extends React.Component<Props, {}> {
     /* usecase
     ---------------------------- */
     setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR').use<IEntity.IPost>([
-        (_, p) => $.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`))
+        $.task('replaceLocation', (_: IAppState, p: IEntity.IPost) => {
+            $.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
+        }),
     ]);
 
     updatePost = this.props.dispatch('POST:UPDATE').use<IEntity.IPost>([
@@ -42,7 +44,11 @@ export class TopicPane extends React.Component<Props, {}> {
 
     deletePost = this.props.dispatch('POST::DELETE').use<IEntity.IPost>([
         $.topics.deletePost,
-        (_, p) => $.router.replaceLoationTo((`/topics/${p.topicId}`))
+        $.task('replaceLocation', (s: IAppState, p: IEntity.IPost) => {
+            if (s.session.currentPostId === p.id) {
+                $.router.replaceLoationTo(`/topics/${p.topicId}`);
+            }
+        }),
     ]);
 
     render() {

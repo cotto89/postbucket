@@ -4,6 +4,7 @@ import { TopicAction } from './TopicAction';
 import { RouterAction } from './RouterAction';
 import history from './../lib/router/history';
 import abortIf from './abortIf';
+import task from './task';
 
 export { SessionAction, ProjectAction, TopicAction }
 export default {
@@ -12,4 +13,5 @@ export default {
     session: new SessionAction(),
     router: new RouterAction(history),
     abortIf,
+    task,
 };

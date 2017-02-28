@@ -1,6 +1,7 @@
 import omit = require('lodash/omit');
 import * as _ from './../utils/object';
 import * as u from './../utils/utils';
+import task from './task';
 import { project } from './../app/entity';
 
 type S = IAppState;
@@ -11,14 +12,14 @@ export class ProjectAction {
     /**
      * projectを追加・更新
      */
-    setProject = u.task('setProject', (s: S, pj: PJ) => {
+    setProject = task('setProject', (s: S, pj: PJ) => {
         return _.set(s, ['projects', pj.name], pj);
     });
 
     /**
      * projectを削除
      */
-    deleteProject = u.task('deleteProject', (s: S, pj: PJ) => {
+    deleteProject = task('deleteProject', (s: S, pj: PJ) => {
         return _.update(s, ['projects'], (v) => omit(v, pj.name));
     });
 
@@ -26,7 +27,7 @@ export class ProjectAction {
     /**
      * topicからprojectを作成・更新
      */
-    setProjectByTopic = u.task('setProject', (s: S, t: T) => {
+    setProjectByTopic = task('setProject', (s: S, t: T) => {
         if (!t.projectName) throw new Error(`topic.projectName is required on setProjectByTopic`);
 
         const name = t.projectName;
@@ -41,7 +42,7 @@ export class ProjectAction {
     /**
      * topicIdをProjectに追加
      */
-    setTopicId = u.task('setTopicId', (s: S, t: T) => {
+    setTopicId = task('setTopicId', (s: S, t: T) => {
         if (!t.projectName) throw new Error(`topic.projectName is required on setTopicId`);
 
         return u.whenExists(s.projects[t.projectName], (pj) => {
@@ -54,7 +55,7 @@ export class ProjectAction {
     /**
      * projectからtopicIdを削除
      */
-    removeTopicId = u.task('removeTopicId', (s: S, t: T) => {
+    removeTopicId = task('removeTopicId', (s: S, t: T) => {
         if (!t.projectName) throw new Error(`topic.projectName is required on removeTopicId`);
 
         return u.whenExists(s.projects[t.projectName], (pj) => {

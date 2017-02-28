@@ -1,7 +1,6 @@
 export {
     whenExists,
     existy,
-    task
 }
 
 /**
@@ -31,15 +30,4 @@ function whenExists<T>(test: T | any, then: Function, fallback?: Function) {
  */
 function existy(v: any) {
     return !(v === null || v === undefined);
-}
-
-
-/**
- * class propertyだとfunction.nameがなくなるので, taskに_taskNameを追加する
- */
-function task<A1, R>(name: string, fn: (a1: A1) => R): (a1: A1) => R;
-function task<A1, A2, R>(name: string, fn: (a1: A1, a2: A2) => R): (a1: A1, a2: A2) => R;
-function task(name: string, fn: Function) {
-    (fn as any)._taskName = name;
-    return fn;
 }
