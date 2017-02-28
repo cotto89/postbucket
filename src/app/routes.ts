@@ -2,6 +2,7 @@ import { SFC, ComponentClass } from 'react';
 import history from './../lib/router/history';
 import DashboardPane from './../components/DashboardPane/DashboardPane';
 import TopicPane from './../components/TopicPane/TopicPane';
+import EditorPane from './../components/EditorPane/EditorPane';
 
 export { history }
 
@@ -23,7 +24,7 @@ export default [
             },
             {
                 path: '/topics/:topicId/posts/:postId',
-                action: result(TopicPane)
+                action: result(EditorPane)
             },
         ]
     }
