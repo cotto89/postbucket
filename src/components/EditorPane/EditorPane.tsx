@@ -44,17 +44,14 @@ export class EditorPane extends React.Component<Props, State> {
     handeSubmit = () => {
         const { post } = this.props;
         const isNew = post.content.length <= 0;
-
         const newPost = Entity.post({
-            ...this.props.post,
+            ...post,
             content: this.content,
             createdAt: isNew ? new Date() : post.createdAt,
             updatedAt: new Date(),
         });
 
         this.updatePost(newPost);
-        this.content = '';
-        this.forceUpdate();
     }
 
     /* usecase
@@ -62,6 +59,8 @@ export class EditorPane extends React.Component<Props, State> {
     updatePost = this.props.usecase('EDITOR::POST_UPDATE').use<IEntity.IPost>([
         (_: any, p: IEntity.IPost) => $.abortIf(p.content.length <= 0),
         $.topics.setPost,
+        () => { this.content = ''; },
+        () => this.forceUpdate(),
         $.task('updateLocation', (_: any, p: IEntity.IPost) => $.router.replaceLoationTo(`/topics/${p.topicId}`))
     ]);
 
