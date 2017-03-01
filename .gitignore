@@ -46,3 +46,4 @@ typings.json
 
 ### Project ####
 .awcache
+src/playground.ts
