@@ -5,12 +5,9 @@ import $ from './../../action/index';
 /* Container
 --------------------------- */
 const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const { currentTopicId, currentProjectId } = store.session;
+    const { currentTopicId } = store.session;
     if (!currentTopicId) return { posts: [] };
-
-    const project = currentProjectId ? store.projects[currentProjectId] : undefined;
-    const topicId = project ? project.topicIds.find((id) => id === currentTopicId) : currentTopicId;
-    const topic = topicId ? store.topics[topicId] : undefined;
+    const topic = store.topics[currentTopicId];
     return {
         posts: topic ? Object.values(topic.posts) : []
     };
