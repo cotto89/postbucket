@@ -3,6 +3,7 @@ import * as E from './../../app/entity';
 import * as S from './../../app/state';
 import * as Quex from 'quex';
 import * as brace from 'brace';
+import { PostBucketIDB } from './../../idb/index';
 
 declare global {
     // cdnから読み込んでいるためglobalにしている
@@ -11,7 +12,6 @@ declare global {
     namespace ace {
         interface Editor extends brace.Editor { }
     }
-    // interface ace extends brace.Editor { }
     /* tslint:eable:class-name */
 
     interface UseCase extends Quex.UseCase<S.IState> { }
@@ -32,5 +32,11 @@ declare global {
             params: { [key: string]: string };
             path: string;
         }
+    }
+
+    // interface IAppIDB extends IDB.PostBucketIDB { }
+
+    namespace IDB {
+        interface Instance extends PostBucketIDB { }
     }
 }
