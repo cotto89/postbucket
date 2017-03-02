@@ -16,7 +16,7 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
     };
 };
 
-/* TopicPane
+/* PostListPane
 -------------------------------- */
 import PostView from './PostView';
 
@@ -25,7 +25,7 @@ interface Props {
     dispatch: UseCase;
 }
 
-export class TopicPane extends React.Component<Props, {}> {
+export class PostListPane extends React.Component<Props, {}> {
     get posts() {
         return this.props.posts.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
@@ -53,7 +53,7 @@ export class TopicPane extends React.Component<Props, {}> {
 
     render() {
         return (
-            <div className='TopicPane'>
+            <div className='PostListPane'>
                 <div className='PostList'>
                     {
                         this.posts.map(post =>
@@ -72,4 +72,4 @@ export class TopicPane extends React.Component<Props, {}> {
     }
 }
 
-export default connect(mapStateToProps)(TopicPane);
+export default connect(mapStateToProps)(PostListPane);
