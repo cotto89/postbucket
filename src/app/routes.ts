@@ -1,6 +1,6 @@
 import { SFC, ComponentClass } from 'react';
 import history from './../lib/router/history';
-import DashboardPane from './../components/DashboardPane/DashboardPane';
+import TopicListPane from './../components/TopicListPane/TopicListPane';
 import PostListPane from './../components/PostListPane/PostListPane';
 import EditorPane from './../components/EditorPane/EditorPane';
 
@@ -16,7 +16,7 @@ export default [
         children: [
             {
                 path: '/',
-                action: result(DashboardPane)
+                action: result(TopicListPane)
             },
             {
                 path: '/topics/:topicId',

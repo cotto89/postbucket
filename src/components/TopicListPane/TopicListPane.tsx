@@ -20,7 +20,7 @@ const mapStateToProps = (state: IAppState) => {
     };
 };
 
-/* ProjectPane
+/* TopicListPane
 -------------------------------------- */
 interface State {
     editingCardId: string;
@@ -31,7 +31,7 @@ interface Props {
     dispatch: UseCase;
 }
 
-export class ProjectPane extends React.Component<Props, State> {
+export class TopicListPane extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -72,7 +72,7 @@ export class ProjectPane extends React.Component<Props, State> {
 
     render() {
         return (
-            <div className='ProjectPane'>
+            <div className='TopicListPane'>
                 <TopicForm
                     topic={{} as IEntity.ITopic}
                     isNew
@@ -107,4 +107,4 @@ export class ProjectPane extends React.Component<Props, State> {
 }
 
 
-export default connect(mapStateToProps)(ProjectPane);
+export default connect(mapStateToProps)(TopicListPane);
