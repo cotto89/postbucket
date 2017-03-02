@@ -50,11 +50,7 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react@*":
-  version "15.0.12"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.12.tgz#aea95e45631bd745be45d65c2dc02327848212f2"
-
-"@types/react@^15.0.14":
+"@types/react@*", "@types/react@^15.0.14":
   version "15.0.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.14.tgz#07a739b20b0d4cf946f52444d3c40a94d4a234b1"
 
@@ -328,18 +324,7 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-autoprefixer@^6.3.1:
-  version "6.7.5"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.7.5.tgz#50848f39dc08730091d9495023487e7cc21f518d"
-  dependencies:
-    browserslist "^1.7.5"
-    caniuse-db "^1.0.30000624"
-    normalize-range "^0.1.2"
-    num2fraction "^1.2.2"
-    postcss "^5.2.15"
-    postcss-value-parser "^3.2.3"
-
-autoprefixer@^6.7.6:
+autoprefixer@^6.3.1, autoprefixer@^6.7.6:
   version "6.7.6"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.7.6.tgz#00f05656c7ef73de9d2fd9b4668f6ef6905a855a"
   dependencies:
@@ -1324,11 +1309,7 @@ caniuse-api@^1.5.2:
     lodash.memoize "^4.1.0"
     lodash.uniq "^4.3.0"
 
-caniuse-db@^1.0.30000346, caniuse-db@^1.0.30000624:
-  version "1.0.30000626"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000626.tgz#44363dc86857efaf758fea9faef6a15ed93d8f33"
-
-caniuse-db@^1.0.30000628:
+caniuse-db@^1.0.30000346, caniuse-db@^1.0.30000624, caniuse-db@^1.0.30000628:
   version "1.0.30000631"
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000631.tgz#8aa6f65cff452c4aba1c2aaa1e724102fbb9114f"
 
@@ -1971,9 +1952,9 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
-dexie@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/dexie/-/dexie-1.5.1.tgz#ac3ad5a0ebaf7e6e42760db58710418d4a756624"
+dexie@2.0.0-beta:
+  version "2.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-2.0.0-beta.10.tgz#ea8aca645c1994f7f10156d7f163e4190e37cf1b"
 
 di@^0.0.1:
   version "0.0.1"

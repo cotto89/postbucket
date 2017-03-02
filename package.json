@@ -5,7 +5,7 @@
   "author": "cotto",
   "dependencies": {
     "brace": "^0.10.0",
-    "dexie": "^1.5.1",
+    "dexie": "2.0.0-beta",
     "hast-util-to-html": "^3.0.0",
     "hast-util-to-string": "^1.0.0",
     "highlight.js": "^9.9.0",
