@@ -3,7 +3,7 @@
 /* Store
 ---------------------------------*/
 import creaetStore from 'quex';
-import { initialState } from './app/state';
+import initialState from './state/state';
 import combineEnhancer from './lib/quex-helper/combineEnhancer';
 import notifier, { Listener } from './lib/enhancer/notifier';
 
@@ -12,14 +12,11 @@ let enhancers: Function[] = [];
 let listeners: Listener[] = [];
 
 if (process.env.NODE_ENV === 'development') {
-    // dummpy project dataを生成
-    const createTopics = require('./app/helper/createTopicsData').default;
-    const topics = createTopics({
+    const fixture = require('./state/fixture/createFixtureState').default;
+    state = fixture({
         topicCount: 5,
-        postCountPerTopic: 5,
+        postCountPerTopic: 5
     });
-
-    state = initialState({ topics });
 
     // devtoolをsetup
     const setupReduxDevtool = require('./lib/devtools/reduxDevtools').default;
@@ -41,12 +38,12 @@ store.subscribe((_, err) => {
 
 /* Router
 --------------------------------- */
-import Router from './lib/router/Router';
-import routes, { history } from './app/routes';
-import action from './action/index';
+import Router from './router/Router';
+import routes, { history } from './routes';
+import * as task from './task/index';
 
 const onLocationChange = store.dispatch('ROUTER::LOCATION_UPDATE').use([
-    action.session.updateCurrentIds
+    task.mutation.updateCurrentIds
 ]);
 
 

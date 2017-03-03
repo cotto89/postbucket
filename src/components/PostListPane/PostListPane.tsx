@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import $ from './../../action/index';
+import * as task from './../../task/index';
 
 /* Container
 --------------------------- */
@@ -30,22 +30,23 @@ export class PostListPane extends React.Component<Props, {}> {
     /* usecase
     ---------------------------- */
     setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR').use<IEntity.IPost>([
-        $.task('replaceLocation', (_: IAppState, p: IEntity.IPost) => {
-            $.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
-        }),
+        (_: IAppState, p: IEntity.IPost) => {
+            task.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
+        },
     ]);
 
     updatePost = this.props.dispatch('POST:UPDATE').use<IEntity.IPost>([
-        $.topics.setPost
+        task.mutation.putPost
     ]);
 
     deletePost = this.props.dispatch('POST::DELETE').use<IEntity.IPost>([
-        $.topics.deletePost,
-        $.task('replaceLocation', (s: IAppState, p: IEntity.IPost) => {
+        task.mutation.removePost,
+        (s: IAppState, p: IEntity.IPost) => {
             if (s.session.currentPostId === p.id) {
-                $.router.replaceLoationTo(`/topics/${p.topicId}`);
+                task.router.replaceLoationTo(`/topics/${p.topicId}`);
             }
-        }),
+        }
+
     ]);
 
     render() {

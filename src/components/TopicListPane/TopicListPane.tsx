@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import $ from './../../action/index';
+import * as task from './../../task/index';
 
 import RenderCase from './../utils/RenderCase';
 import TopicForm from './TopicForm';
@@ -46,19 +46,19 @@ export class TopicListPane extends React.Component<Props, State> {
     /* usecase
     ------------------------------- */
     addTopic = this.props.dispatch('TOPIC::ADD').use<IEntity.ITopic>([
-        (_, t) => $.abortIf(t.title.trim().length <= 0),
-        $.topics.setTopic
+        (_, t) => task.abortIf(t.title.trim().length <= 0),
+        task.mutation.putTopic
     ]);
 
     updateTopic = this.props.dispatch('TOPIC::UPDATE').use<IEntity.ITopic>([
-        (_, t) => $.abortIf(t.title.trim().length <= 0),
+        (_, t) => task.abortIf(t.title.trim().length <= 0),
         () => this.setState({ editingCardId: '' }),
-        $.topics.setTopic,
+        task.mutation.putTopic
     ]);
 
     deleteTopic = this.props.dispatch('TOPIC::DELETE').use<IEntity.ITopic>([
         () => this.setState({ editingCardId: '' }),
-        $.topics.deleteTopic
+        task.mutation.removeTopic
     ]);
 
     toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD').use<IEntity.ITopic>([
@@ -67,7 +67,7 @@ export class TopicListPane extends React.Component<Props, State> {
 
     onTopicSelect = this.props.dispatch('TOPIC::SELECT').use<IEntity.ITopic>([
         () => this.setState({ editingCardId: '' }),
-        (_, t) => $.router.pushLocationTo(`topics/${t.id}`)
+        (_, t) => task.router.pushLocationTo(`topics/${t.id}`)
     ]);
 
     render() {

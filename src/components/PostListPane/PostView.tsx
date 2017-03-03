@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Entity from './../../app/entity';
+import * as Entity from './../../state/entity';
 import MarkdownView from './../MarkdownView/MarkdownView';
 
 type PostAction = (post: IEntity.IPost) => void;

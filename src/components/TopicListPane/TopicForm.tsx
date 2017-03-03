@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Entity from './../../app/entity';
+import * as Entity from './../../state/entity';
 
 interface State {
     newTopicTitle: string;

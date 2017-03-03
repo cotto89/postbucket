@@ -2,14 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import AceEditor from './Ace';
 import { get } from './../../utils/object';
-import $ from './../../action/index';
-import * as Entity from './../../app/entity';
+import * as task from './../../task/index';
+import * as entity from './../../state/entity';
 
 /* Container */
 function mapStateToProps(s: IAppState) {
     const topicId = s.session.currentTopicId as string;
     const postId = s.session.currentPostId as string;
-    const post = get(s, ['topics', topicId, 'posts', postId]) || Entity.post({ topicId });
+    const post = get(s, ['topics', topicId, 'posts', postId]) || entity.post({ topicId });
     return {
         post
     };
@@ -44,7 +44,7 @@ export class EditorPane extends React.Component<Props, State> {
     handeSubmit = () => {
         const { post } = this.props;
         const isNew = post.content.length <= 0;
-        const newPost = Entity.post({
+        const newPost = entity.post({
             ...post,
             content: this.content,
             createdAt: isNew ? new Date() : post.createdAt,
@@ -57,11 +57,11 @@ export class EditorPane extends React.Component<Props, State> {
     /* usecase
     ---------------------------- */
     updatePost = this.props.usecase('EDITOR::POST_UPDATE').use<IEntity.IPost>([
-        (_: any, p: IEntity.IPost) => $.abortIf(p.content.length <= 0),
-        $.topics.setPost,
+        (_: any, p: IEntity.IPost) => task.abortIf(p.content.length <= 0),
+        task.mutation.putPost,
         () => { this.content = ''; },
         () => this.forceUpdate(),
-        $.task('updateLocation', (_: any, p: IEntity.IPost) => $.router.replaceLoationTo(`/topics/${p.topicId}`))
+        (_: any, p: IEntity.IPost) => task.router.replaceLoationTo(`/topics/${p.topicId}`)
     ]);
 
     /* hook
