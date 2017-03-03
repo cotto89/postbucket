@@ -1,8 +1,8 @@
 import { SFC, ComponentClass } from 'react';
-import history from './../lib/router/history';
-import TopicListPane from './../components/TopicListPane/TopicListPane';
-import PostListPane from './../components/PostListPane/PostListPane';
-import EditorPane from './../components/EditorPane/EditorPane';
+import history from './router/history';
+import TopicListPane from './components/TopicListPane/TopicListPane';
+import PostListPane from './/components/PostListPane/PostListPane';
+import EditorPane from './components/EditorPane/EditorPane';
 
 export { history }
 

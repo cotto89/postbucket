@@ -1,6 +1,6 @@
 import { StatelessComponent, ComponentClass } from 'react';
-import * as E from './../../app/entity';
-import * as S from './../../app/state';
+import * as E from './../../state/entity';
+import * as S from './../../state/state';
 import * as Quex from 'quex';
 import * as brace from 'brace';
 import { PostBucketIDB } from './../../idb/index';
@@ -33,8 +33,6 @@ declare global {
             path: string;
         }
     }
-
-    // interface IAppIDB extends IDB.PostBucketIDB { }
 
     namespace IDB {
         interface Instance extends PostBucketIDB { }

@@ -1,4 +1,5 @@
 import { History, Location, createPath } from 'history';
+import history from './history';
 
 type To = string | { pathname: string, search?: string };
 type Locator = (loc: Location) => To;
@@ -49,3 +50,5 @@ export class RouterAction {
         this.history[mode](path);
     }
 }
+
+export default new RouterAction(history);
