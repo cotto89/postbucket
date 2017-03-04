@@ -6,6 +6,9 @@ import RenderCase from './../utils/RenderCase';
 import TopicForm from './TopicForm';
 import TopicView from './TopicView';
 
+type S = IAppState;
+type T = IEntity.ITopic;
+
 /* Container
 --------------------------------- */
 const mapStateToProps = (state: IAppState) => {
@@ -45,29 +48,29 @@ export class TopicListPane extends React.Component<Props, State> {
 
     /* usecase
     ------------------------------- */
-    addTopic = this.props.dispatch('TOPIC::ADD').use<IEntity.ITopic>([
-        (_, t) => task.abortIf(t.title.trim().length <= 0),
+    addTopic = this.props.dispatch('TOPIC::ADD').use([
+        (_: S, t: T) => task.abortIf(t.title.trim().length <= 0),
         task.mutation.putTopic
     ]);
 
-    updateTopic = this.props.dispatch('TOPIC::UPDATE').use<IEntity.ITopic>([
-        (_, t) => task.abortIf(t.title.trim().length <= 0),
+    updateTopic = this.props.dispatch('TOPIC::UPDATE').use([
+        (_: S, t: T) => task.abortIf(t.title.trim().length <= 0),
         () => this.setState({ editingCardId: '' }),
         task.mutation.putTopic
     ]);
 
-    deleteTopic = this.props.dispatch('TOPIC::DELETE').use<IEntity.ITopic>([
+    deleteTopic = this.props.dispatch('TOPIC::DELETE').use([
         () => this.setState({ editingCardId: '' }),
         task.mutation.removeTopic
     ]);
 
-    toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD').use<IEntity.ITopic>([
-        (_, t) => this.setState({ editingCardId: t.id }),
+    toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD').use([
+        (_: S, t: T) => this.setState({ editingCardId: t.id }),
     ]);
 
-    onTopicSelect = this.props.dispatch('TOPIC::SELECT').use<IEntity.ITopic>([
+    onTopicSelect = this.props.dispatch('TOPIC::SELECT').use([
         () => this.setState({ editingCardId: '' }),
-        (_, t) => task.router.pushLocationTo(`topics/${t.id}`)
+        (_: S, t: T) => task.router.pushLocationTo(`topics/${t.id}`)
     ]);
 
     render() {

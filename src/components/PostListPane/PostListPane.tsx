@@ -29,17 +29,17 @@ export class PostListPane extends React.Component<Props, {}> {
 
     /* usecase
     ---------------------------- */
-    setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR').use<IEntity.IPost>([
+    setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR').use([
         (_: IAppState, p: IEntity.IPost) => {
             task.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
         },
     ]);
 
-    updatePost = this.props.dispatch('POST:UPDATE').use<IEntity.IPost>([
+    updatePost = this.props.dispatch('POST:UPDATE').use([
         task.mutation.putPost
     ]);
 
-    deletePost = this.props.dispatch('POST::DELETE').use<IEntity.IPost>([
+    deletePost = this.props.dispatch('POST::DELETE').use([
         task.mutation.removePost,
         (s: IAppState, p: IEntity.IPost) => {
             if (s.session.currentPostId === p.id) {

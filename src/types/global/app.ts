@@ -1,7 +1,7 @@
 import { StatelessComponent, ComponentClass } from 'react';
 import * as E from './../../state/entity';
 import * as S from './../../state/state';
-import * as Quex from 'quex';
+import * as Store from './../../store';
 import * as brace from 'brace';
 import { PostBucketIDB } from './../../idb/index';
 
@@ -14,7 +14,7 @@ declare global {
     }
     /* tslint:eable:class-name */
 
-    interface UseCase extends Quex.UseCase<S.IState> { }
+    interface UseCase extends Store.UseCase { }
 
     interface IAppState extends S.IState { }
 

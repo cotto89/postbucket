@@ -56,7 +56,7 @@ export class EditorPane extends React.Component<Props, State> {
 
     /* usecase
     ---------------------------- */
-    updatePost = this.props.usecase('EDITOR::POST_UPDATE').use<IEntity.IPost>([
+    updatePost = this.props.usecase('EDITOR::POST_UPDATE').use([
         (_: any, p: IEntity.IPost) => task.abortIf(p.content.length <= 0),
         task.mutation.putPost,
         () => { this.content = ''; },
