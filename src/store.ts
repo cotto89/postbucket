@@ -1,7 +1,7 @@
 /* tslint:disable:no-var-requires */
 import creaetStore from 'quex';
 import initialState from './state/state';
-import combineEnhancer from './lib/quex-helper/combineEnhancer';
+import combineEnhancer from './lib/quex-utils/combineEnhancer';
 import notifier, { Listener } from './lib/enhancer/notifier';
 
 let state = initialState();
