@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as task from './../../task/index';
+import bind from 'bind-decorator';
+
+type S = IAppState;
+type P = IEntity.IPost;
 
 /* Container
 --------------------------- */
@@ -27,27 +31,32 @@ export class PostListPane extends React.Component<Props, {}> {
         return this.props.posts.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
 
+    /* local task
+    ---------------------------- */
+    @bind
+    replaceLocationToEditor(_: S, p: P) {
+        task.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
+    }
+
+    @bind
+    replaceLocationToPostList(s: S, p: P) {
+        if (s.session.currentPostId === p.id) {
+            task.router.replaceLoationTo(`/topics/${p.topicId}`);
+        }
+    }
+
     /* usecase
     ---------------------------- */
-    setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR').use([
-        (_: IAppState, p: IEntity.IPost) => {
-            task.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
-        },
-    ]);
+    setPostToEditor = this.props.dispatch('POST::SET_POST_TO_EDITOR')
+        .use(this.replaceLocationToEditor);
 
-    updatePost = this.props.dispatch('POST:UPDATE').use([
-        task.mutation.putPost
-    ]);
+    updatePost = this.props.dispatch('POST:UPDATE')
+        .use(task.mutation.putPost);
 
-    deletePost = this.props.dispatch('POST::DELETE').use([
-        task.mutation.removePost,
-        (s: IAppState, p: IEntity.IPost) => {
-            if (s.session.currentPostId === p.id) {
-                task.router.replaceLoationTo(`/topics/${p.topicId}`);
-            }
-        }
+    deletePost = this.props.dispatch('POST::DELETE')
+        .use(task.mutation.removePost)
+        .use(this.replaceLocationToPostList);
 
-    ]);
 
     render() {
         return (

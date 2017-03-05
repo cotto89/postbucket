@@ -5,6 +5,7 @@
   "author": "cotto",
   "dependencies": {
     "babel-webpack-plugin": "^0.1.1",
+    "bind-decorator": "^1.0.10",
     "brace": "^0.10.0",
     "dexie": "2.0.0-beta",
     "hast-util-to-html": "^3.0.0",

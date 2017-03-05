@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import bind from 'bind-decorator';
 import AceEditor from './Ace';
 import { get } from './../../utils/object';
 import * as task from './../../task/index';
@@ -14,6 +15,9 @@ function mapStateToProps(s: IAppState) {
         post
     };
 }
+
+type S = IAppState;
+type P = IEntity.IPost;
 
 /* Component */
 interface State {
@@ -37,11 +41,13 @@ export class EditorPane extends React.Component<Props, State> {
 
     /* handler
     --------------------------- */
-    handleChange = (content: string) => {
+    @bind
+    handleChange(content: string) {
         this.content = content;
     }
 
-    handeSubmit = () => {
+    @bind
+    handeSubmit() {
         const { post } = this.props;
         const isNew = post.content.length <= 0;
         const newPost = entity.post({
@@ -50,19 +56,22 @@ export class EditorPane extends React.Component<Props, State> {
             createdAt: isNew ? new Date() : post.createdAt,
             updatedAt: new Date(),
         });
-
+        this.content = '';
         this.updatePost(newPost);
+    }
+
+    @bind
+    locationToTopicList(_: S, p: P) {
+        task.router.replaceLoationTo(`/topics/${p.topicId}`);
     }
 
     /* usecase
     ---------------------------- */
-    updatePost = this.props.usecase('EDITOR::POST_UPDATE').use([
-        (_: any, p: IEntity.IPost) => task.abortIf(p.content.length <= 0),
-        task.mutation.putPost,
-        () => { this.content = ''; },
-        () => this.forceUpdate(),
-        (_: any, p: IEntity.IPost) => task.router.replaceLoationTo(`/topics/${p.topicId}`)
-    ]);
+    updatePost = this.props.usecase('EDITOR::POST_UPDATE')
+        .use(task.abortIf((_: S, p: P) => p.content.length <= 0))
+        .use(task.mutation.putPost)
+        .use(task.named('forceUpdate', () => this.forceUpdate()))
+        .use(this.locationToTopicList);
 
     /* hook
     ----------------------------- */

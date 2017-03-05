@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as task from './../../task/index';
+import bind from 'bind-decorator';
 
 import RenderCase from './../utils/RenderCase';
 import TopicForm from './TopicForm';
@@ -46,32 +47,45 @@ export class TopicListPane extends React.Component<Props, State> {
         return this.props.topics.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     }
 
+    /* local task
+    ------------------------------- */
+    @bind
+    clearEditingId() {
+        this.setState({ editingCardId: '' });
+    }
+
+    @bind
+    setEditingId(_: S, t: T) {
+        this.setState(({ editingCardId: t.id }));
+    }
+
+    @bind
+    pushLocation(_: S, t: T) {
+        task.router.pushLocationTo(`topics/${t.id}`);
+    }
+
     /* usecase
     ------------------------------- */
-    addTopic = this.props.dispatch('TOPIC::ADD').use([
-        (_: S, t: T) => task.abortIf(t.title.trim().length <= 0),
-        task.mutation.putTopic
-    ]);
+    addTopic = this.props.dispatch('TOPIC::ADD')
+        .use(task.abortIf((_: S, t: T) => t.title.trim().length <= 0))
+        .use(task.mutation.putTopic);
 
-    updateTopic = this.props.dispatch('TOPIC::UPDATE').use([
-        (_: S, t: T) => task.abortIf(t.title.trim().length <= 0),
-        () => this.setState({ editingCardId: '' }),
-        task.mutation.putTopic
-    ]);
+    updateTopic = this.props.dispatch('TOPIC::UPDATE')
+        .use(task.abortIf((_: S, t: T) => t.title.trim().length <= 0))
+        .use(task.mutation.putTopic)
+        .use(this.clearEditingId);
 
-    deleteTopic = this.props.dispatch('TOPIC::DELETE').use([
-        () => this.setState({ editingCardId: '' }),
-        task.mutation.removeTopic
-    ]);
+    deleteTopic = this.props.dispatch('TOPIC::DELETE')
+        .use(task.mutation.removeTopic)
+        .use(this.clearEditingId);
 
-    toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD').use([
-        (_: S, t: T) => this.setState({ editingCardId: t.id }),
-    ]);
+    toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD')
+        .use(this.setEditingId);
 
-    onTopicSelect = this.props.dispatch('TOPIC::SELECT').use([
-        () => this.setState({ editingCardId: '' }),
-        (_: S, t: T) => task.router.pushLocationTo(`topics/${t.id}`)
-    ]);
+    onTopicSelect = this.props.dispatch('TOPIC::SELECT')
+        .use<S, T>(this.clearEditingId)
+        .use(this.pushLocation);
+
 
     render() {
         return (
