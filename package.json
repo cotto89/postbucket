@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "author": "cotto",
   "dependencies": {
-    "babel-webpack-plugin": "^0.1.1",
     "bind-decorator": "^1.0.10",
     "brace": "^0.10.0",
     "dexie": "2.0.0-beta",
@@ -55,6 +54,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.2.0",
     "babel-preset-power-assert": "^1.0.0",
+    "babel-webpack-plugin": "^0.1.1",
     "babili-webpack-plugin": "^0.0.11",
     "css-loader": "^0.26.2",
     "espower-typescript": "^8.0.0",
