@@ -25,7 +25,8 @@ export {
  */
 function abortIf(predicate: () => boolean): () => void;
 function abortIf<S>(predicate: (s: S) => boolean): (s: S) => void;
-function abortIf<S, P>(predicate: (s: S, p: P) => boolean): (s: S, p: P) => void {
+function abortIf<S, P>(predicate: (s: S, p: P) => boolean): (s: S, p: P) => void;
+function abortIf(predicate: Function): Function {
     return function $abortIfTask() {
         if (predicate.apply(null, arguments)) {
             throw new AbortTransition();
@@ -47,7 +48,8 @@ function abortIf<S, P>(predicate: (s: S, p: P) => boolean): (s: S, p: P) => void
  */
 function when<S>(predicate: () => boolean): When.Then;
 function when<S>(predicate: (s: S) => boolean): When.Then;
-function when<S, P>(predicate: (s: S, p: P) => boolean): When.Then {
+function when<S, P>(predicate: (s: S, p: P) => boolean): When.Then;
+function when(predicate: Function): When.Then {
     return { then };
     function then(f1: Function, f2?: Function) {
         return function $whenTask() {
@@ -81,8 +83,10 @@ namespace When {
  * @example
  * const task = named('name', task)
  */
-function named<S>(name: string, task: quex.T1<S>): typeof task & { _taskName: string };
-function named<S, P>(name: string, task: quex.T2<S, P>): typeof task & { _taskName: string } {
+function named(name: string, task: quex.T1<any>): quex.T1<any> & { _taskName: string };
+function named<S>(name: string, task: quex.T1<S>): quex.T1<S> & { _taskName: string };
+function named<S, P>(name: string, task: quex.T2<S, P>): quex.T2<S, P> & { _taskName: string };
+function named(name: string, task: Function): Function & { _taskName: string } {
     (task as any)._taskName = name;
     return task as any;
 }
