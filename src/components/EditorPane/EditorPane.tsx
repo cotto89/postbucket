@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import bind from 'bind-decorator';
 import AceEditor from './Ace';
 import { get } from './../../utils/object';
-import * as task from './../../task/index';
+import * as $ from './../../task';
 import * as entity from './../../state/entity';
 
 /* Container */
@@ -62,15 +62,15 @@ export class EditorPane extends React.Component<Props, State> {
 
     @bind
     locationToTopicList(_: S, p: P) {
-        task.router.replaceLoationTo(`/topics/${p.topicId}`);
+        $.router.replaceLoationTo(`/topics/${p.topicId}`);
     }
 
     /* usecase
     ---------------------------- */
     updatePost = this.props.usecase('EDITOR::POST_UPDATE')
-        .use(task.abortIf((_: S, p: P) => p.content.length <= 0))
-        .use(task.mutation.putPost)
-        .use(task.named('forceUpdate', () => this.forceUpdate()))
+        .use($.abortIf((_: S, p: P) => p.content.length <= 0))
+        .use($.mutation.putPost)
+        .use($.named('forceUpdate', () => this.forceUpdate()))
         .use(this.locationToTopicList);
 
     /* hook

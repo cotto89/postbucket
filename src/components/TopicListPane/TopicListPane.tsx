@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as task from './../../task/index';
+import * as $ from './../../task';
 import bind from 'bind-decorator';
 
 import RenderCase from './../utils/RenderCase';
@@ -61,22 +61,22 @@ export class TopicListPane extends React.Component<Props, State> {
 
     @bind
     pushLocation(_: S, t: T) {
-        task.router.pushLocationTo(`topics/${t.id}`);
+        $.router.pushLocationTo(`topics/${t.id}`);
     }
 
     /* usecase
     ------------------------------- */
     addTopic = this.props.dispatch('TOPIC::ADD')
-        .use(task.abortIf((_: S, t: T) => t.title.trim().length <= 0))
-        .use(task.mutation.putTopic);
+        .use($.abortIf((_: S, t: T) => t.title.trim().length <= 0))
+        .use($.mutation.putTopic);
 
     updateTopic = this.props.dispatch('TOPIC::UPDATE')
-        .use(task.abortIf((_: S, t: T) => t.title.trim().length <= 0))
-        .use(task.mutation.putTopic)
+        .use($.abortIf((_: S, t: T) => t.title.trim().length <= 0))
+        .use($.mutation.putTopic)
         .use(this.clearEditingId);
 
     deleteTopic = this.props.dispatch('TOPIC::DELETE')
-        .use(task.mutation.removeTopic)
+        .use($.mutation.removeTopic)
         .use(this.clearEditingId);
 
     toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD')

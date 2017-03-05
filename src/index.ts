@@ -4,7 +4,7 @@ import store from './store';
 --------------------------------- */
 import Router from './router/Router';
 import routes, { history } from './routes';
-import * as task from './task/index';
+import * as task from './task';
 
 const onLocationChange = store.dispatch('ROUTER::LOCATION_UPDATE')
     .use(task.mutation.updateCurrentIds);

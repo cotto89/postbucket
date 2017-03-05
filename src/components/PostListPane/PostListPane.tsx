@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as task from './../../task/index';
+import * as $ from './../../task';
 import bind from 'bind-decorator';
 
 type S = IAppState;
@@ -35,13 +35,13 @@ export class PostListPane extends React.Component<Props, {}> {
     ---------------------------- */
     @bind
     replaceLocationToEditor(_: S, p: P) {
-        task.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
+        $.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
     }
 
     @bind
     replaceLocationToPostList(s: S, p: P) {
         if (s.session.currentPostId === p.id) {
-            task.router.replaceLoationTo(`/topics/${p.topicId}`);
+            $.router.replaceLoationTo(`/topics/${p.topicId}`);
         }
     }
 
@@ -51,10 +51,10 @@ export class PostListPane extends React.Component<Props, {}> {
         .use(this.replaceLocationToEditor);
 
     updatePost = this.props.dispatch('POST:UPDATE')
-        .use(task.mutation.putPost);
+        .use($.mutation.putPost);
 
     deletePost = this.props.dispatch('POST::DELETE')
-        .use(task.mutation.removePost)
+        .use($.mutation.removePost)
         .use(this.replaceLocationToPostList);
 
 
