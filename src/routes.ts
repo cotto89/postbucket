@@ -1,5 +1,6 @@
 import { SFC, ComponentClass } from 'react';
 import history from './router/history';
+import * as entity from './state/entity';
 import TopicListPane from './components/TopicListPane/TopicListPane';
 import PostListPane from './/components/PostListPane/PostListPane';
 import EditorPane from './components/EditorPane/EditorPane';
@@ -16,15 +17,21 @@ export default [
         children: [
             {
                 path: '/',
-                action: result(TopicListPane)
+                action: result({
+                    component: TopicListPane
+                })
             },
             {
                 path: '/topics/:topicId',
-                action: result(PostListPane)
+                action: result({
+                    component: PostListPane
+                })
             },
             {
                 path: '/topics/:topicId/posts/:postId',
-                action: result(EditorPane)
+                action: result({
+                    component: EditorPane
+                })
             },
         ]
     }
@@ -34,18 +41,21 @@ export default [
 ------------------------------------ */
 class RoutingError extends Error { }
 
-export function createActionResult(component: SFC<any> | ComponentClass<any>) {
-    return (context: any): IEntity.IRoute => {
-        const { query, params } = context;
-        return {
+type Component = SFC<any> | ComponentClass<any>;
+export function createActionResult(props: {
+    component: Component,
+    task?: IEntity.IRoute['task']
+}) {
+    return (ctx: any): IEntity.IRoute => {
+        const { query, params } = ctx;
+        return entity.route({
+            ...props,
+            path: history.location.pathname,
             query,
-            params,
-            component,
-            path: history.location.pathname
-        };
+            params
+        });
     };
 }
-
 
 /* Middleware
 --------------------------------------- */

@@ -1,3 +1,5 @@
+import { StatelessComponent, ComponentClass } from 'react';
+import * as quex from 'quex';
 import shortId = require('shortid');
 
 /* Project
@@ -62,3 +64,21 @@ export function post(props: Partial<IPost> & { topicId: string }): IPost {
     };
 }
 
+/* Route
+-------------------------------*/
+type Component = StatelessComponent<any> | ComponentClass<any>;
+export interface IRoute {
+    component: Component;
+    query: { [key: string]: string };
+    params: { [key: string]: string };
+    path: string;
+    task?: quex.T2<IAppState, IRoute>;
+}
+
+export function route(props: Partial<IRoute> & { component: Component, path: string }): IRoute {
+    return {
+        query: props.query || {},
+        params: props.params || {},
+        ...props,
+    };
+}

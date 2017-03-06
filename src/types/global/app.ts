@@ -1,4 +1,3 @@
-import { StatelessComponent, ComponentClass } from 'react';
 import * as E from './../../state/entity';
 import * as S from './../../state/state';
 import * as Store from './../../store';
@@ -26,12 +25,7 @@ declare global {
         interface IProject extends E.IProject { }
         interface ITopic extends E.ITopic { }
         interface IPost extends E.IPost { }
-        interface IRoute {
-            component: StatelessComponent<any> | ComponentClass<any>;
-            query: { [key: string]: string };
-            params: { [key: string]: string };
-            path: string;
-        }
+        interface IRoute extends E.IRoute { }
     }
 
     namespace IDB {
