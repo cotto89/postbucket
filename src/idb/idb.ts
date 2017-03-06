@@ -1,16 +1,20 @@
 import Dexie from 'dexie';
-import * as Model from './models';
+import * as M from './models';
 
-export class PostBucketIDB extends Dexie {
-    projects: Dexie.Table<Model.ProjectModel, number>;
-    topics: Dexie.Table<Model.TopicModel, number>;
-    posts: Dexie.Table<Model.PostModel, number>;
-    replies: Dexie.Table<Model.ReplyModel, void>;
-    labels: Dexie.Table<Model.LabelModel, number>;
-    labelsPosts: Dexie.Table<Model.LabelsPostsModel, void>;
+
+export default class PostBucketIDB extends Dexie {
+    projects: Dexie.Table<M.IProjectTable, number>;
+    topics: Dexie.Table<M.ITopicTable, number>;
+    posts: Dexie.Table<M.IPostTable, number>;
+    replies: Dexie.Table<M.IReplyTable, void>;
+    labels: Dexie.Table<M.ILabelTable, number>;
+    labelsPosts: Dexie.Table<M.ILabelsPostsTable, void>;
 
     constructor(option: DexieOption = {}) {
         super('PostbucketIDB', option);
+
+        /* Schema
+        ----------------------- */
         this.version(1).stores({
             projects: '++id, name',
             topics: '++id, projectId, title, createdAt, updatedAt',
@@ -19,17 +23,17 @@ export class PostBucketIDB extends Dexie {
             labels: '++id, name',
             labelsPosts: ', postid, labelId',
         });
+
+        /* mapToClass
+        ----------------------- */
+        this.projects.mapToClass(M.Factory.project(this));
+        this.topics.mapToClass(M.Factory.topic(this));
+        this.posts.mapToClass(M.Factory.post(this));
+        this.replies.mapToClass(M.Factory.reply(this));
+        this.labels.mapToClass(M.Factory.label(this));
+        this.labelsPosts.mapToClass(M.Factory.labelsPosts(this));
     }
 }
-/* idbはシングルトンインスタンスなのでここでmockに差し替えてる */
-let option: DexieOption = {};
-if (process.env.NODE_ENV === 'test') {
-    // tslint:disable:no-var-requires
-    option.indexedDB = require('fake-indexeddb');
-    option.IDBKeyRange = require('fake-indexeddb/lib/FDBKeyRange');
-}
-
-export default new PostBucketIDB(option);
 
 /* Types */
 interface DexieOption {

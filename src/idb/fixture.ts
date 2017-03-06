@@ -1,5 +1,5 @@
 import range = require('lodash/range');
-import * as model from './models';
+import * as M from './models';
 
 const defaults = {
     topicCount: 5,
@@ -11,73 +11,86 @@ interface Option {
     postCountPerTopic?: number;
 }
 
-export function createIDBData(option: Option = defaults) {
-    const $opt = { ...defaults, ...option };
-
-    let projects: model.ProjectModel[] = [];
-    let topics: model.TopicModel[] = [];
-    let posts: model.PostModel[] = [];
-    let replies: model.ReplyModel[] = [];
-    let labels: model.LabelModel[] = [];
-    let labelsPosts: model.LabelsPostsModel[] = [];
-
-    const postsGen = createPostsGen();
-
-    topics = topicsGen($opt.topicCount);
-    projects = projectsGen(topics);
-    topics.forEach(t => {
-        if (!t.id) throw Error('topic.idがない');
-        posts = posts.concat(postsGen(t.id, $opt.postCountPerTopic));
-    });
+export function fixtureGen(idb: IDB.Instance) {
+    const ProjectModel = M.Factory.project(idb);
+    const TopicModel = M.Factory.topic(idb);
+    const PostModel = M.Factory.post(idb);
 
     return {
-        projects,
-        topics,
-        posts,
-        replies,
-        labels,
-        labelsPosts
+        createIDBData,
+        projectsGen,
+        topicsGen,
+        createPostsGen
     };
-}
 
-export function projectsGen(topics: model.TopicModel[]) {
-    const topicsWithPjId = topics.filter(t => !!t.projectId);
-    return topicsWithPjId.map((t) => model.ProjectModel.create({
-        id: t.projectId,
-        name: `SampleProject${t.projectId}`,
-    }));
-}
+    function createIDBData(option: Option = defaults) {
+        const $opt = { ...defaults, ...option };
 
-export function topicsGen(count: number) {
-    const PROJECT_PER_TOPIC = 3;
-    let projectId = 0;
-    let topicId = 0;
+        let projects: M.IProjectTable[] = [];
+        let topics: M.ITopicTable[] = [];
+        let posts: M.IPostTable[] = [];
+        let replies: M.IReplyTable[] = [];
+        let labels: M.ILabelTable[] = [];
+        let labelsPosts: M.ILabelsPostsTable[] = [];
 
-    return range(count).map((n) => {
-        const topic = model.TopicModel.create({
-            id: ++topicId,
-            title: `SampleTopic ${topicId}`
+        const postsGen = createPostsGen();
+
+        topics = topicsGen($opt.topicCount);
+        projects = projectsGen(topics);
+        topics.forEach(t => {
+            if (!t.id) throw Error('topic.idがない');
+            posts = posts.concat(postsGen(t.id, $opt.postCountPerTopic));
         });
 
-        if (projectId === 0) {
-            topic.projectId = ++projectId;
-        } else if (n % PROJECT_PER_TOPIC === 0) {
-            topic.projectId = ++projectId;
-        }
+        return {
+            projects,
+            topics,
+            posts,
+            replies,
+            labels,
+            labelsPosts
+        };
+    }
 
-        return topic;
-    });
-}
-
-export function createPostsGen() {
-    let postId = 0;
-    return function postsGen(tid: number, count: number) {
-        return range(count).map(() => model.PostModel.create({
-            id: ++postId,
-            topicId: tid,
-            content: postContent(postId)
+    function projectsGen(topics: M.ITopicTable[]) {
+        const topicsWithPjId = topics.filter(t => !!t.projectId);
+        return topicsWithPjId.map((t) => ProjectModel.create({
+            id: t.projectId,
+            name: `SampleProject${t.projectId}`,
         }));
-    };
+    }
+
+    function topicsGen(count: number) {
+        const PROJECT_PER_TOPIC = 3;
+        let projectId = 0;
+        let topicId = 0;
+
+        return range(count).map((n) => {
+            const topic = TopicModel.create({
+                id: ++topicId,
+                title: `SampleTopic ${topicId}`
+            });
+
+            if (projectId === 0) {
+                topic.projectId = ++projectId;
+            } else if (n % PROJECT_PER_TOPIC === 0) {
+                topic.projectId = ++projectId;
+            }
+
+            return topic;
+        });
+    }
+
+    function createPostsGen() {
+        let postId = 0;
+        return function postsGen(tid: number, count: number) {
+            return range(count).map(() => PostModel.create({
+                id: ++postId,
+                topicId: tid,
+                content: postContent(postId)
+            }));
+        };
+    }
 }
 
 function postContent(iden: number | string) {
