@@ -9,8 +9,8 @@ export class PostBucketIDB extends Dexie {
     labels: Dexie.Table<Model.LabelModel, number>;
     labelsPosts: Dexie.Table<Model.LabelsPostsModel, void>;
 
-    constructor() {
-        super('PostbucketIDB');
+    constructor(option: DexieOption = {}) {
+        super('PostbucketIDB', option);
         this.version(1).stores({
             projects: '++id, name',
             topics: '++id, projectName, title, createdAt, updatedAt',
@@ -21,5 +21,20 @@ export class PostBucketIDB extends Dexie {
         });
     }
 }
+/* idbはシングルトンインスタンスなのでここでmockに差し替えてる */
+let option: DexieOption = {};
+if (process.env.NODE_ENV === 'test') {
+    // tslint:disable:no-var-requires
+    option.indexedDB = require('fake-indexeddb');
+    option.IDBKeyRange = require('fake-indexeddb/lib/FDBKeyRange');
+}
 
-export default new PostBucketIDB();
+export default new PostBucketIDB(option);
+
+/* Types */
+interface DexieOption {
+    addons?: Array<(db: Dexie) => void>;
+    autoOpen?: boolean;
+    indexedDB?: IDBFactory;
+    IDBKeyRange?: { new (): IDBKeyRange };
+}
