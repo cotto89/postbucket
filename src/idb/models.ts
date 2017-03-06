@@ -6,8 +6,8 @@ export class ProjectModel {
     id?: number;
     name: string;
 
-    constructor(props: Partial<ProjectModel> & { name: string }) {
-        Object.assign(this, props);
+    static create(props: Partial<ProjectModel> & { name: string }) {
+        return props;
     }
 }
 
@@ -15,17 +15,17 @@ export class ProjectModel {
 -------------------------------- */
 export class TopicModel {
     id?: number;
-    projecrName?: string;
+    projectId?: number;
     title: string;
     createdAt: Date;
     updatedAt: Date;
 
-    constructor(props: Partial<TopicModel> & { title: string }) {
-        Object.assign(this, {
+    static create(props: Partial<TopicModel> & { title: string }) {
+        return {
             ...props,
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
-        });
+        };
     }
 }
 
@@ -34,16 +34,17 @@ export class TopicModel {
 export class PostModel {
     id?: number;
     topicId: number;
-    content: string = '';
+    content: string;
     createdAt: Date;
     updatedAt: Date;
 
-    constructor(props: Partial<PostModel> & { topicId: number }) {
-        Object.assign(this, {
+    static create(props: Partial<PostModel> & { topicId: number }) {
+        return {
             ...props,
+            content: props.content || '',
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
-        });
+        };
     }
 }
 
@@ -51,11 +52,11 @@ export class PostModel {
 /* ReplyModel
 --------------------------------- */
 export class ReplyModel {
-    to: number;
-    from: number;
+    to: number; // postId
+    from: number; // postId
 
-    constructor(props: { to: number, from: number }) {
-        Object.assign(this, props);
+    static create(props: { to: number, from: number }) {
+        return props;
     }
 }
 
@@ -64,8 +65,9 @@ export class ReplyModel {
 export class LabelModel {
     id?: number;
     name: string;
-    constructor(props: Partial<LabelModel> & { name: string }) {
-        Object.assign(this, props);
+
+    static create(props: Partial<LabelModel> & { name: string }) {
+        return props;
     }
 }
 
@@ -74,7 +76,8 @@ export class LabelModel {
 export class LabelsPostsModel {
     postId: number;
     labelId: number;
-    constructor(props: { postId: number, labelId: number }) {
-        Object.assign(this, props);
+
+    static create(props: { postId: number, labelId: number }) {
+        return props;
     }
 }

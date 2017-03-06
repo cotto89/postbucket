@@ -13,7 +13,7 @@ export class PostBucketIDB extends Dexie {
         super('PostbucketIDB', option);
         this.version(1).stores({
             projects: '++id, name',
-            topics: '++id, projectName, title, createdAt, updatedAt',
+            topics: '++id, projectId, title, createdAt, updatedAt',
             posts: '++id, topicId, createdAt, updatedAt',
             replies: ', to, from',
             labels: '++id, name',
