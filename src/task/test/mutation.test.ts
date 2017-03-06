@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import has = require('lodash/has');
-import fixtureState from './../fixture/createFixtureState';
-import * as entity from './../entity';
+import fixtureState from './../../state/fixture/createFixtureState';
+import * as entity from './../../state/entity';
 import * as mutation from './../mutation';
 
 let s: IAppState;
