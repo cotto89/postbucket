@@ -61,7 +61,7 @@ export class TopicListPane extends React.Component<Props, State> {
 
     @bind
     pushLocation(_: S, t: T) {
-        $.router.pushLocationTo(`topics/${t.id}`);
+        $.router.pushTo(`topics/${t.id}`);
     }
 
     /* usecase

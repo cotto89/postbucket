@@ -62,7 +62,7 @@ export class EditorPane extends React.Component<Props, State> {
 
     @bind
     locationToTopicList(_: S, p: P) {
-        $.router.replaceLoationTo(`/topics/${p.topicId}`);
+        $.router.replaceTo(`/topics/${p.topicId}`);
     }
 
     /* usecase

@@ -35,13 +35,13 @@ export class PostListPane extends React.Component<Props, {}> {
     ---------------------------- */
     @bind
     replaceLocationToEditor(_: S, p: P) {
-        $.router.replaceLoationTo((`/topics/${p.topicId}/posts/${p.id}`));
+        $.router.replaceTo((`/topics/${p.topicId}/posts/${p.id}`));
     }
 
     @bind
     replaceLocationToPostList(s: S, p: P) {
         if (s.session.currentPostId === p.id) {
-            $.router.replaceLoationTo(`/topics/${p.topicId}`);
+            $.router.replaceTo(`/topics/${p.topicId}`);
         }
     }
 
