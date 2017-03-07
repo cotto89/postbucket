@@ -1,6 +1,5 @@
 import PostBucketIDB from './idb';
 import * as Model from './models';
-export { PostBucketIDB, Model }
 
 /* instance */
 const idb = new PostBucketIDB();
@@ -32,3 +31,8 @@ if (process.env.NODE_ENV === 'development') {
     //     await idb.labelsPosts.bulkAdd(data.labelsPosts);
     // });
 }
+
+/* expose */
+export { PostBucketIDB, Model }
+export * from './fixture'
+export default idb;

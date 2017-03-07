@@ -1,10 +1,8 @@
 import * as Types from '@shared';
 import { SFC, ComponentClass } from 'react';
-import history from './router/history';
-import * as entity from './store/entity';
-import TopicListPane from './components/TopicListPane/TopicListPane';
-import PostListPane from './/components/PostListPane/PostListPane';
-import EditorPane from './components/EditorPane/EditorPane';
+import history from './history';
+import * as entity from './../store/entity';
+import * as Container from './../components/container/container';
 
 export { history }
 
@@ -19,19 +17,19 @@ export default [
             {
                 path: '/',
                 action: result({
-                    component: TopicListPane
+                    component: Container.TopicListContainer
                 })
             },
             {
                 path: '/topics/:topicId',
                 action: result({
-                    component: PostListPane
+                    component: Container.PostListContainer
                 })
             },
             {
                 path: '/topics/:topicId/posts/:postId',
                 action: result({
-                    component: EditorPane
+                    component: Container.EditorContainer
                 })
             },
         ]

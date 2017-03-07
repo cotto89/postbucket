@@ -4,12 +4,11 @@ import store from './store/store';
 /* Router
 --------------------------------- */
 import Router from './router/Router';
-import routes, { history } from './routes';
+import routes, { history } from './router/routes';
 import * as task from './task/index';
 
 const onLocationChange = store.dispatch('ROUTER::LOCATION_UPDATE')
-    .use(task.mutation.updateCurrentIds)
-    .use((_, r) => console.log('location update', r));
+    .use(task.mutation.updateCurrentIds);
 
 
 /* View
