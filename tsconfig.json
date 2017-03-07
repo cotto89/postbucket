@@ -10,25 +10,13 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "jsx": "react",
-        // .d.tsを生成するか
-        // "declaration": false,
-        // "declaration"の吐き出し先
-        // "declarationDir": "types",
-        // コンパイルコードの吐き出し先
         "outDir": "dist",
-        // nullやundefinedの扱いを厳格にする
         "strictNullChecks": true,
-        // 暗黙のanyを許可しない
         "noImplicitAny": true,
-        // 暗黙のthisを許可しない
         "noImplicitThis": true,
-        // Switch構文の各caseでbreakまたはreturnを必須にする
         "noFallthroughCasesInSwitch": true,
-        // 返り値の型を厳密にチェック
         "noImplicitReturns": true,
-        // 未使用の変数を許可しない
         "noUnusedLocals": true,
-        // 未使用のparameterを許可しない
         "noUnusedParameters": true,
         // https://github.com/power-assert-js/espower-typescript/issues/16
         // trueにするとespower-assertが動かない(?)
@@ -41,7 +29,12 @@
         "types": [
             "mocha",
             "node"
-        ]
+        ],
+        "paths": {
+            "@shared": [
+                "./src/types/shared/shared.ts"
+            ]
+        }
     },
     "include": [
         "src/**/*.ts",
