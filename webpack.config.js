@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BabiliPlugin = require("babili-webpack-plugin");
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 /* NODE_ENV */
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -62,7 +63,8 @@ let config = {
             'process.env': {
                 NODE_ENV: JSON.stringify(NODE_ENV)
             }
-        })
+        }),
+        // new BundleAnalyzerPlugin(),
     ],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
