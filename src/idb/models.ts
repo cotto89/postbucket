@@ -21,10 +21,11 @@ export namespace Factory {
             }
 
             async toEntity() {
-                let topicIds: string[] = [];
-                await idb.topics.where('projectId').equals(this.id!).each(t => {
-                    t.id && topicIds.push(`${t.id}`);
+                const topicIds: string[] = [];
+                const topics = await idb.transaction('r', idb.topics, async () => {
+                    return await idb.topics.where('projectId').equals(this.id!).toArray(model => model);
                 });
+                topics.forEach(t => t.id && topicIds.push(`${t.id}`));
                 return entity.project({ id: `${this.id}`, name: this.name, topicIds });
             }
         };
@@ -62,10 +63,14 @@ export namespace Factory {
             }
 
             async toEntity() {
+                const postModels = await idb.transaction('r', idb.posts, async () => {
+                    return await idb.posts.where('topicId').equals(this.id!).toArray(table => table);
+                });
+
                 let posts: { [k: string]: Types.Entity.IPost } = {};
-                await idb.posts.where('topicId').equals(this.id!).each(async model => {
-                    const post = await model.toEntity();
-                    posts[`${post.id}`] = post;
+                postModels.forEach(async post => {
+                    const p = await post.toEntity();
+                    posts[`${p.id}`] = p;
                 });
 
                 const { projectId, createdAt, updatedAt, title } = this;
@@ -112,10 +117,14 @@ export namespace Factory {
             }
 
             async toEntity() {
-                const replyIds: string[] = [];
-                const { content, createdAt, updatedAt } = this;
-                await idb.replies.where('to').equals(this.id!).each(rep => replyIds.push(`${rep.to}`));
+                const repTables = await idb.transaction('r', idb.replies, async () => {
+                    return idb.replies.where('to').equals(this.id!).toArray(t => t);
+                });
 
+                const replyIds: string[] = [];
+                repTables.forEach(r => replyIds.push(`${r.from}`));
+
+                const { content, createdAt, updatedAt } = this;
                 return entity.post({
                     id: `${this.id}`,
                     topicId: `${this.topicId}`,
