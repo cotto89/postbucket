@@ -3,9 +3,9 @@ import * as M from './models';
 
 
 export default class PostBucketIDB extends Dexie {
-    projects: Dexie.Table<M.IProjectTable, number>;
-    topics: Dexie.Table<M.ITopicTable, number>;
-    posts: Dexie.Table<M.IPostTable, number>;
+    projects: Dexie.Table<M.IProjectModle, number>;
+    topics: Dexie.Table<M.ITopicModel, number>;
+    posts: Dexie.Table<M.IPostModel, number>;
     replies: Dexie.Table<M.IReplyTable, void>;
     labels: Dexie.Table<M.ILabelTable, number>;
     labelsPosts: Dexie.Table<M.ILabelsPostsTable, void>;

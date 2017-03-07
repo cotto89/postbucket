@@ -1,18 +1,31 @@
-import { IDB } from '@shared';
+import * as Types from '@shared';
+import * as entity from './../store/entity';
+
 /* ProjectModel
 ------------------------------- */
 export interface IProjectTable {
     id?: number;
     name: string;
 }
+export interface IProjectModle extends IProjectTable {
+    toEntity(): Promise<Types.Entity.IProject>;
+}
 export namespace Factory {
-    export function project(_idb: IDB.Instance) {
-        return class ProjectModel implements IProjectTable {
+    export function project(idb: Types.IDB.Instance) {
+        return class ProjectModel implements IProjectModle {
             id?: number;
             name: string;
 
             static create(props: Partial<ProjectModel> & { name: string }) {
                 return props;
+            }
+
+            async toEntity() {
+                let topicIds: string[] = [];
+                await idb.topics.where('projectId').equals(this.id!).each(t => {
+                    t.id && topicIds.push(`${t.id}`);
+                });
+                return entity.project({ id: `${this.id}`, name: this.name, topicIds });
             }
         };
     }
@@ -28,9 +41,12 @@ export interface ITopicTable {
     createdAt: Date;
     updatedAt: Date;
 }
+export interface ITopicModel extends ITopicTable {
+    toEntity(): Promise<Types.Entity.ITopic>;
+}
 export namespace Factory {
-    export function topic(_idb: IDB.Instance) {
-        return class TopicModel implements ITopicTable {
+    export function topic(idb: Types.IDB.Instance) {
+        return class TopicModel implements ITopicModel {
             id?: number;
             projectId?: number;
             title: string;
@@ -44,6 +60,24 @@ export namespace Factory {
                     updatedAt: props.updatedAt || new Date(),
                 };
             }
+
+            async toEntity() {
+                let posts: { [k: string]: Types.Entity.IPost } = {};
+                await idb.posts.where('topicId').equals(this.id!).each(async model => {
+                    const post = await model.toEntity();
+                    posts[`${post.id}`] = post;
+                });
+
+                const { projectId, createdAt, updatedAt, title } = this;
+                return entity.topic({
+                    id: `${this.id}`,
+                    projectId: projectId ? `${projectId}` : undefined,
+                    title,
+                    posts,
+                    createdAt,
+                    updatedAt
+                });
+            }
         };
     }
 }
@@ -56,9 +90,12 @@ export interface IPostTable {
     createdAt: Date;
     updatedAt: Date;
 }
+export interface IPostModel extends IPostTable {
+    toEntity(): Promise<Types.Entity.IPost>;
+}
 export namespace Factory {
-    export function post(_idb: IDB.Instance) {
-        return class PostModel implements IPostTable {
+    export function post(idb: Types.IDB.Instance) {
+        return class PostModel implements IPostModel {
             id?: number;
             topicId: number;
             content: string;
@@ -73,6 +110,21 @@ export namespace Factory {
                     updatedAt: props.updatedAt || new Date(),
                 };
             }
+
+            async toEntity() {
+                const replyIds: string[] = [];
+                const { content, createdAt, updatedAt } = this;
+                await idb.replies.where('to').equals(this.id!).each(rep => replyIds.push(`${rep.to}`));
+
+                return entity.post({
+                    id: `${this.id}`,
+                    topicId: `${this.topicId}`,
+                    content,
+                    replyIds,
+                    createdAt,
+                    updatedAt,
+                });
+            }
         };
     }
 }
@@ -85,7 +137,7 @@ export interface IReplyTable {
     from: number;
 }
 export namespace Factory {
-    export function reply(_idb: IDB.Instance) {
+    export function reply(_idb: Types.IDB.Instance) {
         return class ReplyModel implements IReplyTable {
             to: number; // postId
             from: number; // postId
@@ -104,7 +156,7 @@ export interface ILabelTable {
     name: string;
 }
 export namespace Factory {
-    export function label(_idb: IDB.Instance) {
+    export function label(_idb: Types.IDB.Instance) {
         return class LabelModel implements ILabelTable {
             id?: number;
             name: string;
@@ -123,7 +175,7 @@ export interface ILabelsPostsTable {
     labelId: number;
 }
 export namespace Factory {
-    export function labelsPosts(_idb: IDB.Instance) {
+    export function labelsPosts(_idb: Types.IDB.Instance) {
         return class LabelsPostsModel implements ILabelsPostsTable {
             postId: number;
             labelId: number;

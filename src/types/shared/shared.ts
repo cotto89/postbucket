@@ -1,7 +1,7 @@
 import * as E from './../../store/entity';
 import * as S from './../../store/state';
 import * as Store from './../../store/store';
-import { PostBucketIDB } from './../../idb/index';
+import { PostBucketIDB, Model } from './../../idb/index';
 
 export interface UseCase extends Store.UseCase { }
 
@@ -16,4 +16,7 @@ export namespace Entity {
 
 export namespace IDB {
     export interface Instance extends PostBucketIDB { }
+    export interface IProjectModel extends Model.IProjectModle { }
+    export interface ITopicModel extends Model.ITopicModel { }
+    export interface IPostModel extends Model.IPostModel { }
 }
