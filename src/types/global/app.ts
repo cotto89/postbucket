@@ -1,6 +1,6 @@
-import * as E from './../../state/entity';
-import * as S from './../../state/state';
-import * as Store from './../../store';
+import * as E from './../../store/entity';
+import * as S from './../../store/state';
+import * as Store from './../../store/store';
 import * as brace from 'brace';
 import { PostBucketIDB } from './../../idb/index';
 

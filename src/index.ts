@@ -1,5 +1,5 @@
 import './idb/index';
-import store from './store';
+import store from './store/store';
 
 /* Router
 --------------------------------- */

@@ -4,7 +4,7 @@ import bind from 'bind-decorator';
 import AceEditor from './Ace';
 import { get } from './../../utils/object';
 import * as $ from './../../task/index';
-import * as entity from './../../state/entity';
+import * as entity from './../../store/entity';
 
 /* Container */
 function mapStateToProps(s: IAppState) {

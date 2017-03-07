@@ -1,6 +1,6 @@
 import { SFC, ComponentClass } from 'react';
 import history from './router/history';
-import * as entity from './state/entity';
+import * as entity from './store/entity';
 import TopicListPane from './components/TopicListPane/TopicListPane';
 import PostListPane from './/components/PostListPane/PostListPane';
 import EditorPane from './components/EditorPane/EditorPane';

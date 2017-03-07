@@ -1,22 +1,22 @@
 /* tslint:disable:no-var-requires */
 import creaetStore from 'quex';
-import initialState from './state/state';
-import combineEnhancer from './lib/quex-utils/combineEnhancer';
-import notifier, { Listener } from './lib/enhancer/notifier';
+import initialState from './state';
+import combineEnhancer from './../lib/quex-utils/combineEnhancer';
+import notifier, { Listener } from './../lib/enhancer/notifier';
 
 let state = initialState();
 let enhancers: Function[] = [];
 let listeners: Listener[] = [];
 
 if (process.env.NODE_ENV === 'development') {
-    const fixture = require('./state/fixture/createFixtureState').default;
+    const fixture = require('./fixture/createFixtureState').default;
     state = fixture({
         topicCount: 5,
         postCountPerTopic: 5
     });
 
     // devtoolをsetup
-    const setupReduxDevtool = require('./lib/devtools/reduxDevtools').default;
+    const setupReduxDevtool = require('./../lib/devtools/reduxDevtools').default;
     const devtool = setupReduxDevtool(state);
     if (devtool) listeners.push(devtool);
 }
