@@ -21,7 +21,7 @@ export default class PostBucketIDB extends Dexie {
             posts: '++id, topicId, createdAt, updatedAt',
             replies: ', to, from',
             labels: '++id, name',
-            labelsPosts: ', postid, labelId',
+            labelsPosts: ', postId, labelId',
         });
 
         /* mapToClass
