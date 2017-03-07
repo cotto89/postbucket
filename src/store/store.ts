@@ -10,12 +10,6 @@ let enhancers: Function[] = [];
 let listeners: Listener[] = [];
 
 if (process.env.NODE_ENV === 'development') {
-    const fixture = require('./fixture/createFixtureState').default;
-    state = fixture({
-        topicCount: 5,
-        postCountPerTopic: 5
-    });
-
     // devtoolをsetup
     const setupReduxDevtool = require('./../lib/devtools/reduxDevtools').default;
     const devtool = setupReduxDevtool(state);

@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import './idb/index';
 import store from './store/store';
 
@@ -7,8 +8,11 @@ import Router from './router/Router';
 import routes, { history } from './router/routes';
 import * as task from './task/index';
 
+type S = Types.IAppState;
+type R = Types.Entity.IRoute;
 const onLocationChange = store.dispatch('ROUTER::LOCATION_UPDATE')
-    .use(task.mutation.updateCurrentIds);
+    .use(task.mutation.updateCurrentIds)
+    .use(task.named<S, R>('DataLoad', (s, r) => r.task && r.task(s, r)));
 
 
 /* View

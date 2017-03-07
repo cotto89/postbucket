@@ -3,6 +3,7 @@ import { SFC, ComponentClass } from 'react';
 import history from './history';
 import * as entity from './../store/entity';
 import * as Container from './../components/container/container';
+import * as $ from './../task/index';
 
 export { history }
 
@@ -17,7 +18,8 @@ export default [
             {
                 path: '/',
                 action: result({
-                    component: Container.TopicListContainer
+                    component: Container.TopicListContainer,
+                    task: $.call($.req.loadData).then((r) => (s) => Object.assign({}, s, r))
                 })
             },
             {
