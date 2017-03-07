@@ -43,9 +43,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@^4.4.36":
-  version "4.4.36"
-  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-4.4.36.tgz#5d1e768f3291c66c8e54d8a48e42f7cb554a7d87"
+"@types/react-redux@^4.4.37":
+  version "4.4.37"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-4.4.37.tgz#14489a999cdfb0a05fb5c2335fa6c3c3e7c89ed5"
   dependencies:
     "@types/react" "*"
     redux "^3.6.0"
@@ -80,9 +80,9 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/universal-router/-/universal-router-1.2.0.tgz#f9134936cd275209fd6b5f240d83ecdbdf4ebfbc"
 
-"@types/webpack@^2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-2.2.7.tgz#bf2e13f709e6bf0cbbbb8d7e7087e11d75624171"
+"@types/webpack@^2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-2.2.8.tgz#ec4c75d462d2b1d9b9a7d010ce5a9d7b07f109c0"
   dependencies:
     "@types/node" "*"
     "@types/tapable" "*"
@@ -537,9 +537,9 @@ babel-helpers@^6.23.0:
     babel-runtime "^6.22.0"
     babel-template "^6.23.0"
 
-babel-loader@^6.3.2:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-6.3.2.tgz#18de4566385578c1b4f8ffe6cbc668f5e2a5ef03"
+babel-loader@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-6.4.0.tgz#e98c239662a22533b9e7a49594ef216d7635ea28"
   dependencies:
     find-cache-dir "^0.1.1"
     loader-utils "^0.2.16"
@@ -930,9 +930,9 @@ babel-preset-babili@^0.0.12:
     babel-plugin-transform-undefined-to-void "^6.8.0"
     lodash.isplainobject "^4.0.6"
 
-babel-preset-env@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.2.0.tgz#c33f12ddd9c5b822ee47f6316de539ae8dc98e08"
+babel-preset-env@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.2.1.tgz#659178f54df74a74765f796be4d290b5beeb3f5f"
   dependencies:
     babel-plugin-check-es2015-constants "^6.3.13"
     babel-plugin-syntax-trailing-function-commas "^6.13.0"
@@ -2536,9 +2536,9 @@ extglob@^0.3.1:
   dependencies:
     is-extglob "^1.0.0"
 
-extract-text-webpack-plugin@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-2.0.0.tgz#8640f72609800a3528f13a2a9634d566a5c1ae60"
+extract-text-webpack-plugin@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-2.1.0.tgz#69315b885f876dbf96d3819f6a9f1cca7aebf159"
   dependencies:
     ajv "^4.11.2"
     async "^2.1.2"
@@ -3146,67 +3146,67 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
-inferno-compat@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-compat/-/inferno-compat-1.3.0-rc.9.tgz#39ce4456782fdb70747fb3b30538f01ecebc7752"
+inferno-compat@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-compat/-/inferno-compat-1.3.0-rc.10.tgz#7d3036d90d5002983894bebe4cfb905db52e85b6"
   dependencies:
-    inferno "^1.3.0-rc.9"
-    inferno-component "^1.3.0-rc.9"
-    inferno-create-class "^1.3.0-rc.9"
-    inferno-create-element "^1.3.0-rc.9"
-    inferno-shared "^1.3.0-rc.9"
+    inferno "^1.3.0-rc.10"
+    inferno-component "^1.3.0-rc.10"
+    inferno-create-class "^1.3.0-rc.10"
+    inferno-create-element "^1.3.0-rc.10"
+    inferno-shared "^1.3.0-rc.10"
     inferno-transition-group "1.1.1"
     inferno-vnode-flags "^1.3.0-rc.4"
     proptypes "0.14.4"
     rc-css-transition-group-modern "^2.1.6"
 
-inferno-component@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-component/-/inferno-component-1.3.0-rc.9.tgz#26b40bfb493294df3118bd492629726d8a8e5aaf"
+inferno-component@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-component/-/inferno-component-1.3.0-rc.10.tgz#894873137ee45742f2eb3973908be295169a33ac"
   dependencies:
-    inferno "^1.3.0-rc.9"
-    inferno-shared "^1.3.0-rc.9"
+    inferno "^1.3.0-rc.10"
+    inferno-shared "^1.3.0-rc.10"
     inferno-vnode-flags "^1.3.0-rc.4"
 
-inferno-create-class@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-create-class/-/inferno-create-class-1.3.0-rc.9.tgz#1f32e11262122db2854330e48f2c27713b0ca343"
+inferno-create-class@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-create-class/-/inferno-create-class-1.3.0-rc.10.tgz#31f6007ed4541bae6e7fb9c84a4fb356b11d46ca"
   dependencies:
-    inferno-component "^1.3.0-rc.9"
-    inferno-shared "^1.3.0-rc.9"
+    inferno-component "^1.3.0-rc.10"
+    inferno-shared "^1.3.0-rc.10"
 
-inferno-create-element@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-create-element/-/inferno-create-element-1.3.0-rc.9.tgz#e7c3a9091bf4ae95b69a44e1a0d721f4f8ca9091"
+inferno-create-element@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-create-element/-/inferno-create-element-1.3.0-rc.10.tgz#55d1cd265608254f9d9662ca18aef8c6df7e7499"
   dependencies:
-    inferno "^1.3.0-rc.9"
-    inferno-component "^1.3.0-rc.9"
-    inferno-shared "^1.3.0-rc.9"
+    inferno "^1.3.0-rc.10"
+    inferno-component "^1.3.0-rc.10"
+    inferno-shared "^1.3.0-rc.10"
     inferno-vnode-flags "^1.3.0-rc.4"
 
-inferno-devtools@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-devtools/-/inferno-devtools-1.3.0-rc.9.tgz#88026a9ba4cd2c2dfc248745c8bde9b86802ac53"
+inferno-devtools@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-devtools/-/inferno-devtools-1.3.0-rc.10.tgz#a4748bde860be523f6884612345a9a012ccb7750"
   dependencies:
-    inferno "^1.3.0-rc.9"
-    inferno-component "^1.3.0-rc.9"
-    inferno-shared "^1.3.0-rc.9"
+    inferno "^1.3.0-rc.10"
+    inferno-component "^1.3.0-rc.10"
+    inferno-shared "^1.3.0-rc.10"
     inferno-vnode-flags "^1.3.0-rc.4"
 
-inferno-redux@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-redux/-/inferno-redux-1.3.0-rc.9.tgz#646c6eb4f2b2db2cdfc84f1eb4728860c2d7beab"
+inferno-redux@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-redux/-/inferno-redux-1.3.0-rc.10.tgz#a077e05fa9a8e3d700045b19235659cfcc4ab2c9"
   dependencies:
     hoist-non-inferno-statics "^1.1.3"
-    inferno "^1.3.0-rc.9"
-    inferno-component "^1.3.0-rc.9"
-    inferno-create-element "^1.3.0-rc.9"
-    inferno-shared "^1.3.0-rc.9"
+    inferno "^1.3.0-rc.10"
+    inferno-component "^1.3.0-rc.10"
+    inferno-create-element "^1.3.0-rc.10"
+    inferno-shared "^1.3.0-rc.10"
     redux "*"
 
-inferno-shared@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno-shared/-/inferno-shared-1.3.0-rc.9.tgz#3ebd129d15df75abc971d403630300b5e63ecccd"
+inferno-shared@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno-shared/-/inferno-shared-1.3.0-rc.10.tgz#293c2857ee1a906aee0fa445a5a0a90209bcfe2b"
 
 inferno-transition-group@1.1.1:
   version "1.1.1"
@@ -3222,11 +3222,11 @@ inferno@^1.1.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.2.2.tgz#0094e4ed428db30184bfa348a5aa38211945e67d"
 
-inferno@^1.3.0-rc.9:
-  version "1.3.0-rc.9"
-  resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.3.0-rc.9.tgz#943ffe8e6b25f72badc21360b4ba7dd2f07d8f25"
+inferno@^1.3.0-rc.10:
+  version "1.3.0-rc.10"
+  resolved "https://registry.yarnpkg.com/inferno/-/inferno-1.3.0-rc.10.tgz#93712133bd9229cdff77c0333de6849338418a1b"
   dependencies:
-    inferno-shared "^1.3.0-rc.9"
+    inferno-shared "^1.3.0-rc.10"
     inferno-vnode-flags "^1.3.0-rc.4"
 
 inflight@^1.0.4:
@@ -5753,9 +5753,9 @@ shellwords@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.0.tgz#66afd47b6a12932d9071cbfd98a52e785cd0ba14"
 
-shortid@^2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/shortid/-/shortid-2.2.6.tgz#3abbefc6c51074cf2c1f1e72f6216a1b45876d72"
+shortid@^2.2.8:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/shortid/-/shortid-2.2.8.tgz#033b117d6a2e975804f6f0969dbe7d3d0b355131"
 
 signal-exit@^3.0.0:
   version "3.0.2"
@@ -6612,9 +6612,9 @@ webpack-dev-server@^2.4.1:
     webpack-dev-middleware "^1.9.0"
     yargs "^6.0.0"
 
-webpack-merge@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-3.0.0.tgz#f2c9c28691bc44fdb124745cb84a8fab74125701"
+webpack-merge@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.0.0.tgz#4347ebeb9e71aaa413baef66be74d4eb2656b66a"
   dependencies:
     lodash "^4.17.4"
 
