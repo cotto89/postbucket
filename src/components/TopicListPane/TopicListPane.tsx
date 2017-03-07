@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as $ from './../../task/index';
@@ -7,12 +8,12 @@ import RenderCase from './../utils/RenderCase';
 import TopicForm from './TopicForm';
 import TopicView from './TopicView';
 
-type S = IAppState;
-type T = IEntity.ITopic;
+type S = Types.IAppState;
+type T = Types.Entity.ITopic;
 
 /* Container
 --------------------------------- */
-const mapStateToProps = (state: IAppState) => {
+const mapStateToProps = (state: S) => {
     const { currentProjectId } = state.session;
     const project = currentProjectId && state.projects[currentProjectId];
     const topics = project ?
@@ -31,8 +32,8 @@ interface State {
 }
 
 interface Props {
-    topics: IEntity.ITopic[];
-    dispatch: UseCase;
+    topics: Types.Entity.ITopic[];
+    dispatch: Types.UseCase;
 }
 
 export class TopicListPane extends React.Component<Props, State> {
@@ -91,7 +92,7 @@ export class TopicListPane extends React.Component<Props, State> {
         return (
             <div className='TopicListPane'>
                 <TopicForm
-                    topic={{} as IEntity.ITopic}
+                    topic={{} as Types.Entity.ITopic}
                     isNew
                     onSubmit={this.addTopic}
                 />

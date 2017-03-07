@@ -1,4 +1,5 @@
 /* tslint:disable:no-var-requires */
+import * as Types from '@shared';
 import creaetStore from 'quex';
 import initialState from './state';
 import combineEnhancer from './../lib/quex-utils/combineEnhancer';
@@ -24,7 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 enhancers.push(notifier(...listeners));
 
 const store = creaetStore(state, {
-    updater: (_, s) => s as IAppState,
+    updater: (_, s) => s as Types.IAppState,
     enhancer: combineEnhancer(enhancers)
 });
 

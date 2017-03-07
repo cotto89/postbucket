@@ -1,10 +1,11 @@
+import * as Types from '@shared';
 import * as React from 'react';
 
 interface Props {
-    topic: IEntity.ITopic;
-    deleteTopic: (t: IEntity.ITopic) => void;
-    toggleToicView: (t: IEntity.ITopic) => void;
-    onSelect: (t: IEntity.ITopic) => void;
+    topic: Types.Entity.ITopic;
+    deleteTopic: (t: Types.Entity.ITopic) => void;
+    toggleToicView: (t: Types.Entity.ITopic) => void;
+    onSelect: (t: Types.Entity.ITopic) => void;
 }
 
 export class TopicView extends React.Component<Props, {}> {

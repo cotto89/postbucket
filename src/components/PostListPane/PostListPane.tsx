@@ -1,17 +1,18 @@
+import { IAppState, Entity, UseCase } from '@shared';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as $ from './../../task/index';
 import bind from 'bind-decorator';
 
 type S = IAppState;
-type P = IEntity.IPost;
+type P = Entity.IPost;
 
 /* Container
 --------------------------- */
-const mapStateToProps = (store: IAppStoreFromProvider) => {
-    const { currentTopicId } = store.session;
+const mapStateToProps = (state: S) => {
+    const { currentTopicId } = state.session;
     if (!currentTopicId) return { posts: [] };
-    const topic = store.topics[currentTopicId];
+    const topic = state.topics[currentTopicId];
     return {
         posts: topic ? Object.values(topic.posts) : []
     };
@@ -22,7 +23,7 @@ const mapStateToProps = (store: IAppStoreFromProvider) => {
 import PostView from './PostView';
 
 interface Props {
-    posts: IEntity.IPost[];
+    posts: Entity.IPost[];
     dispatch: UseCase;
 }
 

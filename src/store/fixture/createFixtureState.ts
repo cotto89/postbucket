@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import times = require('lodash/times');
 import * as entity from './../entity';
 import initState from './../state';
@@ -15,7 +16,7 @@ export default function createFixtureState(option: {
     const $option = { ...defaults, ...option };
 
     function generatePosts(topicId: string) {
-        const posts: { [key: string]: IEntity.IPost } = {};
+        const posts: { [key: string]: Types.Entity.IPost } = {};
         times($option.postCountPerTopic, (n) => {
             const post = entity.post({ topicId, content: `# SamplePost ${n}\n\n${content()}` });
             posts[post.id] = post;
@@ -31,11 +32,11 @@ export default function createFixtureState(option: {
         return topic;
     };
 
-    const projects: { [k: string]: IEntity.IProject } = {};
-    const topics: { [k: string]: IEntity.ITopic } = {};
+    const projects: { [k: string]: Types.Entity.IProject } = {};
+    const topics: { [k: string]: Types.Entity.ITopic } = {};
 
     let i = 1;
-    let project: IEntity.IProject;
+    let project: Types.Entity.IProject;
     times($option.topicCount, (n) => {
         ++iden;
 

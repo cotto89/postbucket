@@ -1,14 +1,15 @@
+import * as Types from '@shared';
 import * as assert from 'assert';
 import has = require('lodash/has');
 import fixtureState from './../../store/fixture/createFixtureState';
 import * as entity from './../../store/entity';
 import * as mutation from './../mutation';
 
-let s: IAppState;
+let s: Types.IAppState;
 let target: {
-    pj: IEntity.IProject;
-    t: IEntity.ITopic;
-    p: IEntity.IPost
+    pj: Types.Entity.IProject;
+    t: Types.Entity.ITopic;
+    p: Types.Entity.IPost
 };
 
 beforeEach(() => {
@@ -106,7 +107,7 @@ describe('removePost', () => {
 });
 
 describe('updateCurrentIds', () => {
-    const createRoute = (props: Partial<IEntity.IRoute>): IEntity.IRoute => ({
+    const createRoute = (props: Partial<Types.Entity.IRoute>): Types.Entity.IRoute => ({
         component: () => '' as any,
         params: {},
         query: {},

@@ -1,12 +1,13 @@
+import * as Types from '@shared';
 import omit = require('lodash/omit');
 import { whenExists } from './../utils/utils';
 import { set, update } from './../utils/object';
 
-type S = IAppState;
-type PJ = IEntity.IProject;
-type T = IEntity.ITopic;
-type P = IEntity.IPost;
-type R = IEntity.IRoute;
+type S = Types.IAppState;
+type PJ = Types.Entity.IProject;
+type T = Types.Entity.ITopic;
+type P = Types.Entity.IPost;
+type R = Types.Entity.IRoute;
 
 /* ProjectMutation
 ------------------------------------------------- */

@@ -1,3 +1,4 @@
+import { IAppState, Entity, UseCase } from '@shared';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import bind from 'bind-decorator';
@@ -17,7 +18,7 @@ function mapStateToProps(s: IAppState) {
 }
 
 type S = IAppState;
-type P = IEntity.IPost;
+type P = Entity.IPost;
 
 /* Component */
 interface State {
@@ -25,7 +26,7 @@ interface State {
 }
 
 interface Props {
-    post: IEntity.IPost;
+    post: Entity.IPost;
     usecase: UseCase;
 }
 

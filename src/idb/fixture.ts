@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import range = require('lodash/range');
 import * as M from './models';
 
@@ -11,7 +12,7 @@ interface Option {
     postCountPerTopic?: number;
 }
 
-export function fixtureGen(idb: IDB.Instance) {
+export function fixtureGen(idb: Types.IDB.Instance) {
     const ProjectModel = M.Factory.project(idb);
     const TopicModel = M.Factory.topic(idb);
     const PostModel = M.Factory.post(idb);

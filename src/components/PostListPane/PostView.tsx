@@ -1,11 +1,12 @@
+import * as Types from '@shared';
 import * as React from 'react';
 import * as Entity from './../../store/entity';
 import MarkdownView from './../MarkdownView/MarkdownView';
 
-type PostAction = (post: IEntity.IPost) => void;
+type PostAction = (post: Types.Entity.IPost) => void;
 
 export interface Props {
-    post: IEntity.IPost;
+    post: Types.Entity.IPost;
     onSelect: PostAction;
     updatePost: PostAction;
     deletePost: PostAction;

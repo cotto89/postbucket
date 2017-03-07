@@ -1,3 +1,4 @@
+import { IDB } from '@shared';
 /* ProjectModel
 ------------------------------- */
 export interface IProjectTable {

@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import * as React from 'react';
 import * as Entity from './../../store/entity';
 
@@ -7,9 +8,9 @@ interface State {
 
 interface Props {
     isNew?: boolean;
-    topic: IEntity.ITopic;
-    onSubmit?: (t: IEntity.ITopic) => void;
-    onCancel?: (t: IEntity.ITopic) => void;
+    topic: Types.Entity.ITopic;
+    onSubmit?: (t: Types.Entity.ITopic) => void;
+    onCancel?: (t: Types.Entity.ITopic) => void;
     onChange?: React.FormEventHandler<HTMLInputElement>;
 }
 

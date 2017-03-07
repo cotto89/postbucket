@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import { StatelessComponent, ComponentClass } from 'react';
 import * as quex from 'quex';
 import shortId = require('shortid');
@@ -72,7 +73,7 @@ export interface IRoute {
     query: { [key: string]: string };
     params: { [key: string]: string };
     path: string;
-    task?: quex.T2<IAppState, IRoute>;
+    task?: quex.T2<Types.IAppState, IRoute>;
 }
 
 export function route(props: Partial<IRoute> & { component: Component, path: string }): IRoute {

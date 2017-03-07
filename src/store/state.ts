@@ -1,6 +1,7 @@
+import * as Types from '@shared';
 export interface IState {
-    projects: { [projectName: string]: IEntity.IProject };
-    topics: { [topicId: string]: IEntity.ITopic };
+    projects: { [projectName: string]: Types.Entity.IProject };
+    topics: { [topicId: string]: Types.Entity.ITopic };
     session: {
         currentProjectId?: string;
         currentTopicId?: string;

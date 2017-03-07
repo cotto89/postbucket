@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 import { SFC, ComponentClass } from 'react';
 import history from './router/history';
 import * as entity from './store/entity';
@@ -44,9 +45,9 @@ class RoutingError extends Error { }
 type Component = SFC<any> | ComponentClass<any>;
 export function createActionResult(props: {
     component: Component,
-    task?: IEntity.IRoute['task']
+    task?: Types.Entity.IRoute['task']
 }) {
-    return (ctx: any): IEntity.IRoute => {
+    return (ctx: any): Types.Entity.IRoute => {
         const { query, params } = ctx;
         return entity.route({
             ...props,

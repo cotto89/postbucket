@@ -1,3 +1,4 @@
+import * as Types from '@shared';
 /*
 * universal-router: path matchingとmatchした場合のroute.actionを叩く。actionの結果はPromiseで返って来る。
 * history: browser historyを模したライブラリ。pathの更新をlistenできる。
@@ -19,7 +20,7 @@ interface Props {
     history: History;
     routes: Routes<any, any>;
     fallbackView?: SFC<any>;
-    onLocationChange?: (location: IEntity.IRoute) => void;
+    onLocationChange?: (location: Types.Entity.IRoute) => void;
 }
 
 export default class Router extends Component<Props, State> {
@@ -42,7 +43,7 @@ export default class Router extends Component<Props, State> {
         };
 
         resolve(this.props.routes, ctx)
-            .then((result: IEntity.IRoute) => {
+            .then((result: Types.Entity.IRoute) => {
                 const { onLocationChange } = this.props;
                 onLocationChange && onLocationChange(result);
                 this.setState({ component: result.component });
