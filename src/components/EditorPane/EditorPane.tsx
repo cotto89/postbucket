@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import bind from 'bind-decorator';
 import AceEditor from './Ace';
 import { get } from './../../utils/object';
-import * as $ from './../../task/index';
+import * as $ from './../../action/index';
 import * as entity from './../../store/entity';
 
 /* Container */

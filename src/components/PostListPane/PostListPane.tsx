@@ -1,7 +1,7 @@
 import { IAppState, Entity, UseCase } from '@shared';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as $ from './../../task/index';
+import * as $ from './../../action/index';
 import bind from 'bind-decorator';
 
 type S = IAppState;
