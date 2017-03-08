@@ -29,7 +29,7 @@ interface Props {
 
 export class PostListPane extends React.Component<Props, {}> {
     get posts() {
-        return this.props.posts.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+        return this.props.posts.sort((a, b) => b.updatedAt - a.updatedAt);
     }
 
     /* local task

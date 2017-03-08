@@ -27,8 +27,8 @@ export interface ITopic {
     projectId?: string;
     title: string;
     posts: { [postId: string]: IPost };
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: number;
+    updatedAt: number;
 }
 
 export function topic(props: Partial<ITopic> = {}): ITopic {
@@ -37,8 +37,8 @@ export function topic(props: Partial<ITopic> = {}): ITopic {
         projectId: undefined,
         title: '',
         posts: {},
-        createdAt: props.createdAt || new Date(),
-        updatedAt: props.updatedAt || new Date(),
+        createdAt: props.createdAt || Date.now(),
+        updatedAt: props.updatedAt || Date.now(),
         ...props
     };
 }
@@ -49,8 +49,8 @@ export interface IPost {
     id: string;
     topicId: string;
     replyIds: string[];
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: number;
+    updatedAt: number;
     content: string;
 }
 
@@ -58,8 +58,8 @@ export function post(props: Partial<IPost> & { topicId: string }): IPost {
     return {
         id: props.id || shortId.generate(),
         replyIds: props.replyIds ? [...props.replyIds] : [],
-        createdAt: props.createdAt || new Date(),
-        updatedAt: props.updatedAt || new Date(),
+        createdAt: props.createdAt || Date.now(),
+        updatedAt: props.updatedAt || Date.now(),
         content: '',
         ...props,
     };

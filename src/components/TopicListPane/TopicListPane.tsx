@@ -45,7 +45,7 @@ export class TopicListPane extends React.Component<Props, State> {
     }
 
     get topics() {
-        return this.props.topics.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+        return this.props.topics.sort((a, b) => b.updatedAt - a.updatedAt);
     }
 
     /* local task

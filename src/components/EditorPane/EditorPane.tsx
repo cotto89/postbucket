@@ -54,8 +54,8 @@ export class EditorPane extends React.Component<Props, State> {
         const newPost = entity.post({
             ...post,
             content: this.content,
-            createdAt: isNew ? new Date() : post.createdAt,
-            updatedAt: new Date(),
+            createdAt: isNew ? Date.now() : post.createdAt,
+            updatedAt: Date.now(),
         });
         this.content = '';
         this.updatePost(newPost);

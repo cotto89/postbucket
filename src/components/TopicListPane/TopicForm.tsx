@@ -25,7 +25,7 @@ export default class TopicForm extends React.Component<Props, State> {
     submit = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
         e.preventDefault();
         const title = this.state.newTopicTitle.trim();
-        const t = Entity.topic({ ...this.props.topic, title, updatedAt: new Date() });
+        const t = Entity.topic({ ...this.props.topic, title, updatedAt: Date.now() });
 
         this.props.onSubmit && this.props.onSubmit(t);
         this.setState({ newTopicTitle: '' });

@@ -39,8 +39,8 @@ export interface ITopicTable {
     id?: number;
     projectId?: number;
     title: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: number;
+    updatedAt: number;
 }
 export interface ITopicModel extends ITopicTable {
     toEntity(): Promise<Types.Entity.ITopic>;
@@ -51,14 +51,14 @@ export namespace Factory {
             id?: number;
             projectId?: number;
             title: string;
-            createdAt: Date;
-            updatedAt: Date;
+            createdAt: number;
+            updatedAt: number;
 
             static create(props: Partial<TopicModel> & { title: string }) {
                 return {
                     ...props,
-                    createdAt: props.createdAt || new Date(),
-                    updatedAt: props.updatedAt || new Date(),
+                    createdAt: props.createdAt || Date.now(),
+                    updatedAt: props.updatedAt || Date.now(),
                 };
             }
 
@@ -92,8 +92,8 @@ export namespace Factory {
 export interface IPostTable {
     id?: number;
     topicId: number;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: number;
+    updatedAt: number;
 }
 export interface IPostModel extends IPostTable {
     toEntity(): Promise<Types.Entity.IPost>;
@@ -104,15 +104,15 @@ export namespace Factory {
             id?: number;
             topicId: number;
             content: string;
-            createdAt: Date;
-            updatedAt: Date;
+            createdAt: number;
+            updatedAt: number;
 
             static create(props: Partial<PostModel> & { topicId: number }) {
                 return {
                     ...props,
                     content: props.content || '',
-                    createdAt: props.createdAt || new Date(),
-                    updatedAt: props.updatedAt || new Date(),
+                    createdAt: props.createdAt || Date.now(),
+                    updatedAt: props.updatedAt || Date.now(),
                 };
             }
 
