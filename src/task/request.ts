@@ -17,7 +17,9 @@ type T = Types.Entity.ITopic;
 export default function createReqestAcion(idb: Types.IDB.Instance) {
     return {
         load: {
-            stateAll: loadAllState
+            stateAll: loadAllState,
+            topicById: loadTopicById,
+            postById: loadPostById
         }
     };
 
@@ -51,7 +53,39 @@ export default function createReqestAcion(idb: Types.IDB.Instance) {
         };
     };
 
-    // async function loadPostList(_s: S, _r: R)
+    /**
+     * session.currentTopicId || route.params['topicId'] || route.query['topic'] の topicIdで
+     * idbのtopicを取得する
+     *
+     * @param {S} { session }
+     * @param {R} r
+     * @returns {Promise}
+     */
+    async function loadTopicById({ session }: S, r: R) {
+        const topicId = session.currentTopicId || r.params['topicId'] || r.query['topic'];
+        const topic = await idb.transaction('r', [idb.topics, idb.posts, idb.replies], async () => {
+            const model = await idb.topics.get(Number(topicId));
+            return model && model.toEntity();
+        });
+        return topic;
+    }
+
+    /**
+     * session.currentPostId || route.params['postId'] || route.query['post'] の postIdで
+     * idbのpostを取得する
+     *
+     * @param {S} { session }
+     * @param {R} r
+     * @returns {Promise}
+     */
+    async function loadPostById({ session }: S, r: R) {
+        const postId = session.currentPostId || r.params['postId'] || r.query['post'];
+        const post = await idb.transaction('r', [idb.posts, idb.replies], async () => {
+            const model = await idb.posts.get(Number(postId));
+            return model && model.toEntity();
+        });
+        return post;
+    }
 }
 
 /* helper
