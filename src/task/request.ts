@@ -4,6 +4,9 @@ type S = Types.IAppState;
 type R = Types.Entity.IRoute;
 type PJ = Types.Entity.IProject;
 type T = Types.Entity.ITopic;
+namespace M {
+    export type T = Types.IDB.ITopicModel;
+}
 
 /**
  * reqest actionを生成する
@@ -20,6 +23,16 @@ export default function createReqestAcion(idb: Types.IDB.Instance) {
             stateAll: loadAllState,
             topicById: loadTopicById,
             postById: loadPostById
+        },
+        add: {
+            topic: addTopic
+        },
+        put: {
+            topic: putTopic
+
+        },
+        delete: {
+
         }
     };
 
@@ -85,6 +98,22 @@ export default function createReqestAcion(idb: Types.IDB.Instance) {
             return model && model.toEntity();
         });
         return post;
+    }
+
+
+    async function addTopic(_s: S, t: T) {
+        return idb.transaction('rw', [idb.topics, idb.posts, idb.replies], async () => {
+            const { id, projectId, posts, ...props } = t;
+            const tid = await idb.topics.add({ projectId: Number(projectId), ...props } as M.T);
+            const topic = await idb.topics.get(tid);
+            return topic && topic.toEntity();
+        });
+    }
+    async function putTopic(_s: S, t: T) {
+        return idb.transaction('rw', [idb.topics], async () => {
+            const { id, projectId, posts, ...props } = t;
+            await idb.topics.put({ id: Number(id), projectId: Number(projectId), ...props } as M.T);
+        });
     }
 }
 
