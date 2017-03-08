@@ -6,7 +6,7 @@ import store from './store/store';
 --------------------------------- */
 import Router from './router/Router';
 import routes, { history } from './router/routes';
-import * as task from './action/index';
+import * as task from './task/index';
 
 type S = Types.IAppState;
 type R = Types.Entity.IRoute;

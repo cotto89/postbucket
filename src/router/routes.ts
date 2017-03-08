@@ -3,7 +3,7 @@ import { SFC, ComponentClass } from 'react';
 import history from './history';
 import * as entity from './../store/entity';
 import * as Container from './../components/container/container';
-import * as $ from './../action/index';
+import * as $ from './../task/index';
 
 export { history }
 
