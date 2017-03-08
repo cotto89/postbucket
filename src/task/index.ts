@@ -1,6 +1,12 @@
+import idb from './../idb/index';
 import * as mutation from './mutation';
-import * as req from './request';
+import createRequestAction from './request';
 
-export { mutation, req };
+const req = createRequestAction(idb);
+
+export {
+    mutation,
+    req
+};
 export { default as router } from '../router/action';
 export * from '../lib/quex-utils/task'

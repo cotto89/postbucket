@@ -7,6 +7,8 @@ import * as $ from './../task/index';
 
 export { history }
 
+type S = Types.IAppState;
+
 /* Routes
 -----------------------------------------*/
 const result = createActionResult;
@@ -19,19 +21,39 @@ export default [
                 path: '/',
                 action: result({
                     component: Container.TopicListContainer,
-                    task: $.call($.req.loadData).then((r) => (s) => Object.assign({}, s, r))
+                    /*
+                    - TODO: stateまたはrouteからloadするtopicsの個数を最適化する
+                    */
+                    /*
+                     - TODO: loadに失敗したときの通知と再読込方法の提供
+                     --> 画面に通知 + reload buttonを表示
+                     */
+                    task: $.call($.req.load.stateAll).then(
+                        (res) => (s: S) => $.mutation.updateState(s, res),
+                        () => (s: S) => s
+                    )
                 })
             },
             {
                 path: '/topics/:topicId',
                 action: result({
-                    component: Container.PostListContainer
+                    component: Container.PostListContainer,
+                    // TODO: とりあえず実装
+                    task: $.call($.req.load.stateAll).then(
+                        (res) => (s: S) => $.mutation.updateState(s, res),
+                        () => (s: S) => s
+                    )
                 })
             },
             {
                 path: '/topics/:topicId/posts/:postId',
                 action: result({
-                    component: Container.EditorContainer
+                    component: Container.EditorContainer,
+                    // TODO: とりあえず実装
+                    task: $.call($.req.load.stateAll).then(
+                        (res) => (s: S) => $.mutation.updateState(s, res),
+                        () => (s: S) => s
+                    )
                 })
             },
         ]

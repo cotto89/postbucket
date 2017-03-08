@@ -143,3 +143,17 @@ export function updateCurrentIds(s: S, r: R): S {
         currentPostId: r.params['postId'] || r.query['post'] || undefined
     } as S['session']);
 };
+
+/* StateMutation
+-------------------------------------------------- */
+/**
+ * update state from partial state
+ *
+ * @export
+ * @param {S} s1
+ * @param {Partial<S>} [s2]
+ * @returns {S}
+ */
+export function updateState(s1: S, s2?: Partial<S>): S {
+    return Object.assign({}, s1, s2);
+}
