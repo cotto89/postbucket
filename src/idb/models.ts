@@ -84,6 +84,15 @@ export namespace Factory {
                     updatedAt
                 });
             }
+
+            async updateRelation() {
+                return idb.transaction('r', [idb.projects], async () => {
+                    if (!this.projectName) return;
+                    const project = await idb.projects.where({ name: this.projectName }).first();
+                    !project && await idb.projects.add({ name: this.projectName } as Types.IDB.IProjectModel);
+                    return entity.project({ name: this.projectName });
+                });
+            }
         };
     }
 }
@@ -97,7 +106,9 @@ export interface IPostTable {
     updatedAt: number;
 }
 export interface IPostModel extends IPostTable {
+    content: string;
     toEntity(): Promise<Types.Entity.IPost>;
+    update(post: Types.Entity.IPost): Promise<number>;
 }
 export namespace Factory {
     export function post(idb: Types.IDB.Instance) {
@@ -133,6 +144,18 @@ export namespace Factory {
                     replyIds,
                     createdAt,
                     updatedAt,
+                });
+            }
+
+            async update(post: Types.Entity.IPost): Promise<number> {
+                return idb.transaction('rw', [idb.posts, idb.replies], async () => {
+                    const { id, replyIds, topicId, ...props } = post;
+                    // postを更新
+                    const key = await idb.posts.update(this.id!, { topicId: Number(topicId), ...props });
+                    // 関連replyを更新
+                    const items = post.replyIds.map(from => ({ to: Number(key), from: Number(from) }));
+                    await idb.replies.bulkPut(items);
+                    return key;
                 });
             }
         };
