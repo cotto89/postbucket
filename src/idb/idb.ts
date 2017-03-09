@@ -36,7 +36,7 @@ export default class PostBucketIDB extends Dexie {
 }
 
 /* Types */
-interface DexieOption {
+export interface DexieOption {
     addons?: Array<(db: Dexie) => void>;
     autoOpen?: boolean;
     indexedDB?: IDBFactory;

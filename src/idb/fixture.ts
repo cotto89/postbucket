@@ -2,27 +2,26 @@ import * as Types from '@shared';
 import range = require('lodash/range');
 import * as M from './models';
 
-const defaults = {
-    topicCount: 5,
-    postCountPerTopic: 5
-};
-
-interface Option {
-    topicCount?: number;
-    postCountPerTopic?: number;
-}
-
 export function fixtureGen(idb: Types.IDB.Instance) {
     const ProjectModel = M.Factory.project(idb);
     const TopicModel = M.Factory.topic(idb);
     const PostModel = M.Factory.post(idb);
-
+    /* option */
+    const defaults = {
+        topicCount: 5,
+        postCountPerTopic: 5
+    };
     return {
         createIDBData,
         projectsGen,
         topicsGen,
         createPostsGen
     };
+
+    interface Option {
+        topicCount?: number;
+        postCountPerTopic?: number;
+    }
 
     function createIDBData(option: Option = defaults) {
         const $opt = { ...defaults, ...option };
@@ -67,13 +66,13 @@ export function fixtureGen(idb: Types.IDB.Instance) {
         let projectId = 0;
         let topicId = 0;
 
-        return range(count).map((n) => {
+        return range(count).map(() => {
             const topic = TopicModel.create({
                 id: ++topicId,
                 title: `SampleTopic ${topicId}`
             });
 
-            if ((projectId === 0) || (n % PROJECT_PER_TOPIC === 0)) {
+            if ((projectId === 3) || (topicId % PROJECT_PER_TOPIC === 0)) {
                 topic.projectName = `SampleProject ${++projectId}`;
             }
 
