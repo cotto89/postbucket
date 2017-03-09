@@ -63,14 +63,14 @@ export class EditorPane extends React.Component<Props, State> {
 
     @bind
     locationToTopicList(_: S, p: P) {
-        $.router.replaceTo(`/topics/${p.topicId}`);
+        $.location.replaceTo(`/topics/${p.topicId}`);
     }
 
     /* usecase
     ---------------------------- */
     updatePost = this.props.usecase('EDITOR::POST_UPDATE')
         .use($.abortIf((_: S, p: P) => p.content.length <= 0))
-        .use($.mutation.putPost)
+        .use($.topic.posts.put)
         .use($.named('forceUpdate', () => this.forceUpdate()))
         .use(this.locationToTopicList);
 

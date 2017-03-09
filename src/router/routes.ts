@@ -7,8 +7,6 @@ import * as $ from './../task/index';
 
 export { history }
 
-type S = Types.IAppState;
-
 /* Routes
 -----------------------------------------*/
 const result = createActionResult;
@@ -21,35 +19,21 @@ export default [
                 path: '/',
                 action: result({
                     component: Container.TopicListContainer,
-                    /*
-                    - TODO: stateまたはrouteからloadするtopicsの個数を最適化する
-                    */
-                    /*
-                     - TODO: loadに失敗したときの通知と再読込方法の提供
-                     --> 画面に通知 + reload buttonを表示
-                     */
-                    task: $.call($.req.load.stateAll).then(
-                        (res) => (s: S) => $.mutation.updateState(s, res),
-                        () => (s: S) => s
-                    )
+                    task: $.route.loadAll
                 })
             },
             {
                 path: '/topics/:topicId',
                 action: result({
                     component: Container.PostListContainer,
-                    task: $.call($.req.load.topicById).then(
-                        (res) => (s: S) => res && $.mutation.putTopic(s, res),
-                    )
+                    task: $.route.loadByTopicId
                 })
             },
             {
                 path: '/topics/:topicId/posts/:postId',
                 action: result({
                     component: Container.EditorContainer,
-                    task: $.call($.req.load.postById).then(
-                        (res) => (s: S) => res && $.mutation.putPost(s, res)
-                    )
+                    task: $.route.loadByPostId,
                 })
             },
         ]

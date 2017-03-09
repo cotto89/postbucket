@@ -62,22 +62,22 @@ export class TopicListPane extends React.Component<Props, State> {
 
     @bind
     pushLocation(_: S, t: T) {
-        $.router.pushTo(`topics/${t.id}`);
+        $.location.pushTo(`topics/${t.id}`);
     }
 
     /* usecase
     ------------------------------- */
     addTopic = this.props.dispatch('TOPIC::ADD')
         .use($.abortIf((_: S, t: T) => t.title.trim().length <= 0))
-        .use($.mutation.putTopic);
+        .use($.topic.put);
 
     updateTopic = this.props.dispatch('TOPIC::UPDATE')
         .use($.abortIf((_: S, t: T) => t.title.trim().length <= 0))
-        .use($.mutation.putTopic)
+        .use($.topic.put)
         .use(this.clearEditingId);
 
     deleteTopic = this.props.dispatch('TOPIC::DELETE')
-        .use($.mutation.removeTopic)
+        .use($.topic.put)
         .use(this.clearEditingId);
 
     toggleEditingCardId = this.props.dispatch('TOPIC::TOGGLE_CARD')

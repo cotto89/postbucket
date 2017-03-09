@@ -11,7 +11,7 @@ namespace M {
 }
 
 /**
- * projet task
+ * projet action
  *
  * @export
  * @param {IDB} idb
@@ -43,8 +43,8 @@ export function $read(idb: IDB) {
          *
          * @returns {Promise<Partial<S>>}
          */
-        async loadAll(): Promise<Partial<S>> {
-            const $list = await idb.transaction('r', [idb.projects], async () => {
+        async all(): Promise<Partial<S>> {
+            const $list = await idb.transaction('r', [idb.projects, idb.topics], async () => {
                 const list: PJ[] = [];
                 await idb.projects.each(async model => {
                     list.push(await model.toEntity());
@@ -115,7 +115,7 @@ export function $mutate() {
          *
          * @param {S} s
          * @param {PJ} pj
-         * @returns {S}
+         * @param {S}
          */
         put(s: S, pj: PJ): S {
             return set(s, ['projects', pj.name], pj);
@@ -128,7 +128,7 @@ export function $mutate() {
          * @returns {S}
          */
         remove(s: S, pj: PJ): S {
-            return update(s, ['projects'], (v) => omit(v, pj.name));
+            return update(s, ['projects'], v => omit(v, pj.name));
         }
     };
 }
