@@ -23,10 +23,10 @@ export namespace Factory {
             async toEntity() {
                 const topicIds: string[] = [];
                 const topics = await idb.transaction('r', idb.topics, async () => {
-                    return await idb.topics.where('projectId').equals(this.id!).toArray(model => model);
+                    return await idb.topics.where('projectName').equals(this.name).toArray(model => model);
                 });
                 topics.forEach(t => t.id && topicIds.push(`${t.id}`));
-                return entity.project({ id: `${this.id}`, name: this.name, topicIds });
+                return entity.project({ name: this.name, topicIds });
             }
         };
     }
@@ -37,19 +37,20 @@ export namespace Factory {
 -------------------------------- */
 export interface ITopicTable {
     id?: number;
-    projectId?: number;
+    projectName?: string;
     title: string;
     createdAt: number;
     updatedAt: number;
 }
 export interface ITopicModel extends ITopicTable {
     toEntity(): Promise<Types.Entity.ITopic>;
+    updateRelation(): Promise<Types.Entity.IProject | undefined>;
 }
 export namespace Factory {
     export function topic(idb: Types.IDB.Instance) {
         return class TopicModel implements ITopicModel {
             id?: number;
-            projectId?: number;
+            projectName?: string;
             title: string;
             createdAt: number;
             updatedAt: number;
@@ -73,10 +74,10 @@ export namespace Factory {
                     posts[`${p.id}`] = p;
                 });
 
-                const { projectId, createdAt, updatedAt, title } = this;
+                const { projectName, createdAt, updatedAt, title } = this;
                 return entity.topic({
                     id: `${this.id}`,
-                    projectId: projectId ? `${projectId}` : undefined,
+                    projectName,
                     title,
                     posts,
                     createdAt,

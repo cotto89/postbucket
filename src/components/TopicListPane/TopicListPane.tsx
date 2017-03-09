@@ -14,8 +14,8 @@ type T = Types.Entity.ITopic;
 /* Container
 --------------------------------- */
 const mapStateToProps = (state: S) => {
-    const { currentProjectId } = state.session;
-    const project = currentProjectId && state.projects[currentProjectId];
+    const { currentProjectName } = state.session;
+    const project = currentProjectName && state.projects[currentProjectName];
     const topics = project ?
         project.topicIds.map(tid => state.topics[tid]) :
         Object.values(state.topics);

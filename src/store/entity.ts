@@ -6,14 +6,12 @@ import shortId = require('shortid');
 /* Project
 ------------------------------- */
 export interface IProject {
-    id: string;
     name: string;
     topicIds: string[];
 }
 
 export function project(props: Partial<IProject> & { name: string }): IProject {
     return {
-        id: props.id || shortId.generate(),
         name: props.name || '',
         topicIds: props.topicIds ? [...props.topicIds] : []
     };
@@ -24,7 +22,7 @@ export function project(props: Partial<IProject> & { name: string }): IProject {
 ------------------------------- */
 export interface ITopic {
     id: string;
-    projectId?: string;
+    projectName?: string;
     title: string;
     posts: { [postId: string]: IPost };
     createdAt: number;
@@ -34,7 +32,7 @@ export interface ITopic {
 export function topic(props: Partial<ITopic> = {}): ITopic {
     return {
         id: props.id || shortId.generate(),
-        projectId: undefined,
+        projectName: undefined,
         title: '',
         posts: {},
         createdAt: props.createdAt || Date.now(),

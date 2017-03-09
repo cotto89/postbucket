@@ -16,8 +16,8 @@ export default class PostBucketIDB extends Dexie {
         /* Schema
         ----------------------- */
         this.version(1).stores({
-            projects: '++id, name',
-            topics: '++id, projectId, title, createdAt, updatedAt',
+            projects: '++id, &name',
+            topics: '++id, projectName, title, createdAt, updatedAt',
             posts: '++id, topicId, createdAt, updatedAt',
             replies: ', to, from',
             labels: '++id, name',

@@ -54,10 +54,11 @@ export function fixtureGen(idb: Types.IDB.Instance) {
     }
 
     function projectsGen(topics: M.ITopicTable[]) {
-        const topicsWithPjId = topics.filter(t => !!t.projectId);
+        let id = 0;
+        const topicsWithPjId = topics.filter(t => !!t.projectName);
         return topicsWithPjId.map((t) => ProjectModel.create({
-            id: t.projectId,
-            name: `SampleProject${t.projectId}`,
+            id: ++id,
+            name: t.projectName!
         }));
     }
 
@@ -72,10 +73,8 @@ export function fixtureGen(idb: Types.IDB.Instance) {
                 title: `SampleTopic ${topicId}`
             });
 
-            if (projectId === 0) {
-                topic.projectId = ++projectId;
-            } else if (n % PROJECT_PER_TOPIC === 0) {
-                topic.projectId = ++projectId;
+            if ((projectId === 0) || (n % PROJECT_PER_TOPIC === 0)) {
+                topic.projectName = `SampleProject ${++projectId}`;
             }
 
             return topic;
