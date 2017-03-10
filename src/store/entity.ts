@@ -6,12 +6,14 @@ import shortId = require('shortid');
 /* Project
 ------------------------------- */
 export interface IProject {
+    id?: string;
     name: string;
     topicIds: string[];
 }
 
 export function project(props: Partial<IProject> & { name: string }): IProject {
     return {
+        id: props.id || shortId.generate(),
         name: props.name || '',
         topicIds: props.topicIds ? [...props.topicIds] : []
     };

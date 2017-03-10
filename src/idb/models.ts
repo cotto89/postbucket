@@ -26,7 +26,7 @@ export namespace Factory {
                     const models = await idb.topics.where({ projectName: this.name }).toArray();
                     return models.map(model => `${model.id}`);
                 });
-                return entity.project({ name: this.name, topicIds });
+                return entity.project({ id: String(this.id), name: this.name, topicIds });
             }
         };
     }
