@@ -1,3 +1,4 @@
+import Dexie from 'dexie';
 import * as Types from '@shared';
 import * as entity from './../store/entity';
 
@@ -21,11 +22,10 @@ export namespace Factory {
             }
 
             async toEntity() {
-                const topicIds: string[] = [];
-                const topics = await idb.transaction('r', idb.topics, async () => {
-                    return await idb.topics.where('projectName').equals(this.name).toArray(model => model);
+                const topicIds = await idb.transaction('r', idb.topics, async () => {
+                    const models = await idb.topics.where({ projectName: this.name }).toArray();
+                    return models.map(model => `${model.id}`);
                 });
-                topics.forEach(t => t.id && topicIds.push(`${t.id}`));
                 return entity.project({ name: this.name, topicIds });
             }
         };
@@ -48,7 +48,16 @@ export interface ITopicModel extends ITopicTable {
 }
 export namespace Factory {
     export function topic(idb: Types.IDB.Instance) {
-        return class TopicModel implements ITopicModel {
+        /**
+         * TopicModel
+         *
+         * @relation
+         * [n: 1] ?ProjectModel(projectName)
+         *
+         * @class TopicModel
+         * @implements {ITopicModel}
+         */
+        class TopicModel implements ITopicModel {
             id?: number;
             projectName?: string;
             title: string;
@@ -63,15 +72,17 @@ export namespace Factory {
                 };
             }
 
+            /**
+             * TopicEntityとして返す
+             */
             async toEntity() {
-                const postModels = await idb.transaction('r', idb.posts, async () => {
-                    return await idb.posts.where('topicId').equals(this.id!).toArray(table => table);
-                });
-
-                let posts: { [k: string]: Types.Entity.IPost } = {};
-                postModels.forEach(async post => {
-                    const p = await post.toEntity();
-                    posts[`${p.id}`] = p;
+                const posts = await idb.transaction('r', [idb.posts, idb.replies], async () => {
+                    const models = await idb.posts.where({ topicId: this.id! }).toArray();
+                    const entities = await Dexie.Promise.all(models.map(async m => await m.toEntity()));
+                    return entities.reduce((obj, entity) => {
+                        obj[entity.id] = entity;
+                        return obj;
+                    }, {} as { [k: string]: Types.Entity.IPost });
                 });
 
                 const { projectName, createdAt, updatedAt, title } = this;
@@ -85,15 +96,29 @@ export namespace Factory {
                 });
             }
 
+            /**
+             * 依存Model(ProjectModel)を更新
+             * 自身のprojectNameが存在するが、ProjectModelが存在しない場合に、
+             * Projectを追加してProjectを返す
+             *
+             * @returns {Promise<Types.Entity.IProject | undefined>}
+             *
+             * @memberOf TopicModel
+             */
             async updateRelation() {
-                return idb.transaction('r', [idb.projects], async () => {
+                return idb.transaction('rw', [idb.projects], async () => {
                     if (!this.projectName) return;
                     const project = await idb.projects.where({ name: this.projectName }).first();
-                    !project && await idb.projects.add({ name: this.projectName } as Types.IDB.IProjectModel);
-                    return entity.project({ name: this.projectName });
+                    if (!project) {
+                        await idb.projects.add({ name: this.projectName } as Types.IDB.IProjectModel);
+                        return entity.project({ name: this.projectName });
+                    }
+                    return;
                 });
             }
         };
+
+        return TopicModel;
     }
 }
 
@@ -129,19 +154,16 @@ export namespace Factory {
             }
 
             async toEntity() {
-                const repTables = await idb.transaction('r', idb.replies, async () => {
-                    return idb.replies.where('to').equals(this.id!).toArray(t => t);
+                const replyIds = await idb.transaction('r', idb.replies, async () => {
+                    const models = await idb.replies.where({ to: this.id! }).toArray();
+                    return Dexie.Promise.all(models.map(async rep => await `${rep.from}`));
                 });
-
-                const replyIds: string[] = [];
-                repTables.forEach(r => replyIds.push(`${r.from}`));
-
                 const { content, createdAt, updatedAt } = this;
                 return entity.post({
                     id: `${this.id}`,
                     topicId: `${this.topicId}`,
                     content,
-                    replyIds,
+                    replyIds: replyIds || [],
                     createdAt,
                     updatedAt,
                 });
