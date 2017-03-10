@@ -1,24 +1,14 @@
 import * as Types from '@shared';
 import * as assert from 'assert';
-import IDB, { DexieOption } from './../idb';
-import { fixtureGen } from './../fixture';
+import IDB from './../idb';
+import { setup, teardown } from './idb.setup';
 
-const option: DexieOption = {
+const idb = new IDB({
     indexedDB: require('fake-indexeddb'),
     IDBKeyRange: require('fake-indexeddb/lib/FDBKeyRange')
-};
-
-const idb = new IDB(option);
-
-beforeEach(async () => {
-    const data = fixtureGen(idb).createIDBData();
-    const tables = [idb.projects, idb.topics, idb.posts];
-    await idb.transaction('rw', tables, async () => {
-        await idb.projects.bulkPut(data.projects as Types.IDB.IProjectModel[]);
-        await idb.topics.bulkPut(data.topics as Types.IDB.ITopicModel[]);
-        await idb.posts.bulkPut(data.posts as Types.IDB.IPostModel[]);
-    });
 });
+beforeEach(setup(idb));
+afterEach(teardown(idb));
 
 describe('ProjectModel', () => {
     describe('#toEntity', () => {
@@ -26,6 +16,7 @@ describe('ProjectModel', () => {
             const model = await idb.projects.toCollection().first();
             const dependentTopicsCount = await idb.topics.where({ projectName: model!.name }).count();
             const entity = await model!.toEntity();
+            assert.equal(entity.id, String(model!.id));
             assert.equal(typeof entity.name, 'string');
             assert.equal(entity.topicIds.length, dependentTopicsCount);
         });
