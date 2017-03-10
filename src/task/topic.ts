@@ -124,16 +124,14 @@ export function $write(idb: IDB) {
             async put(_: S, p: P): Promise<P> {
                 return idb.transaction('rw!', [idb.posts], async () => {
                     const { id, replyIds, topicId, ...props } = p;
-                    const model = await idb.posts.where({ id }).first();
-                    // postを追加/更新
-                    let key: number;
-                    if (model) {
-                        key = await model.update(p);
-                    } else {
-                        key = await idb.posts.add({ topicId: Number(topicId), ...props } as M.P);
-                    }
-                    const postModel = await idb.posts.get(key);
-                    return postModel!.toEntity();
+                    const _id = isNaN(Number(id)) ? undefined : Number(id);
+                    const key = await idb.posts.put({
+                        id: _id,
+                        topicId: Number(topicId),
+                        ...props
+                    } as Types.IDB.IPostModel);
+                    const model = await idb.posts.get(key);
+                    return model!.toEntity();
                 });
             },
             /**
