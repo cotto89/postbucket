@@ -10,7 +10,7 @@ type T = Types.Entity.ITopic;
  * @param {((PJ | T)[])} arr
  * @returns
  */
-export function entityArrayToState(context: 'projects' | 'topics', arr: (PJ | T)[]) {
+export function entitiesToState(context: 'projects' | 'topics', arr: (PJ | T)[]) {
     const obj: { [k: string]: (PJ | T) } = {};
     const k = (context === 'projects') ? 'name' : 'id';
     arr.forEach((entity: any) => obj[entity[k]] = entity);
