@@ -1,5 +1,5 @@
 import { IDB } from '@shared';
-import * as Entity from '@entity';
+import * as Entity from './../store/entity';
 
 export function category(idb: IDB.Instance) {
     class CategoryModel implements IDB.ICategoryModel {
@@ -53,9 +53,9 @@ export function post(idb: IDB.Instance) {
                 const reps = await idb.replies.where({ to: this.id! }).toArray();
                 return reps.map(r => r.from);
             });
-            const tagIds = await idb.transaction('r', idb.tags, async () => {
-                const tags = await idb.tags.where({ postId: this.id! }).toArray();
-                return tags.map(t => t.id!);
+            const tagIds = await idb.transaction('r', idb.tagsPosts, async () => {
+                const tps = await idb.tagsPosts.where({ postId: this.id! }).toArray();
+                return tps.map(o => o.tagId);
             });
 
             const { id, topicId, content, createdAt, updatedAt } = this;
