@@ -36,6 +36,9 @@
             ],
             "@entity": [
                 "./src/store/entity.ts"
+            ],
+            "@idb/*": [
+                "./src/idb/*"
             ]
         }
     },
