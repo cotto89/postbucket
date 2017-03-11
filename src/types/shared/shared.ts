@@ -14,12 +14,12 @@ export namespace $ {
 ------------------------------------------ */
 export namespace Entity {
     export interface ICategory {
-        id?: number;
+        id: number;
         name: string;
         topicIds: number[]; // related
     }
     export interface ITopic {
-        id?: number;
+        id: number;
         category?: string; // category.name
         title: string;
         postIds: number[]; // related
@@ -27,7 +27,7 @@ export namespace Entity {
         updatedAt: number;
     }
     export interface IPost {
-        id?: number;
+        id: number;
         topicId: number; // related
         content: string;
         replyIds: number[]; // related
@@ -53,9 +53,9 @@ export namespace Entity {
 /* State
 --------------------------------------------- */
 export interface IState {
-    categories: { [k: number]: Entity.ICategory };
-    topics: { [k: number]: Entity.ITopic };
-    posts: { [k: number]: Entity.IPost };
+    categories: { [k: string]: Entity.ICategory };
+    topics: { [k: string]: Entity.ITopic };
+    posts: { [k: string]: Entity.IPost };
     session: Entity.ISession;
 }
 
@@ -109,5 +109,8 @@ export namespace IDB {
 /* ActionTypes
 ------------------------------------------------- */
 export interface ActionTypes {
+    'CATEGORY:ADD': $.E.C;
+    // 'CATEGORY:UPDATE': $.E.C;
+    // 'CATEGORY:DELETE': $.E.C;
 
 }

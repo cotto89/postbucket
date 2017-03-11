@@ -1,12 +1,20 @@
 import { Entity, IState } from '@shared';
 
+let _id = 0;
+const idGen = () => Date.now() + ++_id;
+
 /* Category
 -------------------------------------- */
-export const category = (props: Entity.ICategory): Entity.ICategory => props;
+export const category = (props: Partial<Entity.ICategory> & { name: string }): Entity.ICategory => ({
+    id: props.id || idGen(),
+    topicIds: props.topicIds ? [...props.topicIds] : [],
+    ...props
+});
 
 /* Topic
 -------------------------------------- */
 export const topic = (props: Partial<Entity.ITopic> = {}): Entity.ITopic => ({
+    id: props.id || idGen(),
     category: props.category || undefined,
     title: props.title || '',
     postIds: props.postIds || [],
@@ -18,6 +26,7 @@ export const topic = (props: Partial<Entity.ITopic> = {}): Entity.ITopic => ({
 /* Post
 -------------------------------------- */
 export const post = (props: Partial<Entity.IPost> & { topicId: number }): Entity.IPost => ({
+    id: props.id || idGen(),
     content: props.content || '',
     replyIds: props.replyIds ? [...props.replyIds] : [],
     tagIds: props.tagIds ? [...props.tagIds] : [],
