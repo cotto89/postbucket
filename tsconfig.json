@@ -33,12 +33,6 @@
         "paths": {
             "@shared": [
                 "./src/types/shared/shared.ts"
-            ],
-            "@entity": [
-                "./src/store/entity.ts"
-            ],
-            "@idb/*": [
-                "./src/idb/*"
             ]
         }
     },
