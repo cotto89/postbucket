@@ -103,7 +103,7 @@
     "prod": "NODE_ENV=production webpack --progress",
     "start": "webpack-dev-server",
     "test": "NODE_ENV=test karma start",
-    "test:mocha": "NODE_ENV=test mocha --opts mocha/mocha.opts",
+    "mocha": "NODE_ENV=test mocha --opts ./mocha.opts",
     "typecheck": "tsc --noEmit"
   }
 }
