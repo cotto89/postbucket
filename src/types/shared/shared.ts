@@ -110,7 +110,16 @@ export namespace IDB {
 ------------------------------------------------- */
 export interface ActionTypes {
     'CATEGORY:ADD': $.E.C;
-    // 'CATEGORY:UPDATE': $.E.C;
-    // 'CATEGORY:DELETE': $.E.C;
+    'CATEGORY:UPDATE': $.E.C;
+    'CATEGORY:DELETE': $.E.C;
 
+    'TOPIC:ADD': $.E.T;
+    'TOPIC:UPDATE': $.E.T;
+    'TOPIC:DELETE': $.E.T;
+
+    'POST:ADD': $.E.P;
+    'POST:UPDATE': $.E.P;
+    'POST:DELETE': $.E.P;
+
+    'SESSION:UPDATE_BY_ROUTE': $.E.R;
 }
