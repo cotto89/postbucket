@@ -1,29 +1,68 @@
-// import * as E from './../../store/entity';
-// import * as S from './../../store/state';
-// import * as Store from './../../store/store';
-// import { PostBucketIDB, Model } from './../../idb/index';
+import * as React from 'react';
 
-// export interface UseCase extends Store.UseCase { }
+export namespace $ {
+    export type C = Entity.ICategory;
+    export type T = Entity.ITopic;
+    export type P = Entity.IPost;
+    export type R = Entity.IRoute;
+    export type S = Entity.ISession;
+}
 
-// export interface IAppState extends S.IState { }
+export namespace Entity {
+    /* Category
+    -------------------------------------- */
+    export interface ICategory {
+        id?: number;
+        name: string;
+        topicIds: number[];
+    }
+    /* Topic
+    -------------------------------------- */
+    export interface ITopic {
+        id?: number;
+        category?: string; // category name
+        title: string;
+        postIds: number[];
+        createdAt: number;
+        updatedAt: number;
+    }
+    /* Post
+    -------------------------------------- */
+    export interface IPost {
+        id?: number;
+        topicId: number;
+        content: string;
+        replyIds: number[];
+        tagIds: number[];
+        createdAt: number;
+        updatedAt: number;
+    }
+    /* Session
+    -------------------------------------- */
+    export interface ISession {
+        currentCategory: string | undefined;
+        currentTopicId: number | undefined;
+        currentPostId: number | undefined;
+    }
+    /* Route
+    -------------------------------------- */
+    type Component = React.StatelessComponent<any> | React.ComponentClass<any>;
+    export interface IRoute {
+        component: Component;
+        query: { [key: string]: string };
+        params: { [key: string]: string };
+        path: string;
+        task?: Function;
+    }
+}
 
-// export namespace Entity {
-//     export interface IProject extends E.IProject { }
-//     export interface ITopic extends E.ITopic { }
-//     export interface IPost extends E.IPost { }
-//     export interface IRoute extends E.IRoute { }
-// }
-
-// export namespace IDB {
-//     export interface Instance extends PostBucketIDB { }
-//     export interface IProjectModel extends Model.IProjectModle { }
-//     export interface ITopicModel extends Model.ITopicModel { }
-//     export interface IPostModel extends Model.IPostModel { }
-// }
-
+/* State
+--------------------------------------------- */
 export interface IState {
-
-
+    categories: { [k: number]: Entity.ICategory };
+    topics: { [k: number]: Entity.ITopic };
+    posts: { [k: number]: Entity.IPost };
+    session: Entity.ISession;
 }
 
 export interface ActionTypes {
