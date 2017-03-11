@@ -20,3 +20,12 @@
 //     export interface ITopicModel extends Model.ITopicModel { }
 //     export interface IPostModel extends Model.IPostModel { }
 // }
+
+export interface IState {
+
+
+}
+
+export interface ActionTypes {
+
+}
