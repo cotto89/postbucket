@@ -31,11 +31,8 @@ export default function createStore<S, T>(initState: S, reduceMap: ReduceMap<S, 
     }
 
     function dispatch<K extends keyof T>(type: K, payload: T[K]) {
-        const reducer = reduceMap[type];
-        if (reducer) {
-            $state = reducer($state, payload);
-            publish();
-        }
+        $state = reduceMap[type]($state, payload);
+        publish();
     }
 
 };
