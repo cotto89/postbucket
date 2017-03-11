@@ -1,11 +1,12 @@
 /* tslint:disable:max-line-length */
+import omit = require('lodash/omit');
 const _ = {
     update: require('lodash/fp/update'),
     set: require('lodash/fp/set'),
     get: require('lodash/get'),
 };
 
-export { update, set, get };
+export { update, set, get, omit };
 
 function set<O, K1 extends keyof O, K2 extends keyof O[K1], K3 extends keyof O[K1][K2], K4 extends keyof O[K1][K2][K3], K5 extends keyof O[K1][K2][K3][K4], K6 extends keyof O[K1][K2][K3][K4][K5], K7 extends keyof O[K1][K2][K3][K4][K5][K6], K8 extends keyof O[K1][K2][K3][K4][K5][K6][K7], K9 extends keyof O[K1][K2][K3][K4][K5][K6][K7][K8], K10 extends keyof O[K1][K2][K3][K4][K5][K6][K7][K8][K9], V>(obj: O, path: string | [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10], val: V): O & Record<K1, Record<K2, Record<K3, Record<K4, Record<K5, Record<K6, Record<K7, Record<K8, Record<K9, Record<K10, V>>>>>>>>>>;
 function set<O, K1 extends keyof O, K2 extends keyof O[K1], K3 extends keyof O[K1][K2], K4 extends keyof O[K1][K2][K3], K5 extends keyof O[K1][K2][K3][K4], K6 extends keyof O[K1][K2][K3][K4][K5], K7 extends keyof O[K1][K2][K3][K4][K5][K6], K8 extends keyof O[K1][K2][K3][K4][K5][K6][K7], K9 extends keyof O[K1][K2][K3][K4][K5][K6][K7][K8], V>(obj: O, path: string | [K1, K2, K3, K4, K5, K6, K7, K8, K9], val: V): O & Record<K1, Record<K2, Record<K3, Record<K4, Record<K5, Record<K6, Record<K7, Record<K8, Record<K9, V>>>>>>>>>;
