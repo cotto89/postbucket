@@ -1,54 +1,28 @@
-/* tslint:disable:no-var-requires */
-import * as Types from '@shared';
-import creaetStore from 'quex';
-import initialState from './state';
-import combineEnhancer from './../lib/quex-utils/combineEnhancer';
-import notifier, { Listener } from './../lib/enhancer/notifier';
+import createStore, { ReduceMap } from './../lib/flux/createStore';
+import { set, update, omit } from './../utils/object';
+import { ActionTypes, IState } from '@shared';
+import { state as initialState } from './entity';
 
-const STORAGE_KEY = 'state';
-/*
- * 初期load時にlocalStorageからstate(projectsとtopics)を取得する
- * 初期レンダリング時に真っ白画面を出さないためにやってる
- * https://github.com/cotttpan/postbucket/issues/26
- */
-let state = (() => {
-    const json = localStorage.getItem(STORAGE_KEY);
-    return json ? initialState(JSON.parse(json)) : initialState();
-})();
+export const reducemap: ReduceMap<IState, ActionTypes> = {
+    'CATEGORY:ADD': (s, c) => set(s, ['categories', String(c.id)], c),
+    'CATEGORY:UPDATE': (s, c) => set(s, ['categories', String(c.id)], c),
+    'CATEGORY:DELETE': (s, c) => update(s, ['categories'], (o) => omit(o, String(c.id))),
 
-let enhancers: Function[] = [];
-let listeners: Listener[] = [];
+    'TOPIC:ADD': (s, t) => set(s, ['topics', String(t.id)], t),
+    'TOPIC:UPDATE': (s, t) => set(s, ['topics', String(t.id)], t),
+    'TOPIC:DELETE': (s, t) => update(s, ['topics'], o => omit(o, String(t.id))),
 
-if (process.env.NODE_ENV === 'development') {
-    // devtoolをsetup
-    const setupReduxDevtool = require('./../lib/devtools/reduxDevtools').default;
-    const devtool = setupReduxDevtool(state);
-    if (devtool) listeners.push(devtool);
-}
+    'POST:ADD': (s, p) => set(s, ['posts', String(p.id)], p),
+    'POST:UPDATE': (s, p) => set(s, ['posts', String(p.id)], p),
+    'POST:DELETE': (s, p) => update(s, ['posts'], o => omit(o, String(p.id))),
 
-enhancers.push(notifier(...listeners));
+    'SESSION:UPDATE_BY_ROUTE': (s, r) => set(s, ['session'], {
+        currentCategory: r.params['category'] || r.query['category'] || undefined,
+        currentTopicId: r.params['topicId'] || r.query['topicId'] || undefined,
+        currentPostId: r.params['postId'] || r.query['postId'] || undefined
+    } as IState['session'])
+};
 
-/* creaetStore */
-const store = creaetStore(state, {
-    updater: (_, s) => s as Types.IAppState,
-    enhancer: combineEnhancer(enhancers)
-});
+const store = createStore<IState, ActionTypes>(initialState(), reducemap);
 
-
-/* Subscribing */
-store.subscribe((_, err) => {
-    if (err && err.name !== 'AbortTransition') console.error(err);
-});
-/*
- * localStorageにsession以外のstateを投げる
- * sessionはrouting依存なので避けている
- */
-store.subscribe((s) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        projects: s.projects,
-        topics: s.topics
-    }));
-});
-export type UseCase = typeof store.usecase;
-export { store };
 export default store;

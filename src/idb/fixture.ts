@@ -1,94 +1,83 @@
-import * as Types from '@shared';
 import range = require('lodash/range');
-import * as M from './models';
+import { IDB } from '@shared';
 
 export interface Option {
     topicCount?: number;
-    postCountPerTopic?: number;
+    postCount?: number;
 }
 
-export function fixtureGen(idb: Types.IDB.Instance) {
-    const ProjectModel = M.Factory.project(idb);
-    const TopicModel = M.Factory.topic(idb);
-    const PostModel = M.Factory.post(idb);
-    /* option */
-    const defaults = {
-        topicCount: 5,
-        postCountPerTopic: 5
+export default function createIDBData(option?: Option) {
+    const $option = {
+        topicCount: 6,
+        postCount: 6,
+        ...option
     };
+
+    const CATEGORY_PER_TOPIC = 3;
+    let postId = 0;
+    let topicId = 0;
+
+    let categories: IDB.Table.ICategory[] = [];
+    let topics: IDB.Table.ITopic[] = [];
+    let posts: IDB.Table.IPost[] = [];
+    let replies: IDB.Table.IReply[] = [];
+    let tags: IDB.Table.ITag[] = [];
+    let tagsPosts: IDB.Table.TagsPosts[] = [];
+
+
+    topics = topicsData($option.topicCount);
+    categories = categoriesData(topics);
+    topics.forEach(t => {
+        posts = posts.concat(postsData(t.id!, $option.postCount));
+    });
+
     return {
-        createIDBData,
-        projectsGen,
-        topicsGen,
-        createPostsGen
+        categories,
+        topics,
+        posts,
+        replies,
+        tags,
+        tagsPosts
     };
 
-    function createIDBData(option: Option = defaults) {
-        const $opt = { ...defaults, ...option };
 
-        let projects: M.IProjectTable[] = [];
-        let topics: M.ITopicTable[] = [];
-        let posts: M.IPostTable[] = [];
-        let replies: M.IReplyTable[] = [];
-        let labels: M.ILabelTable[] = [];
-        let labelsPosts: M.ILabelsPostsTable[] = [];
-
-        const postsGen = createPostsGen();
-
-        topics = topicsGen($opt.topicCount);
-        projects = projectsGen(topics);
-        topics.forEach(t => {
-            if (!t.id) throw Error('topic.idがない');
-            posts = posts.concat(postsGen(t.id, $opt.postCountPerTopic));
-        });
-
-        return {
-            projects,
-            topics,
-            posts,
-            replies,
-            labels,
-            labelsPosts
-        };
-    }
-
-    function projectsGen(topics: M.ITopicTable[]) {
+    function categoriesData(ts: IDB.Table.ITopic[]): IDB.Table.ICategory[] {
         let id = 0;
-        const topicsWithPjId = topics.filter(t => !!t.projectName);
-        return topicsWithPjId.map((t) => ProjectModel.create({
+        const targets = ts.filter(t => !!t.category);
+        return targets.map((t) => ({
             id: ++id,
-            name: t.projectName!
+            name: `${t.category}`
         }));
     }
 
-    function topicsGen(count: number) {
-        const PROJECT_PER_TOPIC = 3;
-        let projectId = 0;
-        let topicId = 0;
+    function topicsData(count: number) {
+        let categoryId = 0;
+
+        const data = (): IDB.Table.ITopic => ({
+            id: ++topicId,
+            title: `SampleTopic ${topicId}`,
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+        });
 
         return range(count).map(() => {
-            const topic = TopicModel.create({
-                id: ++topicId,
-                title: `SampleTopic ${topicId}`
-            });
-
-            if ((projectId === 3) || (topicId % PROJECT_PER_TOPIC === 0)) {
-                topic.projectName = `SampleProject ${++projectId}`;
+            const t = data();
+            if (topicId % CATEGORY_PER_TOPIC === 0) {
+                t.category = `SampleCategory ${++categoryId}`;
             }
-
-            return topic;
+            return t;
         });
     }
 
-    function createPostsGen() {
-        let postId = 0;
-        return function postsGen(tid: number, count: number) {
-            return range(count).map(() => PostModel.create({
-                id: ++postId,
-                topicId: tid,
-                content: postContent(postId)
-            }));
-        };
+    function postsData(tid: number, count: number) {
+        const data = (): IDB.Table.IPost => ({
+            id: ++postId,
+            topicId: tid,
+            content: postContent(postId),
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+        });
+        return range(count).map(() => data());
     }
 }
 

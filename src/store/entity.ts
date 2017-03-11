@@ -1,85 +1,61 @@
-import * as Types from '@shared';
-import { StatelessComponent, ComponentClass } from 'react';
-import * as quex from 'quex';
-import shortId = require('shortid');
+import { Entity, IState } from '@shared';
 
-/* Project
-------------------------------- */
-export interface IProject {
-    id?: string;
-    name: string;
-    topicIds: string[];
-}
+let _id = 0;
+const idGen = () => Date.now() + ++_id;
 
-export function project(props: Partial<IProject> & { name: string }): IProject {
-    return {
-        id: props.id || shortId.generate(),
-        name: props.name || '',
-        topicIds: props.topicIds ? [...props.topicIds] : []
-    };
-}
-
+/* Category
+-------------------------------------- */
+export const category = (props: Partial<Entity.ICategory> & { name: string }): Entity.ICategory => ({
+    id: props.id || idGen(),
+    topicIds: props.topicIds ? [...props.topicIds] : [],
+    ...props
+});
 
 /* Topic
-------------------------------- */
-export interface ITopic {
-    id: string;
-    projectName?: string;
-    title: string;
-    posts: { [postId: string]: IPost };
-    createdAt: number;
-    updatedAt: number;
-}
-
-export function topic(props: Partial<ITopic> = {}): ITopic {
-    return {
-        id: props.id || shortId.generate(),
-        projectName: undefined,
-        title: '',
-        posts: {},
-        createdAt: props.createdAt || Date.now(),
-        updatedAt: props.updatedAt || Date.now(),
-        ...props
-    };
-}
+-------------------------------------- */
+export const topic = (props: Partial<Entity.ITopic> = {}): Entity.ITopic => ({
+    id: props.id || idGen(),
+    category: props.category || undefined,
+    title: props.title || '',
+    postIds: props.postIds || [],
+    createdAt: props.createdAt || Date.now(),
+    updatedAt: props.updatedAt || Date.now(),
+    ...props
+});
 
 /* Post
-------------------------------- */
-export interface IPost {
-    id: string;
-    topicId: string;
-    replyIds: string[];
-    createdAt: number;
-    updatedAt: number;
-    content: string;
-}
-
-export function post(props: Partial<IPost> & { topicId: string }): IPost {
-    return {
-        id: props.id || shortId.generate(),
-        replyIds: props.replyIds ? [...props.replyIds] : [],
-        createdAt: props.createdAt || Date.now(),
-        updatedAt: props.updatedAt || Date.now(),
-        content: '',
-        ...props,
-    };
-}
+-------------------------------------- */
+export const post = (props: Partial<Entity.IPost> & { topicId: number }): Entity.IPost => ({
+    id: props.id || idGen(),
+    content: props.content || '',
+    replyIds: props.replyIds ? [...props.replyIds] : [],
+    tagIds: props.tagIds ? [...props.tagIds] : [],
+    createdAt: props.createdAt || Date.now(),
+    updatedAt: props.updatedAt || Date.now(),
+    ...props
+});
 
 /* Route
--------------------------------*/
-type Component = StatelessComponent<any> | ComponentClass<any>;
-export interface IRoute {
-    component: Component;
-    query: { [key: string]: string };
-    params: { [key: string]: string };
-    path: string;
-    task?: quex.T2<Types.IAppState, IRoute>;
-}
+---------------------------------------*/
+export const route = (props: Partial<Entity.IRoute> & {
+    component: Entity.IRoute['component'], path: string
+}): Entity.IRoute => ({
+    query: props.query || {},
+    params: props.params || {},
+    ...props,
+});
 
-export function route(props: Partial<IRoute> & { component: Component, path: string }): IRoute {
-    return {
-        query: props.query || {},
-        params: props.params || {},
-        ...props,
-    };
-}
+/* State
+-------------------------------------- */
+export const state = (props: Partial<IState> = {}): IState => ({
+    categories: {},
+    topics: {},
+    posts: {},
+    session: {
+        currentCategory: undefined,
+        currentTopicId: undefined,
+        currentPostId: undefined,
+    },
+    ...props
+});
+

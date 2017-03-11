@@ -1,3 +1,0 @@
---compilers ts:espower-typescript/guess mocha/setup.test.ts src/**/*.test.ts
---growl
---reporter nyan
