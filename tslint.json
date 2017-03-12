@@ -29,7 +29,7 @@
         "no-any": false,
         "no-internal-module": true,
         "no-reference": true,
-        "no-var-requires": true,
+        "no-var-requires": false,
         "typedef": [
             false,
             "member-variable-declaration"
