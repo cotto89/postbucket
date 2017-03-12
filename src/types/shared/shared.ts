@@ -105,6 +105,15 @@ export namespace IDB {
     }
 }
 
+/* Store
+------------------------------------------------- */
+export interface Store {
+    getState: () => IState;
+    dispatch: <K extends keyof ActionTypes>(type: K, payload: ActionTypes[K]) => void;
+}
+
+export type Dispatch = Store['dispatch'];
+
 
 /* ActionTypes
 ------------------------------------------------- */
