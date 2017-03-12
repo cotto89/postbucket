@@ -1,4 +1,5 @@
 import createStore, { ReduceMap } from './../lib/flux/createStore';
+import applyMiddleware from './../lib/flux/applyMiddleware';
 import { set, update, omit } from './../utils/object';
 import { ActionTypes, IState } from '@shared';
 import { state as initialState } from './entity';
@@ -23,6 +24,6 @@ export const reducemap: ReduceMap<IState, ActionTypes> = {
     } as IState['session'])
 };
 
-const store = createStore<IState, ActionTypes>(initialState(), reducemap);
+let store = createStore<IState, ActionTypes>(initialState(), reducemap);
 
-export default store;
+export default (applyMiddleware(store as any, []) as any) as typeof store;
