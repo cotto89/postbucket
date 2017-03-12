@@ -26,4 +26,10 @@ export const reducemap: ReduceMap<IState, ActionTypes> = {
 
 let store = createStore<IState, ActionTypes>(initialState(), reducemap);
 
-export default (applyMiddleware(store as any, []) as any) as typeof store;
+const middlewares: any[] = [];
+if (process.env.NODE_ENV === 'development') {
+    const reduxDevtools = require('./../lib/devtools/devtools').default;
+    middlewares.push(reduxDevtools());
+}
+
+export default (applyMiddleware(store as any, middlewares) as any) as typeof store;
