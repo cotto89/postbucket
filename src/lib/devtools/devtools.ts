@@ -17,6 +17,7 @@ export default function reduxDevtools() {
         devtool.subscribe((msg: any) => {
             if (msg.type === 'START') {
                 isStarted = true;
+                devtool.init({});
             }
         });
     }
