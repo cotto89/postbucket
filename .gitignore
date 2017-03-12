@@ -48,4 +48,5 @@ typings.json
 .awcache
 src/playground
 _src
+temp
 
