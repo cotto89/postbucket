@@ -30,10 +30,13 @@ export function topic(idb: IDB.Instance) {
                 const posts = await idb.posts.where({ topicId: this.id! }).toArray();
                 return posts.map(p => p.id!);
             });
+            const labelIds = await idb.transaction('r', idb.labelsTopics, async () => {
+                const labels = await idb.labelsTopics.where({ topicId: this.id! }).toArray();
+                return labels.map(l => l.labelId);
+            });
 
             const { id, category, title, createdAt, updatedAt } = this;
-            return Entity.topic({ id, category, title, createdAt, updatedAt, postIds });
-
+            return Entity.topic({ id, category, title, createdAt, updatedAt, postIds, labelIds });
         }
     }
 
@@ -53,13 +56,9 @@ export function post(idb: IDB.Instance) {
                 const reps = await idb.replies.where({ to: this.id! }).toArray();
                 return reps.map(r => r.from);
             });
-            const tagIds = await idb.transaction('r', idb.tagsPosts, async () => {
-                const tps = await idb.tagsPosts.where({ postId: this.id! }).toArray();
-                return tps.map(o => o.tagId);
-            });
 
             const { id, topicId, content, createdAt, updatedAt } = this;
-            return Entity.post({ id, topicId, content, createdAt, updatedAt, replyIds, tagIds });
+            return Entity.post({ id, topicId, content, createdAt, updatedAt, replyIds });
         }
     }
     return PostModel;

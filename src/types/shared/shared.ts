@@ -23,6 +23,7 @@ export namespace Entity {
         category?: string; // category.name
         title: string;
         postIds: number[]; // related
+        labelIds: number[];
         createdAt: number;
         updatedAt: number;
     }
@@ -31,7 +32,6 @@ export namespace Entity {
         topicId: number; // related
         content: string;
         replyIds: number[]; // related
-        tagIds: number[]; // related
         createdAt: number;
         updatedAt: number;
     }
@@ -94,13 +94,13 @@ export namespace IDB {
             to: number;
             from: number;
         }
-        export interface ITag {
+        export interface ILabel {
             id?: number;
             name: string;
         }
-        export interface TagsPosts {
-            postId: number;
-            tagId: number;
+        export interface ILabelsTopics {
+            topicId: number;
+            labelId: number;
         }
     }
 }

@@ -17,7 +17,8 @@ export const topic = (props: Partial<Entity.ITopic> = {}): Entity.ITopic => ({
     id: props.id || idGen(),
     category: props.category || undefined,
     title: props.title || '',
-    postIds: props.postIds || [],
+    postIds: props.postIds ? [...props.postIds] : [],
+    labelIds: props.labelIds ? [...props.labelIds] : [],
     createdAt: props.createdAt || Date.now(),
     updatedAt: props.updatedAt || Date.now(),
     ...props
@@ -29,7 +30,6 @@ export const post = (props: Partial<Entity.IPost> & { topicId: number }): Entity
     id: props.id || idGen(),
     content: props.content || '',
     replyIds: props.replyIds ? [...props.replyIds] : [],
-    tagIds: props.tagIds ? [...props.tagIds] : [],
     createdAt: props.createdAt || Date.now(),
     updatedAt: props.updatedAt || Date.now(),
     ...props

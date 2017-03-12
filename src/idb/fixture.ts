@@ -21,8 +21,8 @@ export default function createIDBData(option?: Option) {
     let topics: IDB.Table.ITopic[] = [];
     let posts: IDB.Table.IPost[] = [];
     let replies: IDB.Table.IReply[] = [];
-    let tags: IDB.Table.ITag[] = [];
-    let tagsPosts: IDB.Table.TagsPosts[] = [];
+    let tags: IDB.Table.ILabel[] = [];
+    let tagsPosts: IDB.Table.ILabelsTopics[] = [];
 
 
     topics = topicsData($option.topicCount);

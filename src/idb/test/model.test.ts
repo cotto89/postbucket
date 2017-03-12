@@ -27,6 +27,7 @@ describe('TopicModel', () => {
             const model = await idb.topics.where({ category: category!.name }).first();
             const entity = await model!.toEntity();
             assert(entity.hasOwnProperty('id'));
+            assert(entity.hasOwnProperty('labelIds'));
             assert.equal(entity.category, category!.name);
             assert.equal(entity.postIds.length, 6);
         });
@@ -41,7 +42,6 @@ describe('PostModel', () => {
             const entity = await model!.toEntity();
             assert(entity.hasOwnProperty('id'));
             assert(entity.hasOwnProperty('topicId'));
-            assert(entity.hasOwnProperty('tagIds'));
             assert(entity.hasOwnProperty('replyIds'));
         });
     });

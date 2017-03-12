@@ -7,8 +7,8 @@ export default class PostBucketIDB extends Dexie {
     topics: Dexie.Table<IDB.ITopicModel, number>;
     posts: Dexie.Table<IDB.IPostModel, number>;
     replies: Dexie.Table<IDB.Table.IReply, void>;
-    tags: Dexie.Table<IDB.Table.ITag, number>;
-    tagsPosts: Dexie.Table<IDB.Table.TagsPosts, void>;
+    label: Dexie.Table<IDB.Table.ILabel, number>;
+    labelsTopics: Dexie.Table<IDB.Table.ILabelsTopics, void>;
 
     constructor(option: DexieOption = {}) {
         super('PostbucketIDB', option);
@@ -20,8 +20,8 @@ export default class PostBucketIDB extends Dexie {
             topics: '++id, category, title, createdAt, updatedAt',
             posts: '++id, topicId, createdAt, updatedAt',
             replies: '++, to, from',
-            tags: '++id, name',
-            tagsPosts: '++, postId, tagId',
+            label: '++id, name',
+            labelsTopics: '++, topicId, labelId',
         });
 
         /* mapToClass
