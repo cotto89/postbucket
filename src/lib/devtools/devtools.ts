@@ -3,7 +3,7 @@ interface Store {
     dispatch: Function;
 }
 
-export default function reduxDevtools() {
+export default function reduxDevtools(state: object = {}) {
     let reduxDevToolsExtension = (
         process.env.NODE_ENV === 'development' &&
         typeof window !== 'undefined' &&
@@ -17,7 +17,7 @@ export default function reduxDevtools() {
         devtool.subscribe((msg: any) => {
             if (msg.type === 'START') {
                 isStarted = true;
-                devtool.init({});
+                devtool.init(state);
             }
         });
     }
