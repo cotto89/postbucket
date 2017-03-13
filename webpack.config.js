@@ -9,6 +9,7 @@ const BabiliPlugin = require("babili-webpack-plugin");
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 /* NODE_ENV */
+const NPM_COMMAND = process.env.npm_lifecycle_event;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const isProd = NODE_ENV === 'production';
 const isDev = !isProd;
@@ -37,21 +38,35 @@ let config = {
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        `css-loader?minimize=${isProd}?localIdentName=[path][name]___[local]___[hash:base64:5]`,
-                        'postcss-loader',
-                        'sass-loader'
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                minimize: isProd,
+                                localIdentName: `[path][name]___[local]___[hash:base64:5]`,
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: () => [
+                                    autoprefixer({ browsers: ['last 2 versions'] })
+                                ]
+                            }
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                includePaths: [
+                                    path.join(__dirname, 'node_modules', 'sanitize.css')
+                                ]
+                            }
+                        }
                     ]
                 })
             }
         ]
     },
     plugins: [
-        // loader options
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: [autoprefixer({ browsers: ['last 2 versions'] })],
-            }
-        }),
         new HtmlWebpackPlugin({
             hash: true,
             filename: '../index.html',
@@ -67,7 +82,7 @@ let config = {
         // new BundleAnalyzerPlugin(),
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css', '.scss'],
         alias: {
             'react': 'inferno-compat',
             'react-dom': 'inferno-compat',
@@ -76,7 +91,7 @@ let config = {
     },
 };
 
-if (isDev) {
+if (NPM_COMMAND === 'start') {
     config = merge(config, {
         // https://medium.com/webpack/whats-new-in-webpack-dev-server-2-0-a66848c3679#.qyeizw1h1
         output: {
