@@ -28,6 +28,7 @@
     "remark-parse": "3.0.0",
     "remark-rehype": "^2.0.0",
     "remark-stringify": "^3.0.0",
+    "sanitize.css": "^5.0.0",
     "shortid": "^2.2.8",
     "unified": "^6.1.1",
     "unist-util-visit": "^1.1.1",
