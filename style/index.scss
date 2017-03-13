@@ -1,8 +1,55 @@
+/* ===============================
+* Variable
+================================== */
+$divider: #d2d2d2;
 
-#editor {
-    position: absolute;
-    top: 20px;
-    right: 0;
-    bottom: 0;
-    left: 0;
+/* ===============================
+ * Fundation
+================================== */
+@import 'sanitize';
+body {
+    color: #333;
+    background: #fff;
 }
+
+/* ===============================
+ * Object
+================================== */
+
+
+/* ===============================
+ * Component
+================================== */
+/* example
+<div className='pane _container'>
+    <div className='pane _main'>main pane</div>
+    <div className='pane _sub'>sub pane</div>
+</div>
+*/
+.pane {
+    overflow: scroll;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    & + & {
+        border-left: 1px solid $divider;
+    }
+    &._container {
+        display: flex;
+        align-items: stretch;
+    }
+    &._main {
+        flex-grow: 1;
+        width: 100%;
+    }
+    &._sub {
+        width: 40%;
+        &._fixed {
+            min-width: 230px;
+        }
+    }
+}
+
+/* ===============================
+ * Util
+================================== */
