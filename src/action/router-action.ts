@@ -58,14 +58,11 @@ export default class RouterAction {
         const categories = await _loadAllCategory(this.idb);
         const topics = await _loadAllTopics(this.idb);
         const posts = await _loadPostsFromTopicIds(this.idb, topics.map(t => t.id));
-        const state = {
+        this.dispatch('STATE:SET_STATE', {
             categories: _entitiesToState(categories),
             topics: _entitiesToState(topics),
             posts: _entitiesToState(posts)
-        };
-
-
-        this.dispatch('STATE:SET_STATE', state);
+        });
     }
 }
 
