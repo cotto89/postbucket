@@ -37,7 +37,7 @@ export namespace Entity {
         updatedAt: number;
     }
     export interface ISession {
-        currentCategory: string | undefined;
+        currentCategoryId: number | undefined;
         currentTopicId: number | undefined;
         currentPostId: number | undefined;
     }
@@ -137,4 +137,6 @@ export interface ActionTypes {
     'POST:DELETE': $.E.P;
 
     'SESSION:UPDATE_BY_ROUTE': $.E.R;
+
+    'STATE:SET_STATE': Partial<IState>;
 }

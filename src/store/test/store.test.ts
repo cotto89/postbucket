@@ -91,7 +91,7 @@ describe('SESSION', () => {
                 component: () => createElement('div'),
                 path: '/',
                 params: {
-                    category: 'categoryName',
+                    categoryId: '1',
                     topicId: '1',
                     postId: '1'
                 }
@@ -99,7 +99,7 @@ describe('SESSION', () => {
 
             const state = reducer['SESSION:UPDATE_BY_ROUTE'](s, r);
             assert.deepEqual(state.session, {
-                currentCategory: 'categoryName',
+                currentCategoryId: '1',
                 currentTopicId: '1',
                 currentPostId: '1'
             });
@@ -110,7 +110,7 @@ describe('SESSION', () => {
                 component: () => createElement('div'),
                 path: '/',
                 query: {
-                    category: 'categoryName',
+                    categoryId: '1',
                     topicId: '1',
                     postId: '1'
                 }
@@ -118,7 +118,7 @@ describe('SESSION', () => {
 
             const state = reducer['SESSION:UPDATE_BY_ROUTE'](s, r);
             assert.deepEqual(state.session, {
-                currentCategory: 'categoryName',
+                currentCategoryId: '1',
                 currentTopicId: '1',
                 currentPostId: '1'
             });
@@ -134,7 +134,7 @@ describe('SESSION', () => {
 
             const state = reducer['SESSION:UPDATE_BY_ROUTE'](s, r);
             assert.deepEqual(state.session, {
-                currentCategory: undefined,
+                currentCategoryId: undefined,
                 currentTopicId: undefined,
                 currentPostId: undefined
             });

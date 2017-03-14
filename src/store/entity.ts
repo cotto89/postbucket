@@ -52,7 +52,7 @@ export const state = (props: Partial<IState> = {}): IState => ({
     topics: {},
     posts: {},
     session: {
-        currentCategory: undefined,
+        currentCategoryId: undefined,
         currentTopicId: undefined,
         currentPostId: undefined,
     },
