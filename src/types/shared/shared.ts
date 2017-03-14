@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PostbucketIDB from './../../idb/idb';
+import * as $Action from './../../action/index';
 
 export namespace $ {
     export namespace E {
@@ -114,6 +115,11 @@ export interface Store {
 
 export type Dispatch = Store['dispatch'];
 
+/* Action
+------------------------------------------------- */
+export namespace Action {
+    export type RouterAction = $Action.RouterAction;
+}
 
 /* ActionTypes
 ------------------------------------------------- */
