@@ -1,10 +1,13 @@
 import * as Types from '@shared';
-import createIDBData, { Option } from '../fixture';
+import createIDBData, { Option } from './../idb/fixture';
+import IDB from './../idb/idb';
 
 export const IDBOption = {
     indexedDB: require('fake-indexeddb'),
     IDBKeyRange: require('fake-indexeddb/lib/FDBKeyRange')
 };
+
+export const testDB = new IDB(IDBOption);
 
 export const setup = (idb: Types.IDB.Instance, option: Option = {}) => {
     return async () => {

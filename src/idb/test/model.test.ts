@@ -1,9 +1,7 @@
-// import * as Types from '@shared';
 import * as assert from 'assert';
-import IDB from './../idb';
-import { setup, teardown, IDBOption } from './setup';
+import { testDB, setup, teardown } from './../../test-helper/idb-setup';
 
-const idb = new IDB(IDBOption);
+const idb = testDB;
 beforeEach(setup(idb));
 afterEach(teardown(idb));
 
