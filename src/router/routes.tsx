@@ -2,6 +2,7 @@ import * as Types from '@shared';
 import * as React from 'react';
 import history from './history';
 import * as entity from './../store/entity';
+import TopicListPane from './../component/TopicListPane/Container';
 
 export { history }
 
@@ -27,7 +28,12 @@ export function init(action: Types.Action.RouterAction) {
                 {
                     path: '/',
                     action: result({
-                        component: () => <div>path: /</div>,
+                        component: () => (
+                            <div className='pane _container'>
+                                <TopicListPane />
+                                <TopicListPane />
+                            </div>
+                        ),
                         task: action.loadAll
                     })
                 },
