@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import { createElement } from 'react';
 import * as Types from '@shared';
-import { reducemap as reducer } from './../store';
+import reducer from './../reducemap';
 import * as Entity from './../entity';
 
 let s: Types.IState;
