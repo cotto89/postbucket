@@ -7,41 +7,56 @@ export { history }
 
 /* Routes
 -----------------------------------------*/
-const result = createActionResult;
-export default [
-    {
-        path: '/',
-        action: middleware,
-        children: [
-            {
-                path: '/',
-                action: result({
-                    component: () => <div>path: /</div>,
-                })
-            },
-            {
-                path: '/topics/:topicId',
-                action: result({
-                    component: () => <div>/topics/:topicId</div>,
-                })
-            },
-            {
-                path: '/topics/:topicId/posts/:postId',
-                action: result({
-                    component: () => <div>/topics/:topicId/posts/:postId</div>,
-                })
-            },
-        ]
-    }
-];
+export function init(action: Types.Action.RouterAction) {
+    /* EventHandler
+    ------------------------------------- */
+    const onLocationChange = (route: Types.Entity.IRoute) => {
+        route.task
+            ? route.task(route).then(() => action.updateSession(route))
+            : action.updateSession(route);
+    };
+
+    /* Routes
+    ------------------------------------- */
+    const result = createActionResult;
+    const routes = [
+        {
+            path: '/',
+            action: middleware,
+            children: [
+                {
+                    path: '/',
+                    action: result({
+                        component: () => <div>path: /</div>,
+                        task: action.loadAll
+                    })
+                },
+                {
+                    path: '/topics/:topicId',
+                    action: result({
+                        component: () => <div>/topics/:topicId</div>,
+                    })
+                },
+                {
+                    path: '/topics/:topicId/posts/:postId',
+                    action: result({
+                        component: () => <div>/topics/:topicId/posts/:postId</div>,
+                    })
+                },
+            ]
+        }
+    ];
+
+    return { onLocationChange, routes };
+}
 
 /* Helper
 ------------------------------------ */
 class RoutingError extends Error { }
 
 export function createActionResult(props: {
-    component: React.SFC<any> | React.ComponentClass<any>
-    task?: Function
+    component: Types.Entity.IRoute['component']
+    task?: (route: Types.Entity.IRoute) => any
 }) {
     return (ctx: any): Types.Entity.IRoute => {
         const { query, params } = ctx;
