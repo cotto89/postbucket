@@ -47,6 +47,4 @@ typings.json
 ### Project ####
 .awcache
 src/playground
-_src
-temp
 
