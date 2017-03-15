@@ -5,12 +5,12 @@ export type TopicAction = (entity: Types.$.E.T) => void;
 export namespace TopicView {
     export interface Props {
         topic: Types.$.E.T;
+        labels: Types.$.E.L[];
         action: {
             edit: TopicAction;
             delete: TopicAction;
             select: TopicAction;
         };
-        // labels: string[];
     }
 }
 export class TopicView extends React.Component<TopicView.Props, void> {
@@ -19,7 +19,7 @@ export class TopicView extends React.Component<TopicView.Props, void> {
         this.props.action[name](this.props.topic);
     }
     render() {
-        const { topic, /*labels*/ } = this.props;
+        const { topic, labels } = this.props;
         return (
             <div>
                 <h2 data-events='select' onClick={this.handleEvents}>
@@ -27,7 +27,10 @@ export class TopicView extends React.Component<TopicView.Props, void> {
                 </h2>
                 <div>
                     {
-                        {/*labels.map(label => <div key={label}>{label}</div>)*/ }
+                        labels.map(label =>
+                            <span style={{ marginRight: '5px', backgroundColor: '#e8e8e8' }}
+                                key={label.id}>{label.name}
+                            </span>)
                     }
                 </div>
                 <div>

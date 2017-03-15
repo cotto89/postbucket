@@ -5,16 +5,18 @@ import { TopicView } from './TopicView';
 import * as utils from './../../utils/utils';
 
 type T = Types.$.E.T;
+type L = Types.$.E.L;
 type A = TopicView.Props['action'];
 
 interface Props {
     topics: T[];
+    labels: { [k: string]: L };
     action: A;
 }
 
 export class TopicListPane extends React.Component<Props, void> {
     render() {
-        const { topics } = this.props;
+        const { topics, labels } = this.props;
         return (
             <div className='pane _main'>
                 {
@@ -22,6 +24,7 @@ export class TopicListPane extends React.Component<Props, void> {
                     topics.map(t =>
                         <TopicView key={t.id}
                             topic={t}
+                            labels={t.labelIds.map((id) => labels[id])}
                             action={this.props.action}
                         />
                     )
@@ -35,7 +38,8 @@ export class TopicListPane extends React.Component<Props, void> {
 --------------------------- */
 export function mapStateToProps(state: Types.IState) {
     return {
-        topics: getTopics(state)
+        topics: getTopics(state),
+        labels: state.labels
     };
 };
 
