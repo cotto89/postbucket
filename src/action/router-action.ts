@@ -58,10 +58,12 @@ export default class RouterAction {
         const categories = await _loadAllCategory(this.idb);
         const topics = await _loadAllTopics(this.idb);
         const posts = await _loadPostsFromTopicIds(this.idb, topics.map(t => t.id));
+        const labels = await _loadAllLable(this.idb);
         this.dispatch('STATE:SET_STATE', {
             categories: _entitiesToState(categories),
             topics: _entitiesToState(topics),
-            posts: _entitiesToState(posts)
+            posts: _entitiesToState(posts),
+            labels: _entitiesToState(labels),
         });
     }
 }
@@ -126,5 +128,13 @@ export async function _loadPostsFromTopicIds(idb: IDB, topicIds: number[]) {
     return await idb.transaction('r', [idb.posts, idb.replies], async () => {
         const models = await idb.posts.where('topicId').anyOf(topicIds).toArray();
         return Dexie.Promise.all(models.map(async p => p.toEntity()));
+    });
+}
+
+
+export async function _loadAllLable(idb: IDB) {
+    return await idb.transaction('r', [idb.labels], async () => {
+        const models = await idb.labels.toArray();
+        return Dexie.Promise.all(models.map(async l => l.toEntity()));
     });
 }

@@ -7,7 +7,7 @@ export default class PostBucketIDB extends Dexie {
     topics: Dexie.Table<IDB.ITopicModel, number>;
     posts: Dexie.Table<IDB.IPostModel, number>;
     replies: Dexie.Table<IDB.Table.IReply, void>;
-    label: Dexie.Table<IDB.Table.ILabel, number>;
+    labels: Dexie.Table<IDB.ILabelModel, number>;
     labelsTopics: Dexie.Table<IDB.Table.ILabelsTopics, void>;
 
     constructor(option: DexieOption = {}) {
@@ -20,7 +20,7 @@ export default class PostBucketIDB extends Dexie {
             topics: '++id, category, title, createdAt, updatedAt',
             posts: '++id, topicId, createdAt, updatedAt',
             replies: '++, to, from',
-            label: '++id, name',
+            labels: '++id, name',
             labelsTopics: '++, topicId, labelId',
         });
 
@@ -29,6 +29,7 @@ export default class PostBucketIDB extends Dexie {
         this.categories.mapToClass(Factory.category(this));
         this.topics.mapToClass(Factory.topic(this));
         this.posts.mapToClass(Factory.post(this));
+        this.labels.mapToClass(Factory.label(this));
     }
 }
 

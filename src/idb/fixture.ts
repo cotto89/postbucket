@@ -14,6 +14,7 @@ export default function createIDBData(option?: Option) {
     };
 
     const CATEGORY_PER_TOPIC = 3;
+    const LABEL_COUNT = 10;
     let postId = 0;
     let topicId = 0;
 
@@ -21,8 +22,8 @@ export default function createIDBData(option?: Option) {
     let topics: IDB.Table.ITopic[] = [];
     let posts: IDB.Table.IPost[] = [];
     let replies: IDB.Table.IReply[] = [];
-    let tags: IDB.Table.ILabel[] = [];
-    let tagsPosts: IDB.Table.ILabelsTopics[] = [];
+    let labels: IDB.Table.ILabel[] = [];
+    let labelsTopics: IDB.Table.ILabelsTopics[] = [];
 
 
     topics = topicsData($option.topicCount);
@@ -30,14 +31,16 @@ export default function createIDBData(option?: Option) {
     topics.forEach(t => {
         posts = posts.concat(postsData(t.id!, $option.postCount));
     });
+    labels = labelsData();
+    labelsTopics = labelsTopicsData(topics, labels);
 
     return {
         categories,
         topics,
         posts,
         replies,
-        tags,
-        tagsPosts
+        labels,
+        labelsTopics
     };
 
 
@@ -79,6 +82,36 @@ export default function createIDBData(option?: Option) {
         });
         return range(count).map(() => data());
     }
+
+    function labelsData(): IDB.Table.ILabel[] {
+        let labelId = 0;
+        const data = (): IDB.Table.ILabel => ({
+            id: ++labelId,
+            name: `SampleLabel #${labelId}`
+        });
+
+        return range(LABEL_COUNT).map(data);
+    }
+
+    function labelsTopicsData(ts: IDB.Table.ITopic[], ls: IDB.Table.ILabel[]) {
+        let ret: IDB.Table.ILabelsTopics[] = [];
+        const data = (tid: number, lid: number): IDB.Table.ILabelsTopics => ({ topicId: tid, labelId: lid });
+        const index = () => Math.floor(Math.random() * ls.length) + 1;
+        const indexs = (count: number): number[] => {
+            const ids: number[] = [];
+            while (ids.length !== count) {
+                const n = index();
+                !ids.includes(n) && ids.push(n);
+            }
+            return ids;
+        };
+
+        ts.filter(t => (t.id! % 2 === 0)).forEach((t) => {
+            const labelIds = indexs(2);
+            labelIds.forEach((lid) => ret.push(data(t.id!, lid)));
+        });
+        return ret;
+    };
 }
 
 function postContent(iden: number | string) {

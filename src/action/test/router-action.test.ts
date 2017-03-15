@@ -40,12 +40,14 @@ describe('#loadAll', () => {
         const categoryCount = await idb.categories.count();
         const topicCount = await idb.topics.count();
         const postCount = await idb.posts.count();
+        const labelCount = await idb.labels.count();
 
         const [type, payload] = $spy.args[0];
         assert.equal(type, 'STATE:SET_STATE');
         assert.equal(Object.keys(payload.categories).length, categoryCount);
         assert.equal(Object.keys(payload.topics).length, topicCount);
         assert.equal(Object.keys(payload.posts).length, postCount);
+        assert.equal(Object.keys(payload.labels).length, labelCount);
     });
 });
 
@@ -70,7 +72,7 @@ describe('_loadAppCategory', () => {
     });
 });
 
-describe('(_loadAppTopics)', () => {
+describe('(_loadAllTopics)', () => {
     it('idbにあるすべてのtopicを取得する', async () => {
         const count = await idb.topics.count();
         const topics = await _._loadAllTopics(idb);
@@ -84,5 +86,13 @@ describe('_loadPostsFormTopicIds', () => {
         const count = topics.reduce((c, t) => c + t.postIds.length, 0);
         const posts = await _._loadPostsFromTopicIds(idb, topics.map(t => t.id));
         assert.equal(count, posts.length);
+    });
+});
+
+describe('_loadAllLabels', () => {
+    it('idbからすべてのlabelを取得する', async () => {
+        const count = await idb.labels.count();
+        const labels = await _._loadAllLable(idb);
+        assert.equal(count, labels.length);
     });
 });

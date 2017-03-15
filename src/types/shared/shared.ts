@@ -9,6 +9,7 @@ export namespace $ {
         export type P = Entity.IPost;
         export type R = Entity.IRoute;
         export type S = Entity.ISession;
+        export type L = Entity.ILabel;
     }
 }
 /* Entity
@@ -36,6 +37,10 @@ export namespace Entity {
         createdAt: number;
         updatedAt: number;
     }
+    export interface ILabel {
+        id: number;
+        name: string;
+    }
     export interface ISession {
         currentCategoryId: number | undefined;
         currentTopicId: number | undefined;
@@ -57,6 +62,7 @@ export interface IState {
     categories: { [k: string]: Entity.ICategory };
     topics: { [k: string]: Entity.ITopic };
     posts: { [k: string]: Entity.IPost };
+    labels: { [k: string]: Entity.ILabel }
     session: Entity.ISession;
 }
 
@@ -71,6 +77,7 @@ export namespace IDB {
     export interface ICategoryModel extends Table.ICategory, IDBModel<$.E.C> { }
     export interface ITopicModel extends Table.ITopic, IDBModel<$.E.T> { }
     export interface IPostModel extends Table.IPost, IDBModel<$.E.P> { }
+    export interface ILabelModel extends Table.ILabel, IDBModel<$.E.L> { }
 
     export namespace Table {
         export interface ICategory {

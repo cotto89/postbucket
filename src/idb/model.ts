@@ -63,3 +63,14 @@ export function post(idb: IDB.Instance) {
     }
     return PostModel;
 }
+
+export function label(_idb: IDB.Instance) {
+    class LabelModel implements IDB.ILabelModel {
+        id?: number;
+        name: string;
+        async toEntity() {
+            return Entity.label({ id: this.id!, name: this.name });
+        }
+    }
+    return LabelModel;
+}

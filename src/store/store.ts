@@ -33,7 +33,8 @@ store.subscribe(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
         categories: s.categories,
         topics: s.topics,
-        posts: s.posts
+        posts: s.posts,
+        labels: s.labels,
     }));
 });
 

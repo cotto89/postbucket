@@ -35,6 +35,10 @@ export const post = (props: Partial<Entity.IPost> & { topicId: number }): Entity
     ...props
 });
 
+export const label = (props: Entity.ILabel): Entity.ILabel => ({
+    ...props
+});
+
 /* Route
 ---------------------------------------*/
 export const route = (props: Partial<Entity.IRoute> & {
@@ -51,6 +55,7 @@ export const state = (props: Partial<IState> = {}): IState => ({
     categories: {},
     topics: {},
     posts: {},
+    labels: {},
     session: {
         currentCategoryId: undefined,
         currentTopicId: undefined,
