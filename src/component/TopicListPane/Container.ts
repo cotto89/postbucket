@@ -10,6 +10,7 @@ type T = Types.$.E.T;
 --------------------------- */
 export function mapStateToProps(state: Types.IState) {
     return {
+        category: getCategory(state),
         topics: getTopics(state),
         labels: state.labels
     };
@@ -30,6 +31,11 @@ export function getTopics(state: Types.IState) {
 
     return topics;
 };
+
+export function getCategory(state: Types.IState) {
+    const cId = state.session.currentCategoryId;
+    return cId ? state.categories[cId] : undefined;
+}
 
 export function mapDispatchToProps(dispath: Types.Dispatch) {
     const Action = {

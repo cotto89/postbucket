@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as Types from '@shared';
-
+type C = Types.$.E.C;
 type T = Types.$.E.T;
 type L = Types.$.E.L;
 export type TopicAction = (entity: Types.$.E.T) => void;
 export interface Props {
+    category: C | undefined;
     topics: { [k: string]: T };
     labels: { [k: string]: L };
     action: {
@@ -16,9 +17,10 @@ export interface Props {
 
 export default class TopicListPane extends React.Component<Props, void> {
     render() {
-        const { Children: { TopicView }, props: { topics } } = this;
+        const { Children: { TopicView }, props: { topics, category } } = this;
         return (
             <div className='pane _main'>
+                <h1>{category && category.name}</h1>
                 <div>
                     {Object.values(topics).map(topic => <TopicView topic={topic} key={topic.id} />)}
                 </div>
