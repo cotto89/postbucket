@@ -38,9 +38,8 @@ export function mapDispatchToProps(dispath: Types.Dispatch) {
     };
 
     const action: Props['action'] = {
-        edit: (t: T) => {
-            console.log(t);
-        },
+        select: (t: T) => Action.location.pushTo(`/topics/${t.id}`),
+        edit: (t: T) => dispath('SESSION:SET_EDITING_TOPIC_ID', t),
         /*
          * TODO: TopicAction.deleteを叩く前にconfirmを入れる
          * delete: UtilAction.confirm(message).then(TopicAction.delete)
@@ -51,9 +50,6 @@ export function mapDispatchToProps(dispath: Types.Dispatch) {
                 Action.topic.delete(t);
             }
         },
-        select: (t: T) => {
-            Action.location.pushTo(`/topics/${t.id}`);
-        }
     };
 
     return { action };

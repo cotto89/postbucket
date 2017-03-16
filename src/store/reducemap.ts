@@ -16,10 +16,16 @@ const reducemap: ReduceMap<IState, ActionTypes> = {
     'POST:DELETE': (s, p) => update(s, ['posts'], o => omit(o, String(p.id))),
 
     'SESSION:UPDATE_BY_ROUTE': (s, r) => set(s, ['session'], {
+        ...s.session,
         currentCategoryId: r.params['categoryId'] || r.query['categoryId'] || undefined,
         currentTopicId: r.params['topicId'] || r.query['topicId'] || undefined,
         currentPostId: r.params['postId'] || r.query['postId'] || undefined
     } as IState['session']),
+
+    'SESSION:SET_EDITING_TOPIC_ID': (s, t) => set(s, ['session'], {
+        ...s.session,
+        editingTopicId: t.id
+    }),
 
     'STATE:SET_STATE': (s1, s2) => ({ ...s1, ...s2 }),
 };

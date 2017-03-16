@@ -46,6 +46,7 @@ export namespace Entity {
         currentCategoryId: number | undefined;
         currentTopicId: number | undefined;
         currentPostId: number | undefined;
+        editingTopicId: number | undefined;
     }
     type Component = React.StatelessComponent<any> | React.ComponentClass<any>;
     export interface IRoute {
@@ -142,6 +143,7 @@ export interface ActionTypes {
     'POST:DELETE': $.E.P;
 
     'SESSION:UPDATE_BY_ROUTE': $.E.R;
+    'SESSION:SET_EDITING_TOPIC_ID': $.E.T;
 
     'STATE:SET_STATE': Partial<IState>;
 }

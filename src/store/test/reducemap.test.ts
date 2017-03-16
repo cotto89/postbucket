@@ -99,6 +99,7 @@ describe('SESSION', () => {
 
             const state = reducer['SESSION:UPDATE_BY_ROUTE'](s, r);
             assert.deepEqual(state.session, {
+                ...state.session,
                 currentCategoryId: '1',
                 currentTopicId: '1',
                 currentPostId: '1'
@@ -118,6 +119,7 @@ describe('SESSION', () => {
 
             const state = reducer['SESSION:UPDATE_BY_ROUTE'](s, r);
             assert.deepEqual(state.session, {
+                ...state.session,
                 currentCategoryId: '1',
                 currentTopicId: '1',
                 currentPostId: '1'
@@ -134,9 +136,21 @@ describe('SESSION', () => {
 
             const state = reducer['SESSION:UPDATE_BY_ROUTE'](s, r);
             assert.deepEqual(state.session, {
+                ...state.session,
                 currentCategoryId: undefined,
                 currentTopicId: undefined,
                 currentPostId: undefined
+            });
+        });
+    });
+
+    describe('SET_EDITING_TOPIC_ID', () => {
+        it('session.editingTopicIdを更新する', () => {
+            const t = Entity.topic();
+            const state = reducer['SESSION:SET_EDITING_TOPIC_ID'](s, t);
+            assert.deepEqual(state.session, {
+                ...state.session,
+                editingTopicId: t.id
             });
         });
     });

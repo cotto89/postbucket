@@ -60,6 +60,7 @@ export const state = (props: Partial<IState> = {}): IState => ({
         currentCategoryId: undefined,
         currentTopicId: undefined,
         currentPostId: undefined,
+        editingTopicId: undefined,
     },
     ...props
 });
