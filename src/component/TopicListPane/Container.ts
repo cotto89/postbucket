@@ -2,7 +2,7 @@ import * as Types from '@shared';
 import { connect } from 'react-redux';
 import * as utils from './../../utils/utils';
 import TopicListPane, { Props } from './TopicListPane';
-import { TopicAction } from './../../action/index';
+import { TopicAction, LocationAction } from './../../action/index';
 
 type T = Types.$.E.T;
 
@@ -32,9 +32,15 @@ export function getTopics(state: Types.IState) {
 };
 
 export function mapDispatchToProps(dispath: Types.Dispatch) {
-    const topicAction = TopicAction.create(dispath);
+    const Action = {
+        topic: TopicAction.create(dispath),
+        location: LocationAction.create(dispath)
+    };
+
     const action: Props['action'] = {
-        edit: (t: T) => console.log(t),
+        edit: (t: T) => {
+            console.log(t);
+        },
         /*
          * TODO: TopicAction.deleteを叩く前にconfirmを入れる
          * delete: UtilAction.confirm(message).then(TopicAction.delete)
@@ -42,11 +48,12 @@ export function mapDispatchToProps(dispath: Types.Dispatch) {
          */
         delete: (t: T) => {
             if (confirm(`${t.title} #${t.id} を削除します`)) {
-                topicAction.delete(t);
+                Action.topic.delete(t);
             }
         },
-        select: (t: T) => console.log(t),
-
+        select: (t: T) => {
+            Action.location.pushTo(`/topics/${t.id}`);
+        }
     };
 
     return { action };
