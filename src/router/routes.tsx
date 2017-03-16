@@ -2,7 +2,7 @@ import * as Types from '@shared';
 import * as React from 'react';
 import history from './history';
 import * as entity from './../store/entity';
-import TopicListPane from './../component/TopicListPane/TopicListPane';
+import TopicListPane from './../component/TopicListPane/Container';
 
 export { history }
 

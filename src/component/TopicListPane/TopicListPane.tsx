@@ -1,65 +1,78 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import * as Types from '@shared';
-import { TopicView } from './TopicView';
-import * as utils from './../../utils/utils';
 
 type T = Types.$.E.T;
 type L = Types.$.E.L;
-type A = TopicView.Props['action'];
-
-interface Props {
-    topics: T[];
+export type TopicAction = (entity: Types.$.E.T) => void;
+export interface Props {
+    topics: { [k: string]: T };
     labels: { [k: string]: L };
-    action: A;
+    action: {
+        edit: TopicAction;
+        delete: TopicAction;
+        select: TopicAction;
+    };
 }
 
-export class TopicListPane extends React.Component<Props, void> {
+export default class TopicListPane extends React.Component<Props, void> {
     render() {
-        const { topics, labels } = this.props;
+        const { Children: { TopicView }, props: { topics } } = this;
         return (
             <div className='pane _main'>
-                {
-                    /* TopicList */
-                    topics.map(t =>
-                        <TopicView key={t.id}
-                            topic={t}
-                            labels={t.labelIds.map((id) => labels[id])}
-                            action={this.props.action}
-                        />
-                    )
-                }
+                <div>
+                    {Object.values(topics).map(topic => <TopicView topic={topic} key={topic.id} />)}
+                </div>
             </div>
         );
     }
-}
 
-/* Contaienr
---------------------------- */
-export function mapStateToProps(state: Types.IState) {
-    return {
-        topics: getTopics(state),
-        labels: state.labels
+    handleTopicEvents = (e: React.MouseEvent<HTMLElement>) => {
+        const id = e.currentTarget.dataset.topicid as string;
+        const name = e.currentTarget.dataset.events as keyof Props['action'];
+        this.props.action[name](this.props.topics[id]);
+    }
+
+    Children = {
+        TopicView: (props: { topic: T }) => {
+            const { topic } = props;
+            const { Children: { Label }, props: { labels } } = this;
+            return (
+                <div>
+                    <h2 data-topicid={topic.id} data-events='select' onClick={this.handleTopicEvents}>
+                        {topic.title} <span>#{topic.id}</span>
+                    </h2>
+
+                    <div>
+                        {topic.labelIds.map((id) => (
+                            <Label key={id}>{labels[id].name}</Label>
+                        ))}
+                    </div>
+
+                    <div>
+                        <button
+                            data-topicid={topic.id}
+                            data-events='edit'
+                            onClick={this.handleTopicEvents}
+                        >
+                            edit
+                        </button>
+                        <button
+                            data-topicid={topic.id}
+                            data-events='delete'
+                            onClick={this.handleTopicEvents}
+                        >
+                            delete
+                        </button>
+                    </div>
+                </div>
+            );
+        },
+        Label: (props: React.Props<{}>) => {
+            return (
+                <span style={{ marginRight: '5px', backgroundColor: '#e8e8e8' }}>
+                    {props.children}
+                </span>
+            );
+        },
     };
-};
-
-/* Getter */
-export function getTopics(state: Types.IState) {
-    const { currentCategoryId } = state.session;
-    const topicIds = utils.existy(currentCategoryId)
-        && state.categories[currentCategoryId!].topicIds.map(id => String(id));
-    const topics = topicIds ? topicIds.map(id => state.topics[id]) : Object.values(state.topics);
-    return topics;
-};
-
-export function mapDispatchToProps(dispath: Types.Dispatch) {
-    const action: A = {
-        edit: (t: T) => console.log(t),
-        delete: (t: T) => dispath('TOPIC:DELETE', t),
-        select: (t: T) => console.log(t),
-    };
-
-    return { action };
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopicListPane);
