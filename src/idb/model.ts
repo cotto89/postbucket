@@ -6,11 +6,14 @@ export function category(idb: IDB.Instance) {
         id?: number;
         name: string;
 
-        async toEntity() {
-            const topicIds = await idb.transaction('r', idb.topics, async () => {
+        get topicIds() {
+            return (async () => {
                 const models = await idb.topics.where({ category: this.name }).toArray();
-                return models.map(model => model.id!);
-            });
+                return models.map(t => t.id!);
+            })();
+        }
+        async toEntity() {
+            const topicIds = await this.topicIds;
             return Entity.category({ id: this.id, name: this.name, topicIds });
         }
     }
@@ -25,16 +28,21 @@ export function topic(idb: IDB.Instance) {
         createdAt: number;
         updatedAt: number;
 
+        get postIds() {
+            return (async () => {
+                const models = await idb.posts.where({ topicId: this.id! }).toArray();
+                return models.map(p => p.id!);
+            })();
+        }
+        get labelIds() {
+            return (async () => {
+                const models = await idb.labelsTopics.where({ topicId: this.id! }).toArray();
+                return models.map(l => l.labelId!);
+            })();
+        }
         async toEntity() {
-            const postIds = await idb.transaction('r', idb.posts, async () => {
-                const posts = await idb.posts.where({ topicId: this.id! }).toArray();
-                return posts.map(p => p.id!);
-            });
-            const labelIds = await idb.transaction('r', idb.labelsTopics, async () => {
-                const labels = await idb.labelsTopics.where({ topicId: this.id! }).toArray();
-                return labels.map(l => l.labelId);
-            });
-
+            const postIds = await this.postIds;
+            const labelIds = await this.labelIds;
             const { id, category, title, createdAt, updatedAt } = this;
             return Entity.topic({ id, category, title, createdAt, updatedAt, postIds, labelIds });
         }
@@ -51,12 +59,14 @@ export function post(idb: IDB.Instance) {
         createdAt: number;
         updatedAt: number;
 
-        async toEntity() {
-            const replyIds = await idb.transaction('r', idb.replies, async () => {
+        get replyIds() {
+            return (async () => {
                 const reps = await idb.replies.where({ to: this.id! }).toArray();
                 return reps.map(r => r.from);
-            });
-
+            })();
+        }
+        async toEntity() {
+            const replyIds = await this.replyIds;
             const { id, topicId, content, createdAt, updatedAt } = this;
             return Entity.post({ id, topicId, content, createdAt, updatedAt, replyIds });
         }
