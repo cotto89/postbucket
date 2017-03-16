@@ -1,4 +1,3 @@
-// import './../types/global/global';
 import PostBucketIDB, { DexieOption } from './idb';
 import * as Factory from './model';
 

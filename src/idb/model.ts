@@ -1,7 +1,13 @@
 import { IDB } from '@shared';
 import * as Entity from './../store/entity';
 
-export class CategoryModel implements IDB.ICategoryModel {
+/**
+ * relation: TopicTable(topicIds)
+ * @export
+ * @class CategoryModel
+ * @implements {IDB.ICategoryModel}
+ */
+export class CategoryModel implements IDB.Table.ICategory {
     id?: number;
     name: string;
 
@@ -17,7 +23,13 @@ export class CategoryModel implements IDB.ICategoryModel {
     }
 }
 
-export class TopicModel implements IDB.ITopicModel {
+/**
+ * relation: PostTable(postIds), LablesTopicsTable(labelIds)
+ * @export
+ * @class TopicModel
+ * @implements {IDB.Table.ITopic}
+ */
+export class TopicModel implements IDB.Table.ITopic {
     id?: number;
     category?: string;
     title: string;
@@ -44,8 +56,13 @@ export class TopicModel implements IDB.ITopicModel {
     }
 }
 
-
-export class PostModel implements IDB.IPostModel {
+/**
+ * relation: ReplyTable(replyIds)
+ * @export
+ * @class PostModel
+ * @implements {IDB.Table.IPost}
+ */
+export class PostModel implements IDB.Table.IPost {
     id?: number;
     topicId: number;
     content: string;
@@ -65,7 +82,12 @@ export class PostModel implements IDB.IPostModel {
     }
 }
 
-export class LabelModel implements IDB.ILabelModel {
+/**
+ * @export
+ * @class LabelModel
+ * @implements {IDB.Table.ILabel}
+ */
+export class LabelModel implements IDB.Table.ILabel {
     id?: number;
     name: string;
     async toEntity() {
