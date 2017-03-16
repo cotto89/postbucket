@@ -2,6 +2,7 @@ import * as Types from '@shared';
 import { connect } from 'react-redux';
 import * as utils from './../../utils/utils';
 import TopicListPane, { Props } from './TopicListPane';
+import { TopicAction } from './../../action/index';
 
 type T = Types.$.E.T;
 
@@ -31,10 +32,21 @@ export function getTopics(state: Types.IState) {
 };
 
 export function mapDispatchToProps(dispath: Types.Dispatch) {
+    const topicAction = TopicAction.create(dispath);
     const action: Props['action'] = {
         edit: (t: T) => console.log(t),
-        delete: (t: T) => dispath('TOPIC:DELETE', t),
+        /*
+         * TODO: TopicAction.deleteを叩く前にconfirmを入れる
+         * delete: UtilAction.confirm(message).then(TopicAction.delete)
+         * のような感じでActionを分割する。
+         */
+        delete: (t: T) => {
+            if (confirm(`${t.title} #${t.id} を削除します`)) {
+                topicAction.delete(t);
+            }
+        },
         select: (t: T) => console.log(t),
+
     };
 
     return { action };
