@@ -1,5 +1,4 @@
 import * as React from 'react';
-import history from './history';
 import { createPath } from 'history';
 
 interface Props extends React.HTMLProps<HTMLAnchorElement> {
@@ -14,7 +13,7 @@ export default class LinkTo extends React.Component<Props, {}> {
         const mode = this.props.replace ? 'replace' : 'push';
         const path = createPath(this.props.to);
         this.props.onClick && this.props.onClick(ev);
-        history[mode](path);
+        $history[mode](path);
     }
 
     render() {

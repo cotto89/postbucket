@@ -1,10 +1,7 @@
 import * as Types from '@shared';
 import * as React from 'react';
-import history from './history';
 import * as entity from './../store/entity';
 import TopicListPane from './../component/TopicListPane/Container';
-
-export { history }
 
 /* Routes
 -----------------------------------------*/
@@ -68,7 +65,7 @@ export function createActionResult(props: {
         const { query, params } = ctx;
         return entity.route({
             ...props,
-            path: history.location.pathname,
+            path: $history.location.pathname,
             query,
             params
         });

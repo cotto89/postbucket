@@ -1,5 +1,10 @@
-import { createHashHistory } from 'history';
+import { createHashHistory, createMemoryHistory } from 'history';
 
-export default createHashHistory({
-    hashType: 'hashbang'
-});
+const $global = Function('return this')();
+const $history = (process.env.NODE_ENV === 'test')
+    ? createMemoryHistory()
+    : createHashHistory({ hashType: 'hashbang' });
+
+
+$global.$history = $history;
+export default $history;
