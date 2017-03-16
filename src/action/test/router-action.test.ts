@@ -7,18 +7,17 @@ import RouterAction from './../router-action';
 import * as _ from './../router-action';
 import * as Entity from './../../store/entity';
 
-const idb = TestHelper.testDB;
 const $spy = sinon.spy();
-const $action = RouterAction.create(idb, $spy);
+const $action = RouterAction.create($spy);
 
-beforeEach(TestHelper.setup(idb));
+beforeEach(TestHelper.setup());
 beforeEach(() => $spy.reset());
-afterEach(TestHelper.teardown(idb));
+afterEach(TestHelper.teardown());
 
 describe('.create', () => {
     it('instanceを返す', () => {
         const spy = sinon.spy();
-        const action = RouterAction.create(idb, spy);
+        const action = RouterAction.create(spy);
         assert(action instanceof RouterAction);
     });
 });
@@ -35,12 +34,12 @@ describe('#updateSession', () => {
 });
 
 describe('#loadAll', () => {
-    it('stateとしてidbのdataを返す', async () => {
+    it('stateとして$idbのdataを返す', async () => {
         await $action.loadAll({} as Types.Entity.IRoute);
-        const categoryCount = await idb.categories.count();
-        const topicCount = await idb.topics.count();
-        const postCount = await idb.posts.count();
-        const labelCount = await idb.labels.count();
+        const categoryCount = await $idb.categories.count();
+        const topicCount = await $idb.topics.count();
+        const postCount = await $idb.posts.count();
+        const labelCount = await $idb.labels.count();
 
         const [type, payload] = $spy.args[0];
         assert.equal(type, 'STATE:SET_STATE');
@@ -65,34 +64,34 @@ describe('_entitiesToState', () => {
 
 
 describe('_loadAppCategory', () => {
-    it('idbにあるすべてのcategoryを取得する', async () => {
-        const count = await idb.categories.count();
-        const categories = await _._loadAllCategory(idb);
+    it('$idbにあるすべてのcategoryを取得する', async () => {
+        const count = await $idb.categories.count();
+        const categories = await _._loadAllCategory();
         assert.equal(count, categories.length);
     });
 });
 
 describe('(_loadAllTopics)', () => {
-    it('idbにあるすべてのtopicを取得する', async () => {
-        const count = await idb.topics.count();
-        const topics = await _._loadAllTopics(idb);
+    it('$idbにあるすべてのtopicを取得する', async () => {
+        const count = await $idb.topics.count();
+        const topics = await _._loadAllTopics();
         assert.equal(count, topics.length);
     });
 });
 
 describe('_loadPostsFormTopicIds', () => {
     it('topicIdsからpostをloadする', async () => {
-        const topics = await _._loadAllTopics(idb);
+        const topics = await _._loadAllTopics();
         const count = topics.reduce((c, t) => c + t.postIds.length, 0);
-        const posts = await _._loadPostsFromTopicIds(idb, topics.map(t => t.id));
+        const posts = await _._loadPostsFromTopicIds(topics.map(t => t.id));
         assert.equal(count, posts.length);
     });
 });
 
 describe('_loadAllLabels', () => {
-    it('idbからすべてのlabelを取得する', async () => {
-        const count = await idb.labels.count();
-        const labels = await _._loadAllLable(idb);
+    it('$idbからすべてのlabelを取得する', async () => {
+        const count = await $idb.labels.count();
+        const labels = await _._loadAllLable();
         assert.equal(count, labels.length);
     });
 });

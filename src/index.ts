@@ -8,7 +8,7 @@ import { RouterAction } from './action/index';
 import Router from './router/Router';
 import * as router from './router/routes';
 
-const action = RouterAction.create($idb, store.dispatch);
+const action = RouterAction.create(store.dispatch);
 const { routes, onLocationChange } = router.init(action);
 const { history } = router;
 
