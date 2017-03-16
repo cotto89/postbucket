@@ -1,5 +1,4 @@
 import * as Types from '@shared';
-import bind from 'bind-decorator';
 import Dexie from 'dexie';
 
 type R = Types.Entity.IRoute;
@@ -36,8 +35,7 @@ export default class RouterAction {
      * route entityからsessionを更新
      * @param route
      */
-    @bind
-    updateSession(route: R) {
+    updateSession = (route: R) => {
         this.dispatch('SESSION:UPDATE_BY_ROUTE', route);
     }
 
@@ -47,8 +45,7 @@ export default class RouterAction {
      *
      * @memberOf RouterAction
      */
-    @bind
-    async loadAll(_route: R) {
+    loadAll = async (_route: R) => {
         const categories = await _loadAllCategory();
         const topics = await _loadAllTopics();
         const posts = await _loadPostsFromTopicIds(topics.map(t => t.id));
