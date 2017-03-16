@@ -1,36 +1,13 @@
 import * as Types from '@shared';
 import Dexie from 'dexie';
+import ActionBase from './ActionBase';
 
 type R = Types.Entity.IRoute;
 
-let cache: RouterAction;
-export default class RouterAction {
-    dispatch: Types.Dispatch;
-
-    /**
-     * RouterActionのinstanceを返す.
-     * cacheがあればcacheを返す
-     * @static
-     * @param {Types.Dispatch} dispatch
-     * @returns
-     *
-     * @memberOf RouterAction
-     */
+export default class RouterAction extends ActionBase {
     static create(dispatch: Types.Dispatch) {
-        if (!cache) { cache = new RouterAction(dispatch); }
-        return cache;
+        return super.create<RouterAction>(dispatch);
     }
-
-    /**
-     * Creates an instance of RouterAction.
-     * @param {Types.Dispatch} dispatch
-     *
-     * @memberOf RouterAction
-     */
-    constructor(dispatch: Types.Dispatch) {
-        this.dispatch = dispatch;
-    }
-
     /**
      * route entityからsessionを更新
      * @param route

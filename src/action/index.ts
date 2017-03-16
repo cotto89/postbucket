@@ -1,1 +1,1 @@
-export { default as RouterAction } from './router-action';
+export { default as RouterAction } from './RouterAction';

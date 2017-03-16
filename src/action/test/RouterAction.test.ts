@@ -3,8 +3,8 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import * as React from 'react';
 import * as TestHelper from './../../test-helper/idb-setup';
-import RouterAction from './../router-action';
-import * as _ from './../router-action';
+import RouterAction from './../RouterAction';
+import * as _ from './../RouterAction';
 import * as Entity from './../../store/entity';
 
 const $spy = sinon.spy();
