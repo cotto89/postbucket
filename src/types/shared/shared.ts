@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PostbucketIDB from './../../idb/idb';
+import * as Model from './../../idb/model';
 import * as $Action from './../../action/index';
 
 export namespace $ {
@@ -62,7 +63,7 @@ export interface IState {
     categories: { [k: string]: Entity.ICategory };
     topics: { [k: string]: Entity.ITopic };
     posts: { [k: string]: Entity.IPost };
-    labels: { [k: string]: Entity.ILabel }
+    labels: { [k: string]: Entity.ILabel };
     session: Entity.ISession;
 }
 
@@ -71,13 +72,10 @@ export interface IState {
 export namespace IDB {
     export type Instance = PostbucketIDB;
 
-    export interface IDBModel<T> {
-        toEntity(): Promise<T>;
-    }
-    export interface ICategoryModel extends Table.ICategory, IDBModel<$.E.C> { }
-    export interface ITopicModel extends Table.ITopic, IDBModel<$.E.T> { }
-    export interface IPostModel extends Table.IPost, IDBModel<$.E.P> { }
-    export interface ILabelModel extends Table.ILabel, IDBModel<$.E.L> { }
+    export interface ICategoryModel extends Model.CategoryModel { }
+    export interface ITopicModel extends Model.TopicModel { }
+    export interface IPostModel extends Model.PostModel { }
+    export interface ILabelModel extends Model.LabelModel { }
 
     export namespace Table {
         export interface ICategory {

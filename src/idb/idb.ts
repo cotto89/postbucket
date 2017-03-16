@@ -1,13 +1,13 @@
 import Dexie from 'dexie';
 import { IDB } from '@shared';
-import * as Factory from './model';
+import * as Model from './model';
 
 export default class PostBucketIDB extends Dexie {
-    categories: Dexie.Table<IDB.ICategoryModel, number>;
-    topics: Dexie.Table<IDB.ITopicModel, number>;
-    posts: Dexie.Table<IDB.IPostModel, number>;
+    categories: Dexie.Table<Model.CategoryModel, number>;
+    topics: Dexie.Table<Model.TopicModel, number>;
+    posts: Dexie.Table<Model.PostModel, number>;
     replies: Dexie.Table<IDB.Table.IReply, void>;
-    labels: Dexie.Table<IDB.ILabelModel, number>;
+    labels: Dexie.Table<Model.LabelModel, number>;
     labelsTopics: Dexie.Table<IDB.Table.ILabelsTopics, void>;
 
     constructor(option: DexieOption = {}) {
@@ -26,10 +26,10 @@ export default class PostBucketIDB extends Dexie {
 
         /* mapToClass
         ----------------------- */
-        this.categories.mapToClass(Factory.category(this));
-        this.topics.mapToClass(Factory.topic(this));
-        this.posts.mapToClass(Factory.post(this));
-        this.labels.mapToClass(Factory.label(this));
+        this.categories.mapToClass(Model.CategoryModel);
+        this.topics.mapToClass(Model.TopicModel);
+        this.posts.mapToClass(Model.PostModel);
+        this.labels.mapToClass(Model.LabelModel);
     }
 }
 

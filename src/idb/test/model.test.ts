@@ -1,15 +1,14 @@
 import * as assert from 'assert';
-import { testDB, setup, teardown } from './../../test-helper/idb-setup';
+import { setup, teardown } from './../../test-helper/idb-setup';
 
-const idb = testDB;
-beforeEach(setup(idb));
-afterEach(teardown(idb));
+beforeEach(setup());
+afterEach(teardown());
 
 describe('CategoryModel', () => {
     describe('#toEntity', () => {
         it('依存を含んだCategoryEntityとして返す', async () => {
-            const model = await idb.categories.toCollection().first();
-            const topicIdCount = await idb.topics.where({ category: model!.name }).count();
+            const model = await $idb.categories.toCollection().first();
+            const topicIdCount = await $idb.topics.where({ category: model!.name }).count();
             const entity = await model!.toEntity();
             assert(entity.hasOwnProperty('id'));
             assert(entity.hasOwnProperty('name'));
@@ -21,8 +20,8 @@ describe('CategoryModel', () => {
 describe('TopicModel', () => {
     describe('#toEntity', () => {
         it('依存を含んだTopicEntityとして返す', async () => {
-            const category = await idb.categories.get(1);
-            const model = await idb.topics.where({ category: category!.name }).first();
+            const category = await $idb.categories.get(1);
+            const model = await $idb.topics.where({ category: category!.name }).first();
             const entity = await model!.toEntity();
             assert(entity.hasOwnProperty('id'));
             assert(entity.hasOwnProperty('labelIds'));
@@ -35,8 +34,8 @@ describe('TopicModel', () => {
 describe('PostModel', () => {
     describe('#toEntity', () => {
         it('依存を含んだPostEntityを返す', async () => {
-            const topic = await idb.topics.get(1);
-            const model = await idb.posts.where({ topicId: topic!.id! }).first();
+            const topic = await $idb.topics.get(1);
+            const model = await $idb.posts.where({ topicId: topic!.id! }).first();
             const entity = await model!.toEntity();
             assert(entity.hasOwnProperty('id'));
             assert(entity.hasOwnProperty('topicId'));

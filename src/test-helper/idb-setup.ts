@@ -1,27 +1,22 @@
 import * as Types from '@shared';
 import createIDBData, { Option } from './../idb/fixture';
-import IDB from './../idb/idb';
+import idb from './../idb/index';
 
-export const IDBOption = {
-    indexedDB: require('fake-indexeddb'),
-    IDBKeyRange: require('fake-indexeddb/lib/FDBKeyRange')
-};
-
-export const testDB = new IDB(IDBOption);
-
-export const setup = (idb: Types.IDB.Instance, option: Option = {}) => {
+export const setup = (option: Option = {}) => {
     return async () => {
         const data = createIDBData(option);
-        const tables = [idb.categories, idb.topics, idb.posts];
-        await idb.transaction('rw', tables, async () => {
+        await idb.transaction('rw', idb.tables, async () => {
             await idb.categories.bulkPut(data.categories as Types.IDB.ICategoryModel[]);
             await idb.topics.bulkPut(data.topics as Types.IDB.ITopicModel[]);
             await idb.posts.bulkPut(data.posts as Types.IDB.IPostModel[]);
+            await idb.labels.bulkPut(data.labels as Types.IDB.ILabelModel[]);
+            await idb.labelsTopics.bulkPut(data.labelsTopics);
+            await idb.replies.bulkPut(data.replies);
         });
     };
 };
 
-export const teardown = (idb: Types.IDB.Instance) => {
+export const teardown = () => {
     return async () => {
         idb.tables.forEach(tables => tables.clear());
     };
