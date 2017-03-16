@@ -2,7 +2,7 @@ import './lib/polyfill/object';
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import idb from './idb/idb.index';
+import idb from './idb/index';
 import store from './store/store';
 import { RouterAction } from './action/index';
 import Router from './router/Router';
