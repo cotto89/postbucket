@@ -2,6 +2,7 @@ import * as Types from '@shared';
 import * as React from 'react';
 import * as entity from './../store/entity';
 import TopicListPane from './../component/TopicListPane/Container';
+import PostListPane from './../component/PostListPane/Container';
 
 /* Routes
 -----------------------------------------*/
@@ -37,7 +38,12 @@ export function init(action: Types.Action.RouterAction) {
                 {
                     path: '/topics/:topicId',
                     action: result({
-                        component: () => <div>/topics/:topicId</div>,
+                        component: () => (
+                            <div className='pane _container'>
+                                <TopicListPane />
+                                <PostListPane />
+                            </div>
+                        )
                     })
                 },
                 {

@@ -20,7 +20,6 @@ export class PostView extends React.PureComponent<Props, void> {
         const { post } = this.props;
         return (
             <div>
-                <MarkdownView src={post.content} onSrcUpdated={this.onCheckboxClick} />
                 <div>
                     <button
                         data-postid={post.id}
@@ -37,6 +36,8 @@ export class PostView extends React.PureComponent<Props, void> {
                         delete
                         </button>
                 </div>
+
+                <MarkdownView src={post.content} onSrcUpdated={this.onCheckboxClick} />
             </div>
         );
     }

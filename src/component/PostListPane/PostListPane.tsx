@@ -4,7 +4,7 @@ import { PostView } from './PostView';
 
 // type P = Types.$.E.P;
 type T = Types.$.E.T;
-interface Props {
+export interface Props {
     topic: T;
     posts: Types.IState['posts'];
     action: PostView.Props['action'];
@@ -22,7 +22,7 @@ export default class PostListPane extends React.Component<Props, void> {
 
                 <div>
                     {Object.values(posts).map(post => (
-                        <PostView post={post} action={{ ...this.props.action }} />
+                        <PostView key={post.id} post={post} action={this.props.action} />
                     ))}
                 </div>
             </div>
