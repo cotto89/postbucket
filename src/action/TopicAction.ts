@@ -28,6 +28,7 @@ export default class TopicAction extends ActionBase {
             await $idb.labelsTopics.where({ topicId: topic.id }).delete();
         });
 
+        this.dispatch('POST:DELETE_BY_IDS', topic.postIds.map(String));
         this.dispatch('TOPIC:DELETE', topic);
     }
 }

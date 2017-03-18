@@ -82,6 +82,20 @@ describe('POST', () => {
             assert.deepEqual(state.posts, {});
         });
     });
+    describe('DELETE_BY_IDS', () => {
+        it('payloadのid分だけstate.postsからpostを削除', () => {
+            const posts: Types.IState['posts'] = Array(3).fill(0).reduce((acc, _, i: number) => {
+                const id = i + 1;
+                acc[id] = Entity.post({ id, topicId: 1 });
+                return acc;
+            }, {});
+            const s1 = Entity.state({ posts });
+            const s2 = reducer['POST:DELETE_BY_IDS'](s1, ['1', '2']);
+            assert.equal(Object.keys(s1.posts).length, 3);
+            assert.equal(Object.keys(s2.posts).length, 1);
+        });
+    });
+
 });
 
 describe('SESSION', () => {

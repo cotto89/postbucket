@@ -1,5 +1,6 @@
 import { ReduceMap } from './../lib/flux/createStore';
-import { setIn, deleteIn } from 'ioh';
+import { setIn, deleteIn, updateIn } from 'ioh';
+import * as _ from './../utils/utils';
 import { ActionTypes, IState } from '@shared';
 
 const reducemap: ReduceMap<IState, ActionTypes> = {
@@ -14,6 +15,7 @@ const reducemap: ReduceMap<IState, ActionTypes> = {
     'POST:ADD': (s, p) => setIn(s, ['posts', String(p.id)], p),
     'POST:UPDATE': (s, p) => setIn(s, ['posts', String(p.id)], p),
     'POST:DELETE': (s, p) => deleteIn(s, ['posts', String(p.id)]) as IState,
+    'POST:DELETE_BY_IDS': (s, ids) => updateIn(s, ['posts'], (v) => _.bulkOmit(v, ids)),
 
     'SESSION:UPDATE_BY_ROUTE': (s, r) => setIn(s, ['session'], {
         ...s.session,

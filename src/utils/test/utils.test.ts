@@ -46,3 +46,20 @@ describe('whenExists', () => {
         });
     });
 });
+
+describe('bulkOmit', () => {
+    const obj = {
+        a: 1,
+        b: 2,
+        c: 3
+    };
+    it('immutableにobjectからkeyが削除されること', () => {
+        const r = u.bulkOmit(obj, ['a', 'b']);
+        assert.deepEqual(r, { c: 3 });
+        assert.deepEqual(obj, {
+            a: 1,
+            b: 2,
+            c: 3
+        });
+    });
+});

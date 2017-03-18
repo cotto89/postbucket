@@ -141,6 +141,7 @@ export interface ActionTypes {
     'POST:ADD': $.E.P;
     'POST:UPDATE': $.E.P;
     'POST:DELETE': $.E.P;
+    'POST:DELETE_BY_IDS': string[];
 
     'SESSION:UPDATE_BY_ROUTE': $.E.R;
     'SESSION:SET_EDITING_TOPIC_ID': $.E.T;

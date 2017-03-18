@@ -21,6 +21,12 @@ describe('#delete', () => {
     });
     it('TOPIC:DELETEをdispatchする', async () => {
         const [type, payload] = $spy.args[0];
+        assert.equal(type, 'POST:DELETE_BY_IDS');
+        assert(payload.length > 0);
+        assert(payload.every((id: any) => typeof id === 'string'));
+    });
+    it('TOPIC:DELETEをdispatchする', async () => {
+        const [type, payload] = $spy.args[1];
         assert.equal(type, 'TOPIC:DELETE');
         assert.deepEqual(payload, entity);
     });
