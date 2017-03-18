@@ -3293,9 +3293,9 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-ioh@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/ioh/-/ioh-0.0.2.tgz#ac26a9b41014b54ae04af4417e0a45322952eca4"
+ioh@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ioh/-/ioh-0.0.3.tgz#ef4f37ed901bbacf22f5be6576e352dcdcf4c3a1"
   dependencies:
     "@types/node" "^7.0.8"
 

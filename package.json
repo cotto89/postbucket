@@ -14,7 +14,7 @@
     "inferno": "^1.4.0",
     "inferno-compat": "^1.4.0",
     "inferno-redux": "^1.4.0",
-    "ioh": "^0.0.2",
+    "ioh": "^0.0.3",
     "lodash": "^4.17.4",
     "lowlight": "^1.6.0",
     "object.entries": "^1.0.4",
